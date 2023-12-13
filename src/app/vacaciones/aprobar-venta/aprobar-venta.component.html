@@ -1,0 +1,129 @@
+<div class="row match-height font-small-1">
+    <div class="col-xl-4 col-lg-12">
+      
+      <div id="users-list" class="list-group">
+        <h4 class="card-title font-small-2">SOLICITUDES PENDIENTES</h4>
+        <div class="users-list-padding position-relative">
+  
+          <a class="list-group-item " 
+            *ngFor="let usuario of solicitudesPendientesVenta">
+            <div class="media chat-list-text py-1"  (click)="detalleSolicitudVenta(usuario)">
+              <span class="avatar avatar-md mr-2">
+                <img src="assets/img/portrait/small/avatar-s-15.png" alt="Avatar">
+                <span class="avatar-status"></span>
+                <i></i>
+              </span>
+              <div class="media-body">
+                <h6 class="list-group-item-heading mb-1">{{usuario.usuariosolicitado}}
+                </h6>
+                <p class="list-group-item-text chat-user-list-text m-0">
+                  <i class="ft-calendar primary font-small-2 mr-1"></i>
+                  <span>{{usuario.periodo}}</span>
+                  <span class="float-right primary">
+                    <i class="font-medium-3 icon-check mr-1" (click)="aprobarSolicitudVenta(usuario)"></i>
+                    <i class="font-medium-3 icon-close mr-1" (click)="modalShowCancelarVenta(usuario)"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+  
+    </div>
+    <div class="col-xl-8 col-lg-12">
+      <section id="bordered-striped-form-layout">
+        <div class="row match-height">
+          <div class="col-lg-12 col-12">
+            <div class="card" *ngIf="detalleSolicitudUsuarioVenta != null">
+              <div class="card-header">
+                <div class="list-group-item " >
+                  <div class="media chat-list-text py-1" >
+                    <span class="avatar avatar-md mr-2">
+                      <img src="assets/img/portrait/small/avatar-s-15.png" alt="Avatar">
+                      <span class="avatar-status"></span>
+                      <i></i>
+                    </span>
+                    <div class="media-body">
+                      <h6 class="list-group-item-heading mb-1">{{detalleSolicitudUsuarioVenta.usuariosolicitado}}
+                        <span class="chat-list-text font-small-2 float-right chat-time">Esperando Aprobación</span>
+                      </h6>
+                      <p class="list-group-item-text chat-user-list-text m-0">
+                        <i class="ft-calendar primary font-small-2 mr-1"></i>
+                        <span>{{detalleSolicitudUsuarioVenta.periodo}} (7 días)</span>
+                        <span class="float-right primary">
+                          <span class="badge badge-pill bg-light-primary badge-round"
+                            >{{detalleSolicitudUsuarioVenta.usuarioactual}}</span>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="puesto" class="col-form-label">Puesto:</label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="puesto" class="form-control">Puesto</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="fechIngr" class="col-form-label">Fecha Ingreso:</label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="fechIngr" class="form-control">Fecha Ingreso</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="descr" class="col-form-label">Descripción:</label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="descr" class="form-control">Descripción</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="periVaca" class="col-form-label">Periodo Vacacional:</label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="periVaca" class="form-control">Periodo Vacacional</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="fechSoli" class="col-form-label">Fecha Solicitud:</label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="fechSoli" class="form-control">Fecha Solicitud</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bordered Form Layout ends -->
+        </div>
+      </section>
+    </div>
+  </div>
