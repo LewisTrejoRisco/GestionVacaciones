@@ -40,12 +40,11 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 })
 export class SolicitarModalComponent implements OnInit{
 
-  type = 'Marketing';
   @Input() id: number;
   @Input() data: {};
   myForm: UntypedFormGroup;
   d2: any;
-  cities = [
+  dias = [
     { id: 1, name: '7' },
     { id: 2, name: '8' },
     { id: 3, name: '9', disabled: true },
@@ -65,11 +64,13 @@ export class SolicitarModalComponent implements OnInit{
   }
 
   private buildItemForm(item) {
-    console.log(item)
+    if(item.hasta != null) {
+      item.hasta = this.dias.find(a => a.name == item.hasta);
+    }
     this.myForm = this.formBuilder.group({
-      fechaInic: [item.fechaInic || '', Validators.required],
+      fechaInic: [item.fechaInic || null, Validators.required],
       hasta: [item.hasta || null, Validators.required],
-      descripcion: [item.descripcion || '', Validators.required],
+      descripcion: [item.descripcion || null, Validators.required],
     });
   }
 

@@ -1,7 +1,14 @@
 export class Trabajador {
-    userID: string;
-    nombre: string;
-    fechaInicio: string;
-    fechaFin: string;
-    foto: string;
+    tsolicitudId: number;
+    tusuasoli: string;
+    tfoto: string;
+    tdescusuasoli: string;
+    periodo: string;
+    tcantidaddias: number;
+    tusuaaprob: string;
+    tdescunidfuncsoli: string;
+    tfechingrsoli: string;
+    tdescripcion: string;
+    tperiodo: string;
+    tfechregi: string;
 }

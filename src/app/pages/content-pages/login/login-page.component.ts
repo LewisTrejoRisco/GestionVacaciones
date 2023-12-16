@@ -50,7 +50,7 @@ export class LoginPageComponent {
 
     this.authService.signupUser(this.loginForm.value.username, this.loginForm.value.password)
       .subscribe(res => {
-        this.authService.guardarToken(res);
+        this.authService.guardarToken(JSON.stringify(res));
         console.log(this.authService.userToken)
         this.spinner.hide();
         this.router.navigate(['/vacaciones/solicitar']);

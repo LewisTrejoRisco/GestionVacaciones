@@ -2,8 +2,10 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from 'firebase/app'
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { OBTENERDATOS, URL_END_POINT_BASE } from 'app/shared/utilitarios/Constantes';
+import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class AuthService {
@@ -31,7 +33,8 @@ export class AuthService {
     //your code for signing up the new user
     console.log('email: '+ user)
     console.log('password: '+ password)
-    return this.http.get<any>('assets/json/loginResponse.json');
+    // return this.http.get<any>('assets/json/loginResponse.json');
+    return this.obtenerDatos(user);
   }
 
   signinUser(email: string, password: string) {
@@ -69,4 +72,15 @@ export class AuthService {
       this.token = null;
       sessionStorage.clear();
   }
+  
+
+  public obtenerDatos(codiUsua: string) {
+    console.log(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
+        return this.http.get(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
+        .pipe(catchError(e => {
+            console.error(' Error al intentar listar. Msg: ' + e.error);
+            return throwError(e);
+        })
+    );
+}
 }

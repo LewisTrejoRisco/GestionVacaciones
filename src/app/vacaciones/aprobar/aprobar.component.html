@@ -9,12 +9,12 @@
           *ngFor="let user of solicitudesPendientes ">
           <div class="media chat-list-text py-1"  (click)="detalleSolicitud(user)">
             <span class="avatar avatar-md mr-2">
-              <img src="assets/img/portrait/small/avatar-s-15.png" alt="Avatar">
+              <img src="{{user.tfoto}}" alt="Avatar">
               <span class="avatar-status"></span>
               <i></i>
             </span>
             <div class="media-body">
-              <h6 class="list-group-item-heading mb-1">{{user.usuariosolicitado}}
+              <h6 class="list-group-item-heading mb-1">{{user.tdescusuasoli}}
                 <!-- <span class="chat-list-text font-small-2 float-right chat-time">{{user.nombre}}</span> -->
               </h6>
               <p class="list-group-item-text chat-user-list-text m-0">
@@ -40,28 +40,28 @@
       <div class="row match-height">
         <!-- Bordered Form Layout starts -->
         <div class="col-lg-12 col-12">
-          <div class="card" *ngIf="detalleSolicitudUsuario != null">
+          <div class="card" *ngIf="trabajador != null">
             <div class="card-header">
               <!-- <h4 class="card-title">Bordered Form</h4> -->
               <div class="list-group-item " >
                 <div class="media chat-list-text py-1" >
                   <span class="avatar avatar-md mr-2">
-                    <img src="assets/img/portrait/small/avatar-s-15.png" alt="Avatar">
+                    <img src="{{trabajador.tfoto}}" alt="Avatar">
                     <span class="avatar-status"></span>
                     <i></i>
                   </span>
                   <div class="media-body">
-                    <h6 class="list-group-item-heading mb-1">{{detalleSolicitudUsuario.usuariosolicitado}}
+                    <h6 class="list-group-item-heading mb-1">{{trabajador.tdescusuasoli}}
                       <span class="chat-list-text font-small-2 float-right chat-time">Esperando Aprobación</span>
                     </h6>
                     <p class="list-group-item-text chat-user-list-text m-0">
                       <i class="ft-calendar primary font-small-2 mr-1"></i>
-                      <span>{{detalleSolicitudUsuario.periodo}} (7 días)</span>
+                      <span>{{trabajador.periodo}} ({{trabajador.tcantidaddias}} días)</span>
                       <span class="float-right primary">
                         <!-- <i class="font-medium-3 icon-check mr-1" ></i>
                         <i class="font-medium-3 icon-close mr-1" ></i> -->
                         <span class="badge badge-pill bg-light-primary badge-round"
-                          >{{detalleSolicitudUsuario.usuarioactual}}</span>
+                          >{{trabajador.tusuaaprob}}</span>
                       </span>
                     </p>
                   </div>
@@ -78,7 +78,7 @@
                         <label for="puesto" class="col-form-label">Puesto:</label>
                       </div>
                       <div class="col-lg-9 col-9">
-                        <label id="puesto" class="form-control">Puesto</label>
+                        <label id="puesto" class="form-control">{{trabajador.tdescunidfuncsoli}}</label>
                       </div>
                     </div>
                   </div>
@@ -88,7 +88,7 @@
                         <label for="fechIngr" class="col-form-label">Fecha Ingreso:</label>
                       </div>
                       <div class="col-lg-9 col-9">
-                        <label id="fechIngr" class="form-control">Fecha Ingreso</label>
+                        <label id="fechIngr" class="form-control">{{trabajador.tfechingrsoli}}</label>
                       </div>
                     </div>
                   </div>
@@ -100,7 +100,7 @@
                         <label for="descr" class="col-form-label">Descripción:</label>
                       </div>
                       <div class="col-lg-9 col-9">
-                        <label id="descr" class="form-control">Descripción</label>
+                        <label id="descr" class="form-control">{{trabajador.tdescripcion}}</label>
                       </div>
                     </div>
                   </div>
@@ -110,7 +110,7 @@
                         <label for="periVaca" class="col-form-label">Periodo Vacacional:</label>
                       </div>
                       <div class="col-lg-9 col-9">
-                        <label id="periVaca" class="form-control">Periodo Vacacional</label>
+                        <label id="periVaca" class="form-control">{{trabajador.tperiodo}}</label>
                       </div>
                     </div>
                   </div>
@@ -122,27 +122,27 @@
                         <label for="fechSoli" class="col-form-label">Fecha Solicitud:</label>
                       </div>
                       <div class="col-lg-9 col-9">
-                        <label id="fechSoli" class="form-control">Fecha Solicitud</label>
+                        <label id="fechSoli" class="form-control">{{trabajador.tfechregi}}</label>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-12">
                     <div class="card">
                       <div class="card-header">
                         <h4 class="card-title font-small-2">¿QUIÉN ESTARÁ AUSENTE?</h4>
                       </div>
                       <div class="card-content">
-                        <div class="card-body">
+                        <div class="card-body"> -->
               
                           <!-- ngx-datatable Basic -->
-                          <ngx-datatable [rows]="userRows" [rowHeight]="30" class="bootstrap core-bootstrap font-small-1" [limit]="10"
+                          <!-- <ngx-datatable [rows]="userRows" [rowHeight]="30" class="bootstrap core-bootstrap font-small-1" [limit]="10"
                             [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
                             <ngx-datatable-column name="Name" prop="name">
                               <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center"> -->
                                   <!-- <div *ngIf="row.avatar.length > 0; else customAvatar">
                                     <img class="rounded-circle mr-1" src="assets/img/portrait/small/{{row.avatar}}"
                                       height="32" width="32" alt="datatable-avatar">
@@ -153,7 +153,7 @@
                                       <div class="avatar-content">{{ name | shortName }}</div>
                                     </div>
                                   </ng-template> -->
-                                  <div class="cell-line-height">
+                                  <!-- <div class="cell-line-height">
                                     <p class="font-medium-1 line-height-1 mb-0">{{ Name }}</p>
                                     <span class="font-small-2">
                                       {{ row.name }}</span>
@@ -163,7 +163,7 @@
                             </ngx-datatable-column>
                             <ngx-datatable-column name="Periodo" prop="periodo" ></ngx-datatable-column>
                             <ngx-datatable-column name="Cantidad" prop="cantidad" ></ngx-datatable-column>
-                            <ngx-datatable-column name="Estado" prop="estadodesc" ></ngx-datatable-column>
+                            <ngx-datatable-column name="Estado" prop="estadodesc" ></ngx-datatable-column> -->
                             <!-- <ngx-datatable-column name="Salary" prop="salary" [width]="100"></ngx-datatable-column> -->
                             <!-- <ngx-datatable-column name="Status" prop="status" [width]="100">
                               <ng-template let-status="value" ngx-datatable-cell-template>
@@ -181,7 +181,7 @@
                               </ng-template>
                             </ngx-datatable-column> -->
               
-                          </ngx-datatable>
+                          <!-- </ngx-datatable> -->
                           <!--/ ngx-datatable Basic -->
               
                           <!-- <td class="text-truncate">
@@ -195,11 +195,11 @@
                               <i class="ft-x font-medium-3"></i>
                             </a>
                           </td> -->
-                        </div>
+                        <!-- </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

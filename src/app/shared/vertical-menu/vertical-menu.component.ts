@@ -23,7 +23,7 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('toggleIcon') toggleIcon: ElementRef;
   public menuItems: any[];
   level: number = 0;
-  logoUrl = 'assets/img/logo.png';
+  logoUrl = 'assets/img/logo-nettalco-1.png';
   public config: any = {};
   protected innerWidth: any;
   layoutSub: Subscription;
@@ -100,7 +100,7 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
       this.logoUrl = 'assets/img/logo-dark.png';
     }
     else {
-      this.logoUrl = 'assets/img/logo.png';
+      this.logoUrl = 'assets/img/logo-nettalco-1.png';
     }
 
     if(this.config.layout.sidebar.collapsed) {

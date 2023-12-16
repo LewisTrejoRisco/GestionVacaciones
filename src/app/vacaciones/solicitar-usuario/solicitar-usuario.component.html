@@ -3,83 +3,103 @@
       <div class="card">
         <div class="card-content">
           <div class="card-body font-small-1">
-            <!-- <h1 class="card-title font-small-2">
-              <span>Solicitar como usuario</span>
-            </h1> -->
             <p class="grey"></p>
             <div class="row">
                 <div class="col-xs-12 col-md-4">
                     <label>Solicitar como usuario</label>
                     <fieldset class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" id="iconLeft1" placeholder="Ingrese código de trabajador">
+                        <input type="text" class="form-control" [(ngModel)]="codigoTrabajador" id="iconLeft1" placeholder="Ingrese código de trabajador">
                         <div class="form-control-position">
                             <i class="ft-user"></i>
                         </div>
-                        <!-- <div class="input-group-append">
-                          <button class="btn btn-primary" type="button">Go</button>
-                        </div> -->
                     </fieldset>
                     <button type="button" class="btn btn-secondary" (click)="obtenerUsuario()">Entrar</button>
                 </div>
+                <div class="col-xs-12 col-md-4" *ngIf="usuarioSolicitar!=null">
+                  <div class="users-list-padding position-relative">
+                    <a class="list-group-item " >
+                      <div class="media chat-list-text py-1" >
+                        <span class="avatar avatar-md mr-2">
+                          <img src="{{usuarioSolicitar.p_foto}}" alt="Avatar">
+                          <span class="avatar-status"></span>
+                          <i></i>
+                        </span>
+                        <div class="media-body">
+                          <h6 class="list-group-item-heading mb-1">{{usuarioSolicitar.p_nombcompleto}}
+                          </h6>
+                          <p class="list-group-item-text chat-user-list-text m-0">
+                            <i class="icon-badge primary font-small-2 mr-1"></i>
+                            <span>{{usuarioSolicitar.p_nombunidfunc}}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
             </div>
-            <!-- <button type="button" class="btn btn-primary mr-2" (click)="modalShowSolicitar()">Solicitar</button> -->
-            
           </div>
         </div>
       </div>
     </div>
 </div>
 <div class="row match-height" *ngIf="solicitarFlag">
-    <div class="col-xl-4 col-lg-12">
+    <div class="col-xl-3 col-lg-12">
       <div class="card">
         <div class="card-content">
-          <div class="card-body font-small-1">
+          <div class="card-body font-small-2">
             <h1 class="card-title font-small-2">
               <span>VACACIONES</span>
             </h1>
             <p class="grey"></p>
             <ul class="list-group mb-3">
               <li class="list-group-item" *ngFor="let solicitud of listaSolicitudesUsua">
-                <span>{{solicitud.status}}</span>
+                <span>{{solicitud.statusDesc}}</span>
                 <span class="badge float-right"
                 [ngClass]="{'bg-light-warning': solicitud.status == 'Pendiente', 'bg-light-success':solicitud.status == 'Aprobado', 'bg-light-danger':solicitud.status == 'Rechazado' , 'bg-light-primary':solicitud.status == 'Generado Pago' }"
                 >{{solicitud.cantidad}}</span>
               </li>
             </ul>
-            
-            <!-- <button type="button" class="btn btn-primary mr-2" (click)="modalShowSolicitar()">Solicitar</button> -->
-            <button type="button" class="btn btn-secondary mr-2" (click)="modalShowSolicitar()">Solicitar</button>
+            <button type="button" class="btn btn-secondary mr-2" (click)="modalShowSolicitar(0, null)">Solicitar</button>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="col-xl-8 col-lg-12">
+    <div class="col-xl-9 col-lg-12">
       <section id="ngx-datatable-basic">
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title font-small-2">HISTORIAL DE VACACIONES</h4>
+                <h4 class="card-title float-left font-small-2">HISTORIAL DE VACACIONES</h4>
+                <h4 class="card-title float-right font-small-2">Aprobador: {{usuarioSolicitar.p_nombresp}}</h4>
               </div>
               <div class="card-content">
                 <div class="card-body">
       
-                  <ngx-datatable #tableResponsive  [rows]="listaHistorialSolicitudesUsua" [rowHeight]="30" class="bootstrap core-bootstrap font-small-1" [limit]="10"
+                  <ngx-datatable #tableRowDetails  [rows]="listaHistorialSolicitudesUsua" [rowHeight]="30" class="bootstrap core-bootstrap" [limit]="10"
                     [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
-                    <ngx-datatable-column name="Periodo" prop="periodo" [resizeable]="false" >
-                      <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
-                        <div class="d-flex align-items-center">
-                          <div class="cell-line-height">
-                            <p class="font-medium-1 line-height-1 mb-0">{{ Periodo }}</p>
-                            <span class="">
-                              {{ row.periodo }}</span>
-                          </div>
+                    <ngx-datatable-row-detail [rowHeight]="50">
+                      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div class="ml-5 my-1">
+                          <div><strong>Dias a salir : </strong> {{ row.tcantidad }}</div>
+                          <div><strong>Motivo :</strong> {{ row.tdescripcion }}</div>
                         </div>
                       </ng-template>
+                    </ngx-datatable-row-detail>
+                    <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
+                      [canAutoResize]="false">
+                      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
+                          [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
+                          (click)="rowDetailsToggleExpand(row)">
+                        </a>
+                      </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="desctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="status">
+                    <ngx-datatable-column name="Período" prop="tperiodo"></ngx-datatable-column>
+                    <ngx-datatable-column name="Dias" prop="periodo"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
@@ -87,11 +107,11 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Actions">
-                      <ng-template ngx-datatable-cell-template>
-                        <i class="ft-eye text-primary cursor-pointer mr-2"></i>
-                        <i class="ft-edit text-primary cursor-pointer mr-2"></i>
-                        <i class="ft-x text-primary cursor-pointer"></i>
+                    <ngx-datatable-column prop="tsolicitudId" name="Actions">
+                      <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                        <!-- <i class="ft-eye text-primary cursor-pointer mr-2"></i> -->
+                        <i class="ft-edit text-primary cursor-pointer mr-2" [ngClass]="{'pace-inactive':row.tstatus == '4', 'pace-inactive':row.tstatus == '2', 'pace-inactive':row.tstatus == '3' }" (click)="modalShowSolicitar(1, row)"></i>
+                        <i class="ft-x text-primary cursor-pointer" [ngClass]="{'pace-inactive':row.tstatus == '4', 'pace-inactive':row.tstatus == '2', 'pace-inactive':row.tstatus == '3' }" (click)="modalEliminarSolicitar(row)"></i>
                       </ng-template>
                     </ngx-datatable-column>
       

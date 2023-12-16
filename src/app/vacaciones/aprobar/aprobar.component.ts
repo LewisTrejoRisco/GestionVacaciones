@@ -1,44 +1,47 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import {
-  ColumnMode,
-  DatatableComponent,
-  SelectionType
+  ColumnMode
 } from '@swimlane/ngx-datatable';
-import { DataVacation } from '../data/datavacation.data';
 import { DataUserVacation } from '../data/datauservacation.data';
 import { Trabajador } from './trabajador.model';
-import { AprobarService } from './aprobar.service';
+import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
+import { AuthService } from 'app/shared/auth/auth.service';
 
 @Component({
   selector: 'app-aprobar',
   templateUrl: './aprobar.component.html',
   styleUrls: ['./aprobar.component.scss', '../../../assets/sass/libs/datatables.scss'],
-  providers: [AprobarService]
+  providers: [SolicitarService]
 
 })
 export class AprobarComponent implements OnInit {
 
-  trabajador: Trabajador[] = [];
   public ColumnMode = ColumnMode;
   public userRows = DataUserVacation;
   public expanded: any = {};
 
+
+  //NUEVO
+  sesion: any;
+  trabajador: Trabajador = null;
   public solicitudesPendientes: any = [];
   public detalleSolicitudUsuario: any = null;
+  objVacaUsua: any;
 
-  constructor(private aprobarService: AprobarService, private modalService: NgbModal) {
-    this.trabajador = aprobarService.trabajador;
+  constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
+    private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.sesion = JSON.parse(this.authService.userToken);
     this.listarSolicitudesPendientes();
     console.log(this.detalleSolicitudUsuario)
   }
 
   listarSolicitudesPendientes() {
-    this.aprobarService.listarSolicitudesPendientes('E003620', '1', 1).subscribe(
+    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 1).subscribe(
       resp => {
         // this.listaHistorialSolicitudes = resp;
         console.log(resp);
@@ -53,24 +56,30 @@ export class AprobarComponent implements OnInit {
   detalleSolicitud(user: any) {
     this.detalleSolicitudUsuario = user;
     console.log(this.detalleSolicitudUsuario)
+    this.aprobarService.listarDetalleUsuario(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
+      resp => {
+        console.log(resp)
+        this.objVacaUsua = resp;
+        this.trabajador = {
+          tsolicitudId: this.detalleSolicitudUsuario.tsolicitudId,
+          tusuasoli: this.detalleSolicitudUsuario.tusuasoli,
+          tfoto: this.detalleSolicitudUsuario.tfoto,
+          tdescusuasoli: this.detalleSolicitudUsuario.tdescusuasoli,
+          periodo: this.detalleSolicitudUsuario.periodo,
+          tcantidaddias: this.objVacaUsua.tcantidaddias,
+          tusuaaprob: this.detalleSolicitudUsuario.tusuaaprob,
+          tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
+          tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
+          tdescripcion: this.objVacaUsua.tdescripcion,
+          tperiodo: this.objVacaUsua.tperiodo,
+          tfechregi: this.detalleSolicitudUsuario.tfechregi
+        };
+      },
+      error => {
+        console.log("error detalle de solicitud:", error.message)
+      }
+    )
   }
-
-  // @ViewChild('tableRowDetails') tableRowDetails: any;
-  // public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
-
-  // public expanded: any = {};
-
-  /**
-   * rowDetailsToggleExpand
-   *
-   * @param row
-   */
-  // rowDetailsToggleExpand(row) {
-  //   this.tableRowDetails.rowDetail.toggleExpandRow(row);
-  // }
 
   modalShowCancelar(user: any) {
     console.log(user);
@@ -81,15 +90,15 @@ export class AprobarComponent implements OnInit {
     modalRef.result.then((result) => {
       console.log(result)
       let objRechazar = {
-        idsolicitud: user.idsolicitud,
-        usuarioactualizacion: user.usuarioactual,
+        idsolicitud: user.tsolicitudId,
+        usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
       console.log(objRechazar);
       this.aprobarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
           console.log(resp)
-          this.detalleSolicitudUsuario = null;
+          this.trabajador = null;
           this.listarSolicitudesPendientes();
         }, 
         error => {
@@ -102,17 +111,17 @@ export class AprobarComponent implements OnInit {
   }
 
   aprobarSolicitud(user: any) {
-    console.log(user.idsolicitud)
-    console.log(user.usuarioactual)
+    console.log(user.tsolicitudId)
+    console.log(user.tusuasoli)
     let objAprobar = {
-      idsolicitud: user.idsolicitud,
-      usuarioactualizacion: user.usuarioactual
+      idsolicitud: user.tsolicitudId,
+      usuarioactualizacion: this.sesion.p_codipers
     }
     console.log(objAprobar);
     this.aprobarService.aprobarSolicitud(objAprobar).subscribe(
       resp => {
         console.log(resp)
-        this.detalleSolicitudUsuario = null;
+        this.trabajador = null;
         this.listarSolicitudesPendientes();
       }, 
       error => {

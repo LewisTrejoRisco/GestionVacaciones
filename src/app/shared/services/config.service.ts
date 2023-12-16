@@ -54,13 +54,14 @@ export class ConfigService {
         sidebar: {
           collapsed: false,
           size: "sidebar-md",
-          backgroundColor: "ibiza-sunset",
+          backgroundColor: "purple-bliss",
           backgroundImage: true,
           backgroundImageURL: "assets/img/sidebar-bg/01.jpg"
         }
       }
     };
   }
+  // Temas
 
   // Default configurations for Dark layout. Please check *customizer.service.ts* for different colors and bg images options
 

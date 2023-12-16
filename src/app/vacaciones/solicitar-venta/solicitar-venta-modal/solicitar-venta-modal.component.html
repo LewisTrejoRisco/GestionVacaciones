@@ -1,0 +1,32 @@
+
+    <!-- <div class="modal-content"> -->
+<div class="modal-header">
+  <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Vacaciones' : 'Solicitar Vacaciones'}} </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    x
+  </button>
+</div>
+<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+  <div class="modal-body">
+    <div class="container">
+      <fieldset class="form-group position-relative has-icon-left">
+        <!-- <div class="form-control-position">
+          <i class="ft-message-square"></i>
+        </div> -->
+        <ng-select  [items]="diasASalir" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta">
+        </ng-select>
+        <!-- <input type="text" [formControl]="myForm.controls['hasta']" formControlName="hasta" class="form-control"
+          id="hasta" placeholder="Hasta" (keydown.enter)="$event.preventDefault()" required #hasta> -->
+        <!-- <div class="form-control-position control-position-right">
+          <i class="ft-message-square"></i>
+        </div> -->
+      </fieldset>
+    </div>
+  </div>
+  <div class="modal-footer taskboard-modal-footer">
+    <button class="btn btn-primary btn-save">
+      {{ id != 0 ? 'Actualizar' : 'Solicitar'}}
+    </button>
+  </div>
+</form>
+<!-- </div> -->

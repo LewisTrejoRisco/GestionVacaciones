@@ -59,7 +59,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService) {
 
     const browserLang: string = translate.getBrowserLang();
-    console.log(browserLang.match(/en|es|pt|de/))
+    // console.log(browserLang.match(/en|es|pt|de/))
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
     this.config = this.configService.templateConf;
     this.innerWidth = window.innerWidth;
@@ -81,10 +81,11 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isSmallScreen = false;
     }
     console.log("navbar")
-    this.sesion = this.authService.userToken;
-    this.nombreUsuario = this.sesion.nombreCompleto,
-    this.fotoUsuario = this.sesion.foto;
-    this.descripcionArea = this.sesion.descripcionArea;
+    this.sesion = JSON.parse(this.authService.userToken);
+    console.log(this.sesion)
+    this.nombreUsuario = this.sesion.p_nombcompleto,
+    this.fotoUsuario = this.sesion.p_foto;
+    this.descripcionArea = this.sesion.p_descpues;
     console.log(this.nombreUsuario)
     console.log(this.fotoUsuario);
   }
