@@ -71,7 +71,8 @@ export class AprobarPermisoComponent implements OnInit {
           tminufin: this.objVacaUsua.tminufin,
           tmotivo: this.objVacaUsua.tmotivo,
           tperiodo: this.objVacaUsua.tperiodo,
-          tfechregi: this.detalleSolicitudUsuario.tfechregi
+          tfechregi: this.detalleSolicitudUsuario.tfechregi,
+          tfechinicio: this.objVacaUsua.tfechinicio
         };
       },
       error => {

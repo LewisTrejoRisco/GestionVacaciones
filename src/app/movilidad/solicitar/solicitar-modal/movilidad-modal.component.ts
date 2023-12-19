@@ -83,16 +83,24 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   private buildItemForm(item) {
-    console.log(item)
+    if(item.transporte != null) {
+      item.transporte = this.transporte.find(a => a.name == item.transporte);
+    }
+    if(item.origen != null) {
+      item.origen = this.origen.find(a => a.name == item.origen);
+    }
+    if(item.destino != null) {
+      item.destino = this.destino.find(a => a.name == item.destino);
+    }
     this.myForm = this.formBuilder.group({
-      fechaInic: [item.fechaInic || '', Validators.required],
-      fechaFina: [item.fechaFina || '', Validators.required],
-      numeViajes: [item.numeViajes || '', Validators.required],
+      fechaInic: [item.fechaInic || null, Validators.required],
+      fechaFina: [item.fechaFina || null, Validators.required],
+      numeViajes: [item.numeViajes || null, Validators.required],
       transporte: [item.transporte || null, Validators.required],
       origen: [item.origen || null, Validators.required],
       destino: [item.destino || null, Validators.required],
-      motivo: [item.motivo || '', Validators.required],
-      monto: [item.monto || '', Validators.required]
+      motivo: [item.motivo || null, Validators.required],
+      monto: [item.monto || null, Validators.required]
     });
   }
 

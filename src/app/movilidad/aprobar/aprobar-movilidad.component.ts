@@ -59,7 +59,7 @@ export class AprobarMovilidadComponent implements OnInit {
   detalleSolicitud(user: any) {
     this.detalleSolicitudUsuario = user;
     console.log(this.detalleSolicitudUsuario)
-    this.aprobarService.listarDetalleUsuarioLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
+    this.aprobarService.listarDetalleMovilidadLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
         console.log(resp)
         this.objMoviUsua = resp;
@@ -73,10 +73,14 @@ export class AprobarMovilidadComponent implements OnInit {
           tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tfechregi: this.detalleSolicitudUsuario.tfechregi,
-          // tcantidaddias: this.objLiceUsua.tcantidaddias,
-          // tfechinicio: this.objLiceUsua.tfechinicio,
           tmotivo: this.objMoviUsua.tmotivo,
-          // tficheroadjunto: this.objLiceUsua.tficheroadjunto,
+          tdestino: this.objMoviUsua.tdestino,
+          tmonto: this.objMoviUsua.tmonto,
+          tnumeviaje: this.objMoviUsua.tnumeviaje,
+          torigen: this.objMoviUsua.torigen,
+          ttransporte: this.objMoviUsua.ttransporte,
+          tfechinicio: this.objMoviUsua.tfechinicio,
+          tfechfin: this.objMoviUsua.tfechfin
         };
       },
       error => {

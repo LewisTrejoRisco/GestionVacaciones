@@ -16,20 +16,23 @@ export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";
 export const LISTAR_DETALLE_USUARIO = "/vacaciones/listarXSolicitud?tsolicitudId=";
 
 // Solicitar permiso
+export const SOLICITUD_HISTORIALPERMISOXUSUARIO = "/solicitud/listarHistorialPermisoXUsuario?codiUsua=";
 export const GRABAR_PERMISO = "/solicitud/grabarPermiso";
 
 // Aprobar permiso
 export const LISTAR_DETALLE_USUARIO_PERMISO = "/permisos/listarXSolicitud?tsolicitudId=";
 
 // Solicitar licencia
+export const SOLICITUD_HISTORIALLICENCIAXUSUARIO = "/solicitud/listarHistorialLicenciaXUsuario?codiUsua=";
 export const GRABAR_LICENCIA = "/solicitud/grabarLicencia";
 
 // Aprobar licencia
 export const LISTAR_DETALLE_USUARIO_LICENCIA = "/licencias/listarXSolicitud?tsolicitudId=";
 
-// Solicitar licencia
+// Solicitar movilidad
 export const GRABAR_MOVILIDAD = "/solicitud/grabarMovilidad";
+export const SOLICITUD_HISTORIALMOVILIDADXUSUARIO = "/solicitud/listarHistorialMovilidadXUsuario?codiUsua=";
 
-// Aprobar licencia
+// Aprobar movilidad
 export const LISTAR_DETALLE_USUARIO_MOVILIDAD = "/movilidad/listarXSolicitud?tsolicitudId=";
 

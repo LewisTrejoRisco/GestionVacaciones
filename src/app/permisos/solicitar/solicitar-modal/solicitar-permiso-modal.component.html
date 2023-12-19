@@ -9,32 +9,52 @@
 <form [formGroup]="myForm" (ngSubmit)="submitForm()">
   <div class="modal-body">
     <div class="container">
-      <fieldset class="form-group position-relative has-icon-left">
-        <div class="input-group">
-          <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
-            id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
-          <div class="input-group-append">
-            <div class="input-group-text" (click)="d2.toggle()">
-              <i class="fa fa-calendar" style="cursor: pointer;"></i>
+      <div class="row">
+        <span>Desde: </span>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <div class="form-group position-relative has-icon-left" style="top: 34%!important;">
+            <div class="input-group">
+              <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
+                id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+              <div class="input-group-append">
+                <div class="input-group-text" (click)="d2.toggle()">
+                  <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                </div>
+              </div>
+              
+              <!-- <ngb-timepicker [(ngModel)]="time"></ngb-timepicker> -->
             </div>
           </div>
-          
-          <!-- <ngb-timepicker></ngb-timepicker> -->
         </div>
-      </fieldset>
-      <fieldset class="form-group position-relative has-icon-left">
+        <div class="col-xs-12 col-md-6">
+          <div class="">
+            <div class="">
+              <ngb-timepicker [formControl]="myForm.controls['timeInic']" formControlName="timeInic" id="timeInic"></ngb-timepicker>
+              <!-- <button class="btn mb-3 mt-3" style="opacity: 0;">&nbsp;</button> -->
+              <!-- <hr> -->
+              <!-- <p>Selected time: {{timeInic | json}}</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <span>Hasta: </span>
+      </div>
+      <div class="form-group position-relative has-icon-left">
         <div>
           <ng-select  [items]="horas" [formControl]="myForm.controls['horas']" bindLabel="name" formControlName="horas" placeholder="Elegir horas a salir" id="horas">
           </ng-select>
         </div>
-      </fieldset>
-      <fieldset class="form-group position-relative has-icon-left">
+      </div>
+      <div class="form-group position-relative has-icon-left">
         <div>
           <ng-select  [items]="minutos" [formControl]="myForm.controls['minutos']" bindLabel="name" formControlName="minutos" placeholder="Elegir minutos a salir" id="minutos">
           </ng-select>
         </div>
-      </fieldset>
-      <fieldset class="form-group position-relative has-icon-left">
+      </div>
+      <div class="form-group position-relative has-icon-left">
         <div class="form-control-position">
           <i class="ft-grid"></i>
         </div>
@@ -43,7 +63,7 @@
         <div class="form-control-position control-position-right">
           <i class="ft-grid"></i>
         </div>
-      </fieldset>
+      </div>
     </div>
   </div>
   <div class="modal-footer taskboard-modal-footer">

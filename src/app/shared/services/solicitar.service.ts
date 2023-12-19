@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_SOLICITUD_PENDIENTE, RECHAZAR_SOLICITUD, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_SOLICITUD_PENDIENTE, RECHAZAR_SOLICITUD, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 
@@ -23,6 +23,36 @@ export class SolicitarService {
     public listarHistorialSolicitudes(codiUsua: string, ttiposolicitudId: number) {
         console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar historial. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarHistorialPermisoSolicitudes(codiUsua: string, ttiposolicitudId: number) {
+        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALPERMISOXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALPERMISOXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar historial. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarHistorialLicenciasSolicitudes(codiUsua: string, ttiposolicitudId: number) {
+        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALLICENCIAXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALLICENCIAXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar historial. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarHistorialMovilidadSolicitudes(codiUsua: string, ttiposolicitudId: number) {
+        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALMOVILIDADXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+            return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALMOVILIDADXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar historial. Msg: ' + e.error);
                 return throwError(e);
@@ -103,6 +133,16 @@ export class SolicitarService {
     public listarDetalleUsuarioLicencia(tsolicitudId: number) {
         console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_LICENCIA + tsolicitudId)
             return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_LICENCIA + tsolicitudId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarDetalleMovilidadLicencia(tsolicitudId: number) {
+        console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_MOVILIDAD + tsolicitudId)
+            return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_MOVILIDAD + tsolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
                 return throwError(e);
