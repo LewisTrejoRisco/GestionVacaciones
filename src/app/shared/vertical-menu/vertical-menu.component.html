@@ -26,7 +26,8 @@
   <div class="nav-container">
     <ul class="navigation" appSidebarDropdown>
       <!-- First level menu -->
-      <li appSidebarlink *ngFor="let menuItem of menuItems" [parent]="menuItem.title" [path]="menuItem.path" level="{{level + 1}}" [hasSub]="menuItem.class.includes('has-sub') ? true: false"
+      <li appSidebarlink *ngFor="let menuItem of menuItems" [parent]="menuItem.title" [path]="menuItem.path" level="{{level + 1}}" 
+        [hasSub]="menuItem.class.includes('has-sub') ? true: false"
         [ngClass]="{'has-sub': menuItem.class.includes('has-sub') ? true: false}"
         [routerLinkActive]="menuItem.submenu.length != 0 ? 'open' : 'active'" [routerLinkActiveOptions]="{exact: false}">
         <a appSidebarAnchorToggle *ngIf="menuItem.submenu.length > 0 && !menuItem.isExternalLink">

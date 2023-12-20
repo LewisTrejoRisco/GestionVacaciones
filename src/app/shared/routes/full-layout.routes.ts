@@ -23,18 +23,18 @@ export const Full_ROUTES: Routes = [
   //   path: 'maps',
   //   loadChildren: () => import('../../maps/maps.module').then(m => m.MapsModule)
   // },
-  {
-    path: 'tables',
-    loadChildren: () => import('../../tables/tables.module').then(m => m.TablesModule)
-  },
+  // {
+  //   path: 'tables',
+  //   loadChildren: () => import('../../tables/tables.module').then(m => m.TablesModule)
+  // },
   // {
   //   path: 'datatables',
   //   loadChildren: () => import('../../data-tables/data-tables.module').then(m => m.DataTablesModule)
   // },
-  {
-    path: 'uikit',
-    loadChildren: () => import('../../ui-kit/ui-kit.module').then(m => m.UIKitModule)
-  },
+  // {
+  //   path: 'uikit',
+  //   loadChildren: () => import('../../ui-kit/ui-kit.module').then(m => m.UIKitModule)
+  // },
   // {
   //   path: 'components',
   //   loadChildren: () => import('../../components/ui-components.module').then(m => m.UIComponentsModule)
@@ -59,14 +59,14 @@ export const Full_ROUTES: Routes = [
   //   path: 'inbox',
   //   loadChildren: () => import('../../inbox/inbox.module').then(m => m.InboxModule)
   // },
-  {
-    path: 'taskboard',
-    loadChildren: () => import('../../taskboard/taskboard.module').then(m => m.TaskboardModule)
-  },
-  {
-    path: 'taskboard-ngrx',
-    loadChildren: () => import('../../taskboard-ngrx/taskboard-ngrx.module').then(m => m.TaskboardNGRXModule)
-  },
+  // {
+  //   path: 'taskboard',
+  //   loadChildren: () => import('../../taskboard/taskboard.module').then(m => m.TaskboardModule)
+  // },
+  // {
+  //   path: 'taskboard-ngrx',
+  //   loadChildren: () => import('../../taskboard-ngrx/taskboard-ngrx.module').then(m => m.TaskboardNGRXModule)
+  // },
   {
     path: 'vacaciones',
     loadChildren: () => import('../../vacaciones/vacaciones.module').then(m => m.VacacionesModule)

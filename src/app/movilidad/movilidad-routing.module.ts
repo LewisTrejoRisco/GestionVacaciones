@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MovilidadComponent } from './solicitar/movilidad.component';
 import { AprobarMovilidadComponent } from './aprobar/aprobar-movilidad.component';
+import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,13 @@ const routes: Routes = [
         component: AprobarMovilidadComponent,
         data: {
           title: 'Aprobar'
+        }
+      },
+      {
+        path: 'generar',
+        component: GenerarTxtComponent,
+        data: {
+          title: 'Generar TXT'
         }
       }
     ]

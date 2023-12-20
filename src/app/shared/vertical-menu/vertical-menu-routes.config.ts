@@ -3,30 +3,32 @@ import { RouteInfo } from './vertical-menu.metadata';
 //Sidebar menu Routes and data
 export const ROUTES: RouteInfo[] = [
   {
-    path: '', title: 'Vacaciones', icon: 'icon-plane', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-      { path: '/vacaciones/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/vacaciones/solicitarusuario', title: 'Solicitar por usuario', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/vacaciones/solicitarventa', title: 'Solicitar Venta ', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/vacaciones/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/vacaciones/aprobarventa', title: 'Aprobar Venta', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    path: '', title: 'Vacaciones', icon: 'icon-plane', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, perfil: '', submenu: [
+      { path: '/vacaciones/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
+      { path: '/vacaciones/solicitarusuario', title: 'Solicitar por usuario', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
+      { path: '/vacaciones/solicitarventa', title: 'Solicitar Venta ', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
+      { path: '/vacaciones/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '2' },
+      { path: '/vacaciones/aprobarventa', title: 'Aprobar Venta', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
+      { path: '/vacaciones/generar', title: 'Generar TXT', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
     ]
   },
   {
-    path: '', title: 'Permisos', icon: 'icon-screen-tablet', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-      { path: '/permisos/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/permisos/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    path: '', title: 'Permisos', icon: 'icon-screen-tablet', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, perfil: '', submenu: [
+      { path: '/permisos/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
+      { path: '/permisos/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '2' },
     ]
   },
   {
-    path: '', title: 'Licencias', icon: 'icon-screen-tablet', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-      { path: '/licencias/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/licencias/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    path: '', title: 'Licencias', icon: 'icon-screen-tablet', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, perfil: '', submenu: [
+      { path: '/licencias/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
+      { path: '/licencias/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '2' },
     ]
   },
   {
-    path: '', title: 'Movilidad', icon: 'ft-truck', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [
-      { path: '/movilidad/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-      { path: '/movilidad/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+    path: '', title: 'Movilidad', icon: 'ft-truck', class: 'has-sub', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, perfil: '', submenu: [
+      { path: '/movilidad/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
+      { path: '/movilidad/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '2' },
+      { path: '/movilidad/generar', title: 'Generar TXT', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
     ]
   }
   // ,{
