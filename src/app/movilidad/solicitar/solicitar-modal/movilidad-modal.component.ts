@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, Input, OnInit, Injectable } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { SolicitarService } from 'app/shared/services/solicitar.service';
 
 /**
  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
@@ -36,6 +37,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
     {
       provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter
     },
+    SolicitarService
   ]
 })
 export class MovilidadModalComponent implements OnInit{
@@ -50,47 +52,40 @@ export class MovilidadModalComponent implements OnInit{
     { id: 1, name: 'Urbano' },
     { id: 2, name: 'Taxi' }
   ];
-  origen = [
-    { id: 1, name: 'Lima' },
-    { id: 2, name: 'Callao' },
-    // { id: 3, name: '3', disabled: true },
-    { id: 4, name: 'ATE' },
-    // { id: 5, name: '5' },
-    // { id: 6, name: '6' },
-    // { id: 7, name: '7' },
-    // { id: 8, name: '8' }
-  ];
-  destino = [
-    { id: 1, name: 'Lima' },
-    { id: 2, name: 'Callao' },
-    // { id: 3, name: '3', disabled: true },
-    { id: 4, name: 'ATE' },
-    // { id: 5, name: '5' },
-    // { id: 6, name: '6' },
-    // { id: 7, name: '7' },
-    // { id: 8, name: '8' }
-  ];
+  origen: any = null;
+  destino: any = null;
 
   constructor(
    public activeModal: NgbActiveModal,
-   private formBuilder: UntypedFormBuilder
+   private formBuilder: UntypedFormBuilder,
+   private solicitarService: SolicitarService
   ) {
 
   }
 
   ngOnInit() {
-    this.buildItemForm(this.data);
+    this.solicitarService.listarDistrito().subscribe(
+      resp => {
+        this.origen = resp;
+        this.destino = resp;
+        this.buildItemForm(this.data);
+      }, 
+      error => {
+        console.log("error:", error.message)
+      }
+    )
   }
 
   private buildItemForm(item) {
+    console.log(this.origen)
     if(item.transporte != null) {
       item.transporte = this.transporte.find(a => a.name == item.transporte);
     }
     if(item.origen != null) {
-      item.origen = this.origen.find(a => a.name == item.origen);
+      item.origen = this.origen.find(a => a.descripcion_distrito == item.origen);
     }
     if(item.destino != null) {
-      item.destino = this.destino.find(a => a.name == item.destino);
+      item.destino = this.destino.find(a => a.descripcion_distrito == item.destino);
     }
     this.myForm = this.formBuilder.group({
       fechaInic: [item.fechaInic || null, Validators.required],

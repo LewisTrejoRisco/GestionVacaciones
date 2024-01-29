@@ -32,7 +32,7 @@ export class AprobarVentaComponent implements OnInit {
   }
 
   listarSolicitudesPendientesVenta() {
-    this.aprobarVentaService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 2).subscribe(
+    this.aprobarVentaService.listarSolicitudesPendientesXStatusXTipo('1', 2).subscribe(
       resp => {
         // this.listaHistorialSolicitudes = resp;
         console.log(resp);

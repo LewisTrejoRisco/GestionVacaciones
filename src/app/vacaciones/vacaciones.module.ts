@@ -15,6 +15,7 @@ import { SolicitarVentaComponent } from './solicitar-venta/solicitar-venta.compo
 import { SolicitarUsuarioComponent } from './solicitar-usuario/solicitar-usuario.component';
 import { AprobarVentaComponent } from './aprobar-venta/aprobar-venta.component';
 import { SolicitarVentaModalComponent } from './solicitar-venta/solicitar-venta-modal/solicitar-venta-modal.component';
+import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SolicitarVentaModalComponent } from './solicitar-venta/solicitar-venta-
                  SolicitarVentaModalComponent,
                  AprobarComponent, 
                  AprobarVentaComponent, 
-                 CancelarModalComponent],
+                 CancelarModalComponent,
+                 GenerarTxtComponent],
   imports: [
     CommonModule,
     VacacionesRoutingModule,

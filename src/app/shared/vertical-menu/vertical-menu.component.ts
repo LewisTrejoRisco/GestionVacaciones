@@ -33,6 +33,7 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   collapseSidebar = false;
   resizeTimeout;
   sesion: any;
+  privilegio: string = '2';
 
   constructor(
     private router: Router,
@@ -52,7 +53,7 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.sesion = JSON.parse(this.authService.userToken);
     console.log("vertical-menu")
-    console.log(this.sesion.p_codipers)
+    console.log(this.sesion)
     this.menuItems = ROUTES;
   }
 

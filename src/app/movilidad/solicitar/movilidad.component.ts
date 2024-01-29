@@ -82,6 +82,7 @@ export class MovilidadComponent implements OnInit {
   }
 
   modalShowSolicitar(tipo: any, row: any) {
+    console.log(row)
     const modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
@@ -110,7 +111,7 @@ export class MovilidadComponent implements OnInit {
                                           origen: row.torigen, 
                                           destino: row.tdestino , 
                                           motivo: row.tmotivo , 
-                                          monto: row.tmonto  }; // should be the data
+                                          monto: row.tmonto }; // should be the data
     
     }
 
@@ -128,10 +129,10 @@ export class MovilidadComponent implements OnInit {
           tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
           tnumeviaje : result.numeViajes,
           ttransporte : result.transporte.name,
-          torigen : result.origen.name,
-          tdestino : result.destino.name,
+          torigen : result.origen.descripcion_distrito,
+          tdestino : result.destino.descripcion_distrito,
           tmotivo : result.motivo,
-          tmonto : result.monto,
+          tmonto : result.monto.toFixed(2),
         }
       } else {
         objSolicitud = {
@@ -145,10 +146,10 @@ export class MovilidadComponent implements OnInit {
           tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
           tnumeviaje : result.numeViajes,
           ttransporte : result.transporte.name,
-          torigen : result.origen.name,
-          tdestino : result.destino.name,
+          torigen : result.origen.descripcion_distrito,
+          tdestino : result.destino.descripcion_distrito,
           tmotivo : result.motivo,
-          tmonto : result.monto,
+          tmonto : result.monto.toFixed(2),
         }
       }
       console.log(objSolicitud);

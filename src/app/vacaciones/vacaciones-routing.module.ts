@@ -5,6 +5,7 @@ import { AprobarComponent } from './aprobar/aprobar.component';
 import { SolicitarVentaComponent } from './solicitar-venta/solicitar-venta.component';
 import { SolicitarUsuarioComponent } from './solicitar-usuario/solicitar-usuario.component';
 import { AprobarVentaComponent } from './aprobar-venta/aprobar-venta.component';
+import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,13 @@ const routes: Routes = [
         component: AprobarVentaComponent,
         data: {
           title: 'AprobarVenta'
+        }
+      },
+      {
+        path: 'generar',
+        component: GenerarTxtComponent,
+        data: {
+          title: 'generar'
         }
       }
     ]

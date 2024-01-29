@@ -29,7 +29,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title float-left font-small-2">HISTORIAL DE MOVILIDAD</h4>
+                <h4 class="card-title float-left font-small-2">HISTORIAL DE VENTA DE VACACIONES</h4>
                 <h4 class="card-title float-right font-small-2">Aprobador: {{sesion.p_nombresp}}</h4>
               </div>
               <div class="card-content">
@@ -38,7 +38,7 @@
                   <!-- ngx-datatable Basic -->
                   <ngx-datatable #tableRowDetails  [rows]="listaHistorialSolicitudes" [rowHeight]="30" class="bootstrap core-bootstrap font-small-2" [limit]="10"
                     [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
-                    <ngx-datatable-row-detail [rowHeight]="50">
+                    <!-- <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1">
                           <div><strong>- Número viaje : </strong> {{ row.tnumeviaje }} <strong>  - Transporte :</strong> {{ row.ttransporte }}  <strong>  - Monto :</strong> {{ row.tmonto }}</div>
@@ -47,8 +47,8 @@
                           
                         </div>
                       </ng-template>
-                    </ngx-datatable-row-detail>
-                    <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
+                    </ngx-datatable-row-detail> -->
+                    <!-- <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
                       [canAutoResize]="false">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                         <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
@@ -56,9 +56,9 @@
                           (click)="rowDetailsToggleExpand(row)">
                         </a>
                       </ng-template>
-                    </ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column>
+                    </ngx-datatable-column> -->
+                    <ngx-datatable-column name="Periodo" prop="tperiodo"></ngx-datatable-column>
+                    <ngx-datatable-column name="Días" prop="tcantidad"></ngx-datatable-column>
                     <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
                     <ngx-datatable-column name="Estado" prop="tstatus">
                       <ng-template let-status="value" ngx-datatable-cell-template>

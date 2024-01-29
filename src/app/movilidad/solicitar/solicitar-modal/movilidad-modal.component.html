@@ -6,7 +6,7 @@
     x
   </button>
 </div>
-<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+<form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm">
   <div class="modal-body">
     <div class="container">
       <div class="row">
@@ -58,13 +58,13 @@
       <div class="row mb-2">
         <div class="col-xs-12 col-md-6">
           <div>
-            <ng-select  [items]="origen" [formControl]="myForm.controls['origen']" bindLabel="name" formControlName="origen" placeholder="Elegir origen" id="origen">
+            <ng-select  [items]="origen" [formControl]="myForm.controls['origen']" bindLabel="descripcion_distrito" formControlName="origen" placeholder="Elegir origen" id="origen">
             </ng-select>
           </div>
         </div>
         <div class="col-xs-12 col-md-6">
           <div>
-            <ng-select  [items]="destino" [formControl]="myForm.controls['destino']" bindLabel="name" formControlName="destino" placeholder="Elegir destino" id="destino">
+            <ng-select  [items]="destino" [formControl]="myForm.controls['destino']" bindLabel="descripcion_distrito" formControlName="destino" placeholder="Elegir destino" id="destino">
             </ng-select>
           </div>
         </div>
