@@ -1,23 +1,47 @@
 
     <!-- <div class="modal-content"> -->
+      
+<!-- <div class="col-xl-4 col-lg-4 col-12">
+  <div class="card">
+    <div class="card-header">
+      <h4>User Tour</h4>
+    </div>
+    <div class="card-body">
+      <div>
+        <p>
+          Haga clic en este botón para iniciar un recorrido de demostración para el usuario.</p>
+        <button id="btnStartTour" class="btn btn-primary" (click)="startTour()">Empezar</button>
+      </div>
+    </div>
+  </div>
+</div> -->
 <div class="modal-header">
   <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Vacaciones' : 'Solicitar Vacaciones'}} </h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     x
   </button>
 </div>
-<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+<form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm">
   <div class="modal-body">
     <div class="container">
       
       <div class="form-group position-relative has-icon-left">
         <div class="input-group">
           <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
-            id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+            id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker"  >
           <div class="input-group-append">
             <div class="input-group-text" (click)="d2.toggle()">
-              <i class="fa fa-calendar" style="cursor: pointer;"></i>
+              <i class="fa fa-calendar" id="fechInicVaca" style="cursor: pointer;"></i>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="input-group">
+            <span class="input-group-text" id="hasta">Período</span>
+            <input type="text" [formControl]="myForm.controls['periodo']" readonly formControlName="periodo" class="form-control"
+            id="periodo" placeholder="Período" (keydown.enter)="$event.preventDefault()" required #periodo>
           </div>
         </div>
       </div>
@@ -35,6 +59,15 @@
       <div class="row">
         <div class="col">
           <div class="input-group">
+            <span class="input-group-text" id="hasta">Reemplazo</span>
+            <input type="text" [formControl]="myForm.controls['reemplazo']" formControlName="reemplazo" class="form-control"
+            id="reemplazo" placeholder="Reemplazo" (keydown.enter)="$event.preventDefault()" required #reemplazo>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="input-group">
             <span class="input-group-text" id="hasta">Descripción</span>
             <!-- <input type="text" placeholder="Agregar Nombre" aria-label="Agregar Nombre"
               aria-describedby="basic-nombre-largo" id="nombreComida"> -->
@@ -43,27 +76,6 @@
           </div>
         </div>
       </div>
-      <!-- <fieldset class="form-group position-relative has-icon-left"> -->
-        <!-- <div class="form-control-position">
-          <i class="ft-message-square"></i>
-        </div> -->
-        
-        <!-- <input type="text" [formControl]="myForm.controls['hasta']" formControlName="hasta" class="form-control"
-          id="hasta" placeholder="Hasta" (keydown.enter)="$event.preventDefault()" required #hasta> -->
-        <!-- <div class="form-control-position control-position-right">
-          <i class="ft-message-square"></i>
-        </div> -->
-      <!-- </fieldset> -->
-      <!-- <fieldset class="form-group position-relative has-icon-left">
-        <div class="form-control-position">
-          <i class="ft-grid"></i>
-        </div>
-        <input type="text" [formControl]="myForm.controls['descripcion']" formControlName="descripcion" class="form-control"
-          id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" required #descripcion>
-        <div class="form-control-position control-position-right">
-          <i class="ft-grid"></i>
-        </div>
-      </fieldset> -->
     </div>
   </div>
   <div class="modal-footer taskboard-modal-footer">
@@ -72,4 +84,3 @@
     </button>
   </div>
 </form>
-<!-- </div> -->

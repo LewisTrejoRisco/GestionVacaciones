@@ -268,9 +268,10 @@
           <li class="dropdown nav-item mr-1" placement="bottom-left" display="static" ngbDropdown >
             <a class="nav-link dropdown-toggle user-dropdown d-flex align-items-end" id="dropdownBasic2"
               href="javascript:;" data-toggle="dropdown" ngbDropdownToggle>
-              <div class="user d-md-flex d-none mr-2">
-                <span class="text-right">{{nombreUsuario}}</span><span
-                  class="text-right text-muted font-small-3">{{descripcionArea}}</span>
+              <!-- <div class="user d-md-flex d-none mr-2"> -->
+              <div class="user d-flex d-none mr-2">
+                <span class="text-right">{{nombreUsuario}}</span>
+                <span class="text-right text-muted font-small-3">{{descripcionArea}}</span>
               </div>
               <img class="avatar" src="{{fotoUsuario}}" alt="avatar" height="35" width="35" />
             </a>
@@ -283,14 +284,32 @@
               </a>
               <a class="dropdown-item" routerLink="/pages/profile">
                 <div class="d-flex align-items-center">
-                  <i class="ft-edit mr-2"></i><span>Edit Profile</span>
+                  <i class="ft-user mr-2"></i><span>{{codigoUsuario}}</span>
                 </div>
               </a>
-              <a class="dropdown-item" routerLink="/inbox">
+              <a class="dropdown-item">
                 <div class="d-flex align-items-center">
-                  <i class="ft-mail mr-2"></i><span>My Inbox</span>
+                  <i class="ft-calendar mr-2"></i><span>{{fechaIngreso}}</span>
                 </div>
               </a> -->
+              <a class="d-flex justify-content-between read-notification" href="javascript:void(0)">
+                <div class="media d-flex align-items-center">
+                  <!-- <div class="media-left">
+                    <div class="mr-3">
+                      <img class="avatar" src="assets/img/portrait/small/avatar-s-7.png" alt="avatar" height="45"
+                        width="45" />
+                    </div>
+                  </div> -->
+                  <div class="media-left">
+                    <h6 class="m-2" style="font-weight: 300!important;">
+                      <i class="ft-user mr-1"></i><span>{{codigoUsuario}}</span>
+                    </h6>
+                    <h6 class="m-2" style="font-weight: 300!important;">
+                      <i class="ft-calendar mr-1"></i><span>Fecha Ingreso: {{fechaIngreso}}</span>
+                    </h6>
+                  </div>
+                </div>
+              </a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" routerLink="/pages/login">
                 <div class="d-flex align-items-center">
@@ -299,7 +318,7 @@
               </a>
             </div>
           </li>
-          <!-- <li class="nav-item d-none d-lg-block mr-2 mt-1">
+          <!-- <li class="nav-item d-lg-block mr-2 mt-1">
             <a class="nav-link notification-sidebar-toggle" (click)="toggleNotificationSidebar();"><i
                 class="ft-align-right font-medium-3"></i></a>
           </li> -->

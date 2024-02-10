@@ -21,6 +21,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
    nombreUsuario: string = null;
    fotoUsuario: string = null;
    descripcionArea: string = null;
+   codigoUsuario: string = null;
+   fechaIngreso: string = null;
 
   currentLang = "en";
   selectedLanguageText = "English";
@@ -80,14 +82,13 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     else {
       this.isSmallScreen = false;
     }
-    console.log("navbar")
     this.sesion = JSON.parse(this.authService.userToken);
     console.log(this.sesion)
     this.nombreUsuario = this.sesion.p_nombcompleto,
     this.fotoUsuario = this.sesion.p_foto;
     this.descripcionArea = this.sesion.p_descpues;
-    console.log(this.nombreUsuario)
-    console.log(this.fotoUsuario);
+    this.codigoUsuario = this.sesion.p_codipers
+    this.fechaIngreso = this.sesion.p_fechingr.split("T")[0]
   }
 
   ngAfterViewInit() {

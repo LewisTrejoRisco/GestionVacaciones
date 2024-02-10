@@ -1,5 +1,5 @@
 {
-  "name": "apex-admin",
+  "name": "gestor-vacaciones",
   "version": "14.0.0",
   "license": "",
   "scripts": {
@@ -75,6 +75,7 @@
     "ngx-toastr": "13.2.0",
     "ngx-ui-switch": "10.0.2",
     "nouislider": "14.6.3",
+    "pdf-lib": "^1.17.1",
     "postcss-rtl": "1.7.3",
     "prismjs": "^1.23.0",
     "pug": "3.0.2",

@@ -8,6 +8,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarVentaModalComponent } from './solicitar-venta-modal/solicitar-venta-modal.component';
+import Swal from 'sweetalert2';
+import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
 
 @Component({
   selector: 'app-solicitar-venta',
@@ -50,6 +52,11 @@ export class SolicitarVentaComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -62,6 +69,11 @@ export class SolicitarVentaComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -117,9 +129,21 @@ export class SolicitarVentaComponent implements OnInit {
           console.log(resp)
           this.listarSolicitudesGroupBy();
           this.listarHistorialSolicitudes();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
 
@@ -127,5 +151,37 @@ export class SolicitarVentaComponent implements OnInit {
       console.log(error);
     });
   }
+
+  public modalEliminarSolicitar(user: any){
+    const modalRef = this.modalService.open(CancelarModalComponent);
+    modalRef.componentInstance.titulo = 'venta de vacaciones'; // should be the id
+    modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
+
+    modalRef.result.then((result) => {
+      let objRechazar = {
+        idsolicitud: user.tsolicitudId,
+        usuarioactualizacion: this.sesion.p_codipers,
+        motivorechazo: result.motivo
+      }
+      console.log(objRechazar);
+      this.solicitarVentaService.rechazarSolicitud(objRechazar).subscribe(
+        resp => {
+          console.log(resp)
+          this.listarHistorialSolicitudes();
+        }, 
+        error => {
+          console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
+        }
+      );
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
 
 }

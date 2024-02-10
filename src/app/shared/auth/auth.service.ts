@@ -15,7 +15,6 @@ export class AuthService {
 
   constructor(public _firebaseAuth: AngularFireAuth, public router: Router, private http: HttpClient) {
     this.user = _firebaseAuth.authState;
-    console.log(this.user)
     this.user.subscribe(
       (user) => {
         if (user) {
@@ -31,10 +30,8 @@ export class AuthService {
 
   signupUser(user: string, password: string) {
     //your code for signing up the new user
-    console.log('email: '+ user)
-    console.log('password: '+ password)
     // return this.http.get<any>('assets/json/loginResponse.json');
-    return this.obtenerDatos(user);
+    return this.obtenerDatos(user.toUpperCase());
   }
 
   signinUser(email: string, password: string) {

@@ -52,8 +52,6 @@ export class VerticalMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.sesion = JSON.parse(this.authService.userToken);
-    console.log("vertical-menu")
-    console.log(this.sesion)
     this.menuItems = ROUTES;
   }
 

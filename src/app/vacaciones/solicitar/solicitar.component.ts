@@ -4,11 +4,12 @@ import {
 } from '@swimlane/ngx-datatable';
 import { DataVacation } from '../data/datavacation.data';
 import { DataUserVacation } from '../data/datauservacation.data';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitarModalComponent } from './solicitar-modal/solicitar-modal.component';
 import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solicitar',
@@ -46,10 +47,8 @@ export class SolicitarComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
-    // this.listarSolicitudesGroupBy();
     this.listarHistorialSolicitudes();
     this.poblarListaResumen();
-    console.log(this.listaSolicitudes)
   }
 
   poblarListaResumen() {
@@ -60,14 +59,14 @@ export class SolicitarComponent implements OnInit {
         "cantidad": this.sesion.p_diaspaga,
       },
       {
+        "status": "p_diasvenc",
+        "statusDesc": "Vencidos",
+        "cantidad": this.sesion.p_diasvenc
+      },
+      {
         "status": "p_diaspend",
         "statusDesc": "Pendientes",
         "cantidad": this.sesion.p_diaspend
-      },
-      {
-        "status": "p_diastota",
-        "statusDesc": "Totales",
-        "cantidad": this.sesion.p_diastota
       },
       {
         "status": "p_diastrun",
@@ -75,9 +74,19 @@ export class SolicitarComponent implements OnInit {
         "cantidad": this.sesion.p_diastrun
       },
       {
-        "status": "p_diasvenc",
-        "statusDesc": "Vencidos",
-        "cantidad": this.sesion.p_diasvenc
+        "status": "p_diasadela",
+        "statusDesc": "Adelantado",
+        "cantidad": '0'
+      },
+      {
+        "status": "p_diastota",
+        "statusDesc": "Totales",
+        "cantidad": this.sesion.p_diastota
+      },
+      {
+        "status": "p_diasprog",
+        "statusDesc": "Programados",
+        "cantidad": '0'
       }
     ]
   }
@@ -90,6 +99,11 @@ export class SolicitarComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -101,7 +115,6 @@ export class SolicitarComponent implements OnInit {
    */
 
   rowDetailsToggleExpand(row) {
-    console.log(row);
     this.tableRowDetails.rowDetail.toggleExpandRow(row);
   }
 
@@ -109,7 +122,13 @@ export class SolicitarComponent implements OnInit {
     const modalRef = this.modalService.open(SolicitarModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, hasta: null, descripcion: null }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: null, 
+                                          hasta: null, 
+                                          descripcion: null, 
+                                          codipers: this.sesion.p_codipers,
+                                          periodo: null,
+                                          reemplazo: null
+                                        }; // should be the data
     } else {
       let fechInicEdit = null;
       if(row.tfechinicsoli.split('/').length == 3){
@@ -119,8 +138,13 @@ export class SolicitarComponent implements OnInit {
           "day": parseInt(row.tfechinicsoli.split('/')[0])
         };
       }
-      console.log(fechInicEdit)
-      modalRef.componentInstance.data = { fechaInic: fechInicEdit, hasta: row.tcantidad, descripcion: row.tdescripcion }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
+                                          hasta: row.tcantidad, 
+                                          descripcion: row.tdescripcion, 
+                                          codipers: this.sesion.p_codipers, 
+                                          periodo: row.tperiodo,
+                                          reemplazo: row.treemplazo
+                                        }; // should be the data
     }
     modalRef.result.then((result) => {
       let objSolicitud = null;
@@ -134,7 +158,9 @@ export class SolicitarComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           cantidaddias : result.hasta.name,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          periodo: result.periodo,
+          treemplazo: result.reemplazo
         }
       } else {
         objSolicitud = {
@@ -146,7 +172,9 @@ export class SolicitarComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           cantidaddias : result.hasta.name,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          periodo: result.periodo,
+          treemplazo: result.reemplazo
         }
       }
       console.log(objSolicitud);
@@ -155,9 +183,21 @@ export class SolicitarComponent implements OnInit {
           console.log(resp)
           this.poblarListaResumen();
           this.listarHistorialSolicitudes();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
@@ -166,13 +206,11 @@ export class SolicitarComponent implements OnInit {
   }
 
   public modalEliminarSolicitar(user: any){
-    console.log(user);
     const modalRef = this.modalService.open(CancelarModalComponent);
     modalRef.componentInstance.titulo = 'vacaciones'; // should be the id
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
@@ -186,6 +224,11 @@ export class SolicitarComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {

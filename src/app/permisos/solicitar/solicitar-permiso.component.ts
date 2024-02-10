@@ -9,6 +9,7 @@ import { SolicitarPermisoModalComponent } from './solicitar-modal/solicitar-perm
 import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solicitar-permiso',
@@ -21,16 +22,10 @@ export class SolicitarPermisoComponent implements OnInit {
 
   @ViewChild('tableRowDetails') tableRowDetails: any;
   public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
-
   public expanded: any = {};
   closeResult: string;
-
   public listaPermisos: any = [];
   public listaHistorialSolicitudes: any = [];
-
   //NUEVO
   sesion: any;
 
@@ -52,6 +47,11 @@ export class SolicitarPermisoComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -64,6 +64,11 @@ export class SolicitarPermisoComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -82,7 +87,12 @@ export class SolicitarPermisoComponent implements OnInit {
     const modalRef = this.modalService.open(SolicitarPermisoModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, timeInic: null, horas: null, minutos: null , descripcion: null }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: null, 
+                                          timeInic: null, 
+                                          horas: null, 
+                                          minutos: null , 
+                                          descripcion: null,
+                                          documento: null }; // should be the data
     } else {
       let fechInicEdit = null;
       let timeInicEdit = null;
@@ -98,11 +108,15 @@ export class SolicitarPermisoComponent implements OnInit {
           "minute": parseInt(row.tfechinicsoli.split(':')[1]), 
           "second": 0 
         };
-        modalRef.componentInstance.data = { fechaInic: fechInicEdit, timeInic: timeInicEdit, horas: row.thorasfin, minutos: row.tminufin , descripcion: row.tmotivo }; // should be the data
+        modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
+                                            timeInic: timeInicEdit, 
+                                            horas: row.thorasfin, 
+                                            minutos: row.tminufin , 
+                                            descripcion: row.tmotivo,
+                                            documento: row.tficheroadjunto }; // should be the data
       }
     }
     modalRef.result.then((result) => {
-      console.log(result)
       let objSolicitud = null;
       if(row == null) {
         objSolicitud = {
@@ -116,7 +130,8 @@ export class SolicitarPermisoComponent implements OnInit {
           status : "1",
           horas : result.horas.id,
           minutos : result.minutos.id,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          tficheroadjunto: result.documento
         }
       } else {
         objSolicitud = {
@@ -130,18 +145,30 @@ export class SolicitarPermisoComponent implements OnInit {
           status : "1",
           horas : result.horas.id,
           minutos : result.minutos.id,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          tficheroadjunto: result.documento
         }
       }
-      console.log(objSolicitud);
       this.solicitarService.grabarPermiso(objSolicitud).subscribe(
         resp => {
           console.log(resp)
           this.listarSolicitudesGroupBy();
           this.listarHistorialSolicitudes();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
 
@@ -172,11 +199,28 @@ export class SolicitarPermisoComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  createPDF(user: any) {
+    var userData = {
+      nombre: 'lewis bryan trejo risco',
+      codigo : '00E003625',
+      horaInicio: '08/02/2024 3:40',
+      horaFin: '08/02/2024 6:40',
+      fechaActual: '08/02/2024',
+      fechaAprobacion: '06/02/2024'
+    };
+    this.solicitarService.createPDF(userData, 'assets/img/logo-nettalco-1.png', 'output');
   }
 
 }

@@ -8,6 +8,8 @@ import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
 import { AuthService } from 'app/shared/auth/auth.service';
+import Swal from 'sweetalert2';
+import { User } from './user.model';
 
 @Component({
   selector: 'app-aprobar',
@@ -27,8 +29,10 @@ export class AprobarComponent implements OnInit {
   sesion: any;
   trabajador: Trabajador = null;
   public solicitudesPendientes: any = [];
+  public solicitudesAprobadas: any = [];
   public detalleSolicitudUsuario: any = null;
   objVacaUsua: any;
+  solicitudPendiente: User = null;
 
   constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
     private authService: AuthService) {
@@ -36,8 +40,8 @@ export class AprobarComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
+    this.listarSolicitudesAprobadas() ;
     this.listarSolicitudesPendientes();
-    console.log(this.detalleSolicitudUsuario)
   }
 
   listarSolicitudesPendientes() {
@@ -49,13 +53,34 @@ export class AprobarComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  listarSolicitudesAprobadas() {
+    this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 1).subscribe(
+      resp => {
+        console.log(resp);
+        this.solicitudesAprobadas = resp;
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes aprobadas:'+ error.message,
+          'error'
+        );
       }
     )
   }
 
   detalleSolicitud(user: any) {
     this.detalleSolicitudUsuario = user;
-    console.log(this.detalleSolicitudUsuario)
     this.aprobarService.listarDetalleUsuario(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
         console.log(resp)
@@ -72,23 +97,33 @@ export class AprobarComponent implements OnInit {
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tdescripcion: this.objVacaUsua.tdescripcion,
           tperiodo: this.objVacaUsua.tperiodo,
-          tfechregi: this.detalleSolicitudUsuario.tfechregi
+          tfechregi: this.detalleSolicitudUsuario.tfechregi,
+          treemplazo: this.objVacaUsua.treemplazo
         };
+        
+        this.solicitudesPendientes.forEach(user => {
+            user.isActive = false;
+        })
+        this.solicitudPendiente = user;
+        this.solicitudPendiente.isActive = true;
       },
       error => {
         console.log("error detalle de solicitud:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar detalle solicitud:'+ error.message,
+          'error'
+        );
       }
     )
   }
 
   modalShowCancelar(user: any) {
-    console.log(user);
     const modalRef = this.modalService.open(CancelarModalComponent);
     modalRef.componentInstance.titulo = 'vacaciones'; // should be the id
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
@@ -100,9 +135,15 @@ export class AprobarComponent implements OnInit {
           console.log(resp)
           this.trabajador = null;
           this.listarSolicitudesPendientes();
+          this.listarSolicitudesAprobadas();
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al rechazar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
@@ -111,8 +152,6 @@ export class AprobarComponent implements OnInit {
   }
 
   aprobarSolicitud(user: any) {
-    console.log(user.tsolicitudId)
-    console.log(user.tusuasoli)
     let objAprobar = {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
@@ -123,9 +162,22 @@ export class AprobarComponent implements OnInit {
         console.log(resp)
         this.trabajador = null;
         this.listarSolicitudesPendientes();
+        this.listarSolicitudesAprobadas();
+        Swal.fire({
+          title: 'Exito',
+          text: 'Solicitud aprobada',
+          icon: 'success',
+          timer: 1500, 
+          showConfirmButton: false,
+        })
       }, 
       error => {
         console.log("Error: " + error.message)
+        Swal.fire(
+          'Error',
+          'error al aprobar solicitud:'+ error.message,
+          'error'
+        );
       }
     );
   }

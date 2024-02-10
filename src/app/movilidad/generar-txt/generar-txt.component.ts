@@ -11,6 +11,7 @@ import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
 import { BancosService } from 'app/shared/services/bancos.service';
 import { CODIGO_BANCO_CUENTA_BENEFICIARIO, CODIGO_DEVOLUCION, CUENTA_CARGO, CUENTA_ORDENANTE, DIVISA_CUENTA_SOLES, DOCUMENTO_RUC_ORDENANTE, FLAG_IDC, INDICADOR_DEVOLUCION, MONEDA_CARGO_SOLES, MONEDA_IMPORTE_SOLES, NOMBRE_ORDENANTE, NUMERO_CUENTA_CARGO, PLANILLA_HABERES, PRIMER_BENEFICIARIO, PRIMER_BENEFICIARIO_SEGUNDO, PRIMER_ORDENANTE, REGISTRO_TOTALES, SEGUNDO_ORDENANTE, SERVICIO_QUINTA_CATEGORIA, SOLICITUDXUSUARIO, TIPO_ABONO_PROPIO, TIPO_CUENTA_ABONO_AHORRO, TIPO_CUENTA_TITULAR, TIPO_DOCUMENTO_RUC, TIPO_REGISTRO, TIPO_REGISTRO_BENEFICIARIO, URL_END_POINT_BASE, VALIDACION_PERTENENCIA_VALIDA } from "app/shared/utilitarios/Constantes";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-generar-txt',
@@ -23,9 +24,6 @@ export class GenerarTxtComponent implements OnInit {
 
   @ViewChild('tableRowDetails') tableRowDetails: any;
   public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
 
   public expanded: any = {};
   closeResult: string;
@@ -44,10 +42,7 @@ export class GenerarTxtComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
-    // this.listarSolicitudesGroupBy();
     this.listarHistorialSolicitudes();
-    console.log("solicitar componente")
-    console.log(this.sesion.p_codipers)
   }
 
   saveTextAsFile (data: any, filename: any){
@@ -94,6 +89,11 @@ export class GenerarTxtComponent implements OnInit {
       }, 
       error => {
         console.log("error al consultar:", error.message)
+        Swal.fire(
+          'Error',
+          'error al exportar TXT:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -101,24 +101,20 @@ export class GenerarTxtComponent implements OnInit {
   dataExportarBancos(personasPagar: any) { 
     var bcp = personasPagar.responseBCP.listBancoBCP;
     var bbva = personasPagar.responseBBVA.listBancoBBVA;
-    console.log('bcp' + bcp);
-    console.log('bcp' + bcp.length);
-    console.log('bbva' + bbva)
-    console.log('bbva' + bbva.length)
     if (bcp.length > 0) {
-      this.docuBCP(bcp, personasPagar.responseBCP.sumatoriaCuenta, personasPagar.responseBCP.totalEnteroBCP, personasPagar.responseBCP.totalDecimalBCP)
+      this.docuBCP(bcp, personasPagar.responseBCP.fechGeneTxt, personasPagar.responseBCP.sumatoriaCuenta, personasPagar.responseBCP.totalEnteroBCP, personasPagar.responseBCP.totalDecimalBCP)
     }
     if (bbva.length > 0) {
-      this.docuBBVA(bbva, personasPagar.responseBBVA.totalEnteroBBVA, personasPagar.responseBBVA.totalDecimalBBVA);
+      this.docuBBVA(bbva, personasPagar.responseBBVA.fechGeneTxt, personasPagar.responseBBVA.totalEnteroBBVA, personasPagar.responseBBVA.totalDecimalBBVA);
     }
   }
 
-  docuBBVA(listBanco: any, totalEntero: any, totalDecimal: any) {
+  docuBBVA(listBanco: any, fecha: string, totalEntero: any, totalDecimal: any) {
     var primerRegistro = PRIMER_ORDENANTE + 
         TIPO_DOCUMENTO_RUC + 
         this.PadLeft(DOCUMENTO_RUC_ORDENANTE, 12) + 
-        "17012024" + 
-        "17012024" + 
+        fecha + 
+        fecha + 
         this.PadLeft(CUENTA_ORDENANTE, 20) + 
         DIVISA_CUENTA_SOLES + 
         this.PadLeft(" ", 12) + 
@@ -198,16 +194,16 @@ export class GenerarTxtComponent implements OnInit {
     this.listarHistorialSolicitudes();
   }
 
-  docuBCP(listBanco: any, sumatoriaCuenta: number, totalEntero: any, totalDecimal: any) {
+  docuBCP(listBanco: any, fecha: string, sumatoriaCuenta: number, totalEntero: any, totalDecimal: any) {
     var primerRegistro = TIPO_REGISTRO +
           this.PadLeftCeros(listBanco.length, 6) + 
-          "20240127" + 
+          fecha + 
           PLANILLA_HABERES + 
           CUENTA_CARGO +
           MONEDA_CARGO_SOLES +
           this.PadLeft(NUMERO_CUENTA_CARGO, 20) + 
           this.PadLeftCeros(totalEntero+"."+totalDecimal, 17) +
-          this.PadLeft("HABERE_LIQUIDACIONEN", 40) + 
+          this.PadLeft("Referencia Haberes", 40) + 
           this.PadLeftCeros(sumatoriaCuenta.toString(), 15);
     listBanco.forEach(e => {
       var tipo = null;
@@ -242,7 +238,7 @@ export class GenerarTxtComponent implements OnInit {
           this.PadLeftCeros(e.montoEntero + "." + e.montoDecimal, 17) +
           FLAG_IDC
     });
-    var fileName = "HABERE_LIQUIDACIONBCP.txt"
+    var fileName = "Referencia Haberes.txt"
     this.saveTextAsFile(primerRegistro, fileName);
     this.listarHistorialSolicitudes();
 
@@ -257,6 +253,11 @@ export class GenerarTxtComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar listado de solicitudes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -269,6 +270,11 @@ export class GenerarTxtComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -282,121 +288,5 @@ export class GenerarTxtComponent implements OnInit {
   rowDetailsToggleExpand(row) {
     this.tableRowDetails.rowDetail.toggleExpandRow(row);
   }
-
-  // modalShowSolicitar(tipo: any, row: any) {
-  //   const modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
-  //   modalRef.componentInstance.id = tipo;
-  //   if(row == null) {
-  //     modalRef.componentInstance.data = { fechaInic: null, fechaFina: null, numeViajes: null, transporte: null , origen: null, destino: null , motivo: null , monto: null  }; // should be the data
-  //   } else {
-  //     let fechInicEdit = null;
-  //     let fechFinEdit = null;
-  //     if(row.tfechinicsoli.split('/').length == 3){
-  //       fechInicEdit = {
-  //         "year": parseInt(row.tfechinicsoli.split('/')[2]),
-  //         "month": parseInt(row.tfechinicsoli.split('/')[1]),
-  //         "day": parseInt(row.tfechinicsoli.split('/')[0])
-  //       };
-  //     }
-  //     if(row.tfechfinasoli.split('/').length == 3){
-  //       fechFinEdit = {
-  //         "year": parseInt(row.tfechfinasoli.split('/')[2]),
-  //         "month": parseInt(row.tfechfinasoli.split('/')[1]),
-  //         "day": parseInt(row.tfechfinasoli.split('/')[0])
-  //       };
-  //     }
-  //     modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
-  //                                         fechaFina: fechFinEdit, 
-  //                                         numeViajes: row.tnumeviaje, 
-  //                                         transporte: row.ttransporte , 
-  //                                         origen: row.torigen, 
-  //                                         destino: row.tdestino , 
-  //                                         motivo: row.tmotivo , 
-  //                                         monto: row.tmonto  }; // should be the data
-    
-  //   }
-
-  //   modalRef.result.then((result) => {
-  //     let objSolicitud = null;
-  //     if(row == null) {
-  //       objSolicitud = {
-  //         tsolicitudId : 0,
-  //         idtiposolicitud : "5",
-  //         usuarioregistro : this.sesion.p_codipers,
-  //         usuariosolicitado : this.sesion.p_codipers,
-  //         usuarioactual : this.sesion.p_matrresp,
-  //         status : "1",
-  //         tfechinicio : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-  //         tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
-  //         tnumeviaje : result.numeViajes,
-  //         ttransporte : result.transporte.name,
-  //         torigen : result.origen.name,
-  //         tdestino : result.destino.name,
-  //         tmotivo : result.motivo,
-  //         tmonto : result.monto,
-  //       }
-  //     } else {
-  //       objSolicitud = {
-  //         tsolicitudId : row.tsolicitudId,
-  //         idtiposolicitud : "5",
-  //         usuarioregistro : this.sesion.p_codipers,
-  //         usuariosolicitado : this.sesion.p_codipers,
-  //         usuarioactual : this.sesion.p_matrresp,
-  //         status : "1",
-  //         tfechinicio : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-  //         tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
-  //         tnumeviaje : result.numeViajes,
-  //         ttransporte : result.transporte.name,
-  //         torigen : result.origen.name,
-  //         tdestino : result.destino.name,
-  //         tmotivo : result.motivo,
-  //         tmonto : result.monto,
-  //       }
-  //     }
-  //     console.log(objSolicitud);
-  //     this.solicitarService.grabarMovilidad(objSolicitud).subscribe(
-  //       resp => {
-  //         console.log(resp)
-  //         this.listarSolicitudesGroupBy();
-  //         this.listarHistorialSolicitudes();
-  //       }, 
-  //       error => {
-  //         console.log("Error: " + error.message)
-  //       }
-  //     );
-
-  //   }).catch((error) => {
-  //     console.log(error);
-  //   });
-  // }
-
-  // public modalEliminarSolicitar(user: any){
-  //   console.log(user);
-  //   const modalRef = this.modalService.open(CancelarModalComponent);
-  //   modalRef.componentInstance.titulo = 'movilidad'; // should be the id
-  //   modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
-
-  //   modalRef.result.then((result) => {
-  //     console.log(result)
-  //     let objRechazar = {
-  //       idsolicitud: user.tsolicitudId,
-  //       usuarioactualizacion: this.sesion.p_codipers,
-  //       motivorechazo: result.motivo
-  //     }
-  //     console.log(objRechazar);
-  //     this.solicitarService.rechazarSolicitud(objRechazar).subscribe(
-  //       resp => {
-  //         console.log(resp)
-  //         this.listarHistorialSolicitudes();
-  //         this.listarSolicitudesGroupBy();
-  //       }, 
-  //       error => {
-  //         console.log("Error: " + error.message)
-  //       }
-  //     );
-  //   }).catch((error) => {
-  //     console.log(error);
-  //   });
-  // }
 
 }

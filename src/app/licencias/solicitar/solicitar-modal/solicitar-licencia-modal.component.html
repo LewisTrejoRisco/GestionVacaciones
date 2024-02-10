@@ -1,7 +1,12 @@
 
     <!-- <div class="modal-content"> -->
 <div class="modal-header">
-  <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Licencia' : 'Solicitar Licencia'}} </h4>
+    <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Licencia' : 'Solicitar Licencia'}} 
+      <h6>
+        (Sujeto a descuento)
+      </h6>
+    </h4>
+    
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     x
   </button>
@@ -33,6 +38,14 @@
         <div class="form-control-position control-position-right">
           <i class="ft-grid"></i>
         </div>
+      </div>
+      <div class="form-group position-relative has-icon-left">
+        <input class="form-control" id="formFileSm" type="file" multiple accept="pdf/*"
+                  (change)="imageUpload($event)">
+      </div>
+      <button class="btn btn-secondary" >Tomar foto <i class="fa fa-camera-retro"></i></button>
+      <div class="col" *ngIf="profileImage">
+        <a download='documento' [href]=profileImage >Descargar documento adjunto</a>
       </div>
     </div>
   </div>

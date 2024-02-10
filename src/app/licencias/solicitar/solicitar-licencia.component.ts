@@ -9,6 +9,7 @@ import { SolicitarLicenciaModalComponent } from './solicitar-modal/solicitar-lic
 import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solicitar-licencia',
@@ -21,16 +22,10 @@ export class SolicitarLicenciaComponent implements OnInit {
 
   @ViewChild('tableRowDetails') tableRowDetails: any;
   public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
-
   public expanded: any = {};
   closeResult: string;
-
   public listaLicencia: any = [];
   public listaHistorialLicencias: any = [];
-
   //NUEVO
   sesion: any;
 
@@ -52,6 +47,11 @@ export class SolicitarLicenciaComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -64,6 +64,11 @@ export class SolicitarLicenciaComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -82,7 +87,10 @@ export class SolicitarLicenciaComponent implements OnInit {
     const modalRef = this.modalService.open(SolicitarLicenciaModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, hasta: null, descripcion: null }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: null, 
+                                          hasta: null, 
+                                          descripcion: null,
+                                          documento: null }; // should be the data
     } else {
       let fechInicEdit = null;
       if(row.tfechinicsoli.split('/').length == 3){
@@ -92,8 +100,10 @@ export class SolicitarLicenciaComponent implements OnInit {
           "day": parseInt(row.tfechinicsoli.split('/')[0])
         };
       }
-      console.log(fechInicEdit)
-      modalRef.componentInstance.data = { fechaInic: fechInicEdit, hasta: row.tcantidaddias, descripcion: row.tmotivo }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
+                                          hasta: row.tcantidaddias, 
+                                          descripcion: row.tmotivo,
+                                          documento: row.tficheroadjunto }; // should be the data
     }
 
     modalRef.result.then((result) => {
@@ -108,7 +118,8 @@ export class SolicitarLicenciaComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           hasta : result.hasta.id,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          tficheroadjunto: result.documento
         }
       } else {
         objSolicitud = {
@@ -120,18 +131,30 @@ export class SolicitarLicenciaComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           hasta : result.hasta.id,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          tficheroadjunto: result.documento
         }
       }
-      console.log(objSolicitud);
       this.solicitarService.grabarLicencia(objSolicitud).subscribe(
         resp => {
           console.log(resp)
           this.listarSolicitudesGroupBy();
           this.listarHistorialSolicitudes();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
 
@@ -161,6 +184,11 @@ export class SolicitarLicenciaComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {

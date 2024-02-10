@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit, Injectable } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, Injectable, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
@@ -45,6 +45,7 @@ export class SolicitarLicenciaModalComponent implements OnInit{
   @Input() data: {};
   myForm: UntypedFormGroup;
   d2: any;
+  public profileImage:any;
   dias = [
     { id: 1, name: '1' },
     { id: 2, name: '2' },
@@ -61,13 +62,28 @@ export class SolicitarLicenciaModalComponent implements OnInit{
 
   constructor(
    public activeModal: NgbActiveModal,
-   private formBuilder: UntypedFormBuilder
+   private formBuilder: UntypedFormBuilder,
+   private changeDetector:ChangeDetectorRef
   ) {
 
   }
 
   ngOnInit() {
     this.buildItemForm(this.data);
+  }
+  
+  imageUpload(event:any) {
+    var file = event.target.files.length;
+    for(let i=0;i<file;i++)
+    {
+       var reader = new FileReader();
+       reader.onload = (event:any) => 
+       {
+           this.profileImage = event.target.result;
+           this.changeDetector.detectChanges();
+       }
+       reader.readAsDataURL(event.target.files[i]);
+    }
   }
 
   private buildItemForm(item) {
@@ -78,10 +94,13 @@ export class SolicitarLicenciaModalComponent implements OnInit{
       fechaInic: [item.fechaInic || null, Validators.required],
       hasta: [item.hasta || null, Validators.required],
       descripcion: [item.descripcion || null, Validators.required],
+      documento: [item.documento || null, Validators.required]
     });
+    this.profileImage = this.myForm.value.documento;
   }
 
   submitForm() {
+    this.myForm.value.documento = this.profileImage;
     this.activeModal.close(this.myForm.value);
   }
 

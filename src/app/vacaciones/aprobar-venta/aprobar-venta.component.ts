@@ -4,6 +4,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
 import { AuthService } from 'app/shared/auth/auth.service';
 import { Trabajador } from '../aprobar/trabajador.model';
+import Swal from 'sweetalert2';
+import { ColumnMode } from '@swimlane/ngx-datatable';
+import { DataUserVacation } from '../data/datauservacation.data';
+import { User } from '../aprobar/user.model';
 
 @Component({
   selector: 'app-aprobar-venta',
@@ -13,12 +17,18 @@ import { Trabajador } from '../aprobar/trabajador.model';
 
 })
 export class AprobarVentaComponent implements OnInit {
+
+  public ColumnMode = ColumnMode;
+  public userRows = DataUserVacation;
+  public expanded: any = {};
   public solicitudesPendientesVenta: any = [];
+  public solicitudesAprobadas: any = [];
   public detalleSolicitudUsuarioVenta: any = null;
   //NUEVO
   sesion: any;
   objVacaUsua: any;
   trabajador: Trabajador = null;
+  solicitudPendiente: User = null;
 
   constructor(private aprobarVentaService: SolicitarService, 
     private modalService: NgbModal,
@@ -27,26 +37,46 @@ export class AprobarVentaComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
+    this.listarSolicitudesAprobadas();
     this.listarSolicitudesPendientesVenta();
-    console.log(this.detalleSolicitudUsuarioVenta)
   }
 
   listarSolicitudesPendientesVenta() {
     this.aprobarVentaService.listarSolicitudesPendientesXStatusXTipo('1', 2).subscribe(
       resp => {
-        // this.listaHistorialSolicitudes = resp;
         console.log(resp);
         this.solicitudesPendientesVenta = resp;
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al listar solicitudes pendientes:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  listarSolicitudesAprobadas() {
+    this.aprobarVentaService.listarSolicitudesAprobadas(this.sesion.p_codipers, 2).subscribe(
+      resp => {
+        console.log(resp);
+        this.solicitudesAprobadas = resp;
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes aprobadas:'+ error.message,
+          'error'
+        );
       }
     )
   }
 
   detalleSolicitudVenta(user: any) {
     this.detalleSolicitudUsuarioVenta = user;
-    console.log(this.detalleSolicitudUsuarioVenta)
     this.aprobarVentaService.listarDetalleUsuario(this.detalleSolicitudUsuarioVenta.tsolicitudId).subscribe(
       resp => {
         console.log(resp)
@@ -63,22 +93,21 @@ export class AprobarVentaComponent implements OnInit {
           tfechingrsoli: this.detalleSolicitudUsuarioVenta.tfechingrsoli,
           tdescripcion: this.objVacaUsua.tdescripcion,
           tperiodo: this.objVacaUsua.tperiodo,
-          tfechregi: this.detalleSolicitudUsuarioVenta.tfechregi
+          tfechregi: this.detalleSolicitudUsuarioVenta.tfechregi,
+          treemplazo: this.objVacaUsua.treemplazo
         };
+        
+        this.solicitudesPendientesVenta.forEach(user => {
+            user.isActive = false;
+        })
+        this.solicitudPendiente = user;
+        this.solicitudPendiente.isActive = true;
       },
       error => {
         console.log("error detalle de solicitud:", error.message)
       }
     )
   }
-
-  // @ViewChild('tableRowDetails') tableRowDetails: any;
-  // public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
-
-  // public expanded: any = {};
 
   /**
    * rowDetailsToggleExpand
@@ -90,13 +119,11 @@ export class AprobarVentaComponent implements OnInit {
   // }
 
   modalShowCancelarVenta(user: any) {
-    console.log(user);
     const modalRef = this.modalService.open(CancelarModalComponent);
     modalRef.componentInstance.titulo = 'venta vacaciones'; // should be the id
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
@@ -111,6 +138,11 @@ export class AprobarVentaComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al rechazar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
@@ -119,8 +151,6 @@ export class AprobarVentaComponent implements OnInit {
   }
 
   aprobarSolicitudVenta(user: any) {
-    console.log(user.idsolicitud)
-    console.log(user.usuarioactual)
     let objAprobar = {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
@@ -131,9 +161,21 @@ export class AprobarVentaComponent implements OnInit {
         console.log(resp)
         this.trabajador = null;
         this.listarSolicitudesPendientesVenta();
+        Swal.fire({
+          title: 'Exito',
+          text: 'Solicitud aprobada',
+          icon: 'success',
+          timer: 1500, 
+          showConfirmButton: false,
+        })
       }, 
       error => {
         console.log("Error: " + error.message)
+        Swal.fire(
+          'Error',
+          'error al aprobar solicitud:'+ error.message,
+          'error'
+        );
       }
     );
   }

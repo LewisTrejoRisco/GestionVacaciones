@@ -9,7 +9,7 @@ export const ROUTES: RouteInfo[] = [
       { path: '/vacaciones/solicitarventa', title: 'Solicitar Venta ', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
       { path: '/vacaciones/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false, submenu: [], perfil: '2' },
       { path: '/vacaciones/aprobarventa', title: 'Aprobar Venta', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
-      { path: '/vacaciones/generar', title: 'Generar TXT', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
+      // { path: '/vacaciones/generar', title: 'Generar TXT', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
     ]
   },
   {

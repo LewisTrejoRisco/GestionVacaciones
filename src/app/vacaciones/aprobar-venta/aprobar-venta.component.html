@@ -1,21 +1,20 @@
 <div class="row match-height font-small-1">
-    <div class="col-xl-4 col-lg-12">
-      
-      <div id="users-list" class="list-group">
-        <h4 class="card-title font-small-2">SOLICITUDES PENDIENTES</h4>
+  <div class="col-xl-4 col-md-4 col-xs-4">
+    <div id="users-list" class="list-group">
+      <h4 class="card-title font-small-2">SOLICITUDES PENDIENTES</h4>
+      <div class="overflow-auto heightScroll">
         <div class="users-list-padding position-relative">
-  
-          <a class="list-group-item " 
+          <a class="list-group-item" [ngClass]="{'selected-usernet': usuario.isActive}"
             *ngFor="let usuario of solicitudesPendientesVenta">
-            <div class="media chat-list-text py-1"  (click)="detalleSolicitudVenta(usuario)">
+            <div class="media chat-list-text py-1"  (click)="detalleSolicitudVenta(usuario)"
+                [ngClass]="{'align-items-center': !usuario.isActiveChat}">
               <span class="avatar avatar-md mr-2">
                 <img src="{{usuario.tfoto}}" alt="Avatar">
                 <span class="avatar-status"></span>
                 <i></i>
               </span>
               <div class="media-body">
-                <h6 class="list-group-item-heading mb-1">{{usuario.tdescusuasoli}}
-                </h6>
+                <h6 class="list-group-item-heading mb-1">{{usuario.tdescusuasoli}} </h6>
                 <p class="list-group-item-text chat-user-list-text m-0">
                   <i class="ft-calendar primary font-small-2 mr-1"></i>
                   <!-- <span>{{trabajador.tcantidaddias}} días</span> -->
@@ -29,9 +28,10 @@
           </a>
         </div>
       </div>
-  
     </div>
-    <div class="col-xl-8 col-lg-12">
+  </div>
+  <div class="col-xl-8 col-md-8 col-xs-8">
+    <div class="col-xs-12">
       <section id="bordered-striped-form-layout">
         <div class="row match-height">
           <div class="col-lg-12 col-12">
@@ -126,4 +126,33 @@
         </div>
       </section>
     </div>
+    <div class="col-xs-12">
+      <h4 class="card-title font-small-2">SOLICITUDES APROBADAS</h4>
+      <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-content">
+          <div class="card-body">
+            <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2" [columnMode]="ColumnMode.force" 
+              [rows]="solicitudesAprobadas" [rowHeight]="30"[limit]="10"
+              [headerHeight]="30" [footerHeight]="50" >
+              <ngx-datatable-column name="Código" prop="tusuasoli"></ngx-datatable-column>
+              <ngx-datatable-column name="Nombre Completo" prop="tdescusuasoli"></ngx-datatable-column>
+              <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
+              <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column>
+              <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
+              <ngx-datatable-column name="Estado" prop="tstatus">
+                <ng-template let-status="value" ngx-datatable-cell-template>
+                  <div class="badge badge-pill"
+                    [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
+                    {{ status == 1 ? "Pendiente" : (status == 2 ? "Aprobado" : (status == 3 ? "Rechazado" : (status == 4 ? "Pago Generado" : status))) }}
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>

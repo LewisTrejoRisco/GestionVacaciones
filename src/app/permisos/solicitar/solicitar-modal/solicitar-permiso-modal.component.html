@@ -64,6 +64,21 @@
           <i class="ft-grid"></i>
         </div>
       </div>
+      <div class="form-group position-relative has-icon-left">
+        <input class="form-control" id="formFileSm" type="file" multiple accept="pdf/*"
+                  (change)="imageUpload($event)">
+      </div>
+      <button class="btn btn-secondary" >Tomar foto <i class="fa fa-camera-retro"></i></button>
+      <!-- <button class="btn btn-secondary" onclick="document.getElementById('idFoto').click()">Tomar foto <i class="fa fa-camera-retro"></i></button>
+      <input type="file" accept="image/*" capture="camera" id="idFoto" (change)="encodeImageFileAsURL()" style="display: none;">
+      <div id="dummy" style="display: none;">
+      </div>
+      <div>
+        <input type="text" style="width:100%;height:500px;display: none" formControlName="idFoto" id="txt">
+      </div> -->
+      <div class="col" *ngIf="profileImage">
+        <a download='documento' [href]=profileImage ><i class="ft-download mr-1"></i>Descargar documento adjunto</a>
+      </div>
     </div>
   </div>
   <div class="modal-footer taskboard-modal-footer">

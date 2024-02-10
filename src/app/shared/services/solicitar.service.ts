@@ -1,8 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, RECHAZAR_SOLICITUD, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
+import { PDFDocument, rgb } from 'pdf-lib';
+import { async } from "@angular/core/testing";
 
 @Injectable()
 export class SolicitarService {
@@ -103,6 +105,16 @@ export class SolicitarService {
     public listarSolicitudesPendientes(codiUsua: string, status: string, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarSolicitudesAprobadas(codiUsua: string, idtiposolicitud: number) {
+        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_APROBADA + "codiUsua=" + codiUsua + "&ttiposolicitudId=" + idtiposolicitud)
+            return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_APROBADA + "codiUsua=" + codiUsua + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
                 return throwError(e);
@@ -219,10 +231,81 @@ export class SolicitarService {
             })
         );
     }
-  
-    // public guardarDistritos(distritos: string): void {
-    //     sessionStorage.setItem('distritos', distritos);
-    // }
+
+    public reglasVacaciones(pCodipers: string) {
+        console.log(URL_END_POINT_BASE + REGLAS_VACACIONES + "pCodipers=" + pCodipers )
+            return this.http.get(URL_END_POINT_BASE + REGLAS_VACACIONES + "pCodipers=" + pCodipers )
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar las reglas. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
     
+    // Función para crear un PDF
+    
+    async createPDF(userData: any, imagePath: string, outputPath: string) {
+
+        
+        const pdfDoc = await PDFDocument.create()
+
+        const page = pdfDoc.addPage([550, 750])
+          // Cargar la imagen
+        const imgUrl = 'assets/img/nettalco.jpg'; // URL de la imagen
+        const imgBytes = await fetch(imgUrl).then(res => res.arrayBuffer());
+        const image = await pdfDoc.embedJpg(imgBytes);
+          // Dibujar la imagen en la página
+        const width = 100; // Anchura de la imagen en puntos
+        const height = 50; // Altura de la imagen en puntos
+        const x = 30; // Posición X de la imagen en la página
+        const y = 670; // Posición Y de la imagen en la página
+        page.drawImage(image, {
+            x,
+            y,
+            width,
+            height,
+        });
+
+        const form = pdfDoc.getForm()
+
+        page.drawText('BOLETA DE PERMISO', { x: 180, y: 650, size: 18 })
+
+        // const superheroField = form.createTextField('favorite.superhero')
+        // superheroField.setText('One Punch Man')
+        // superheroField.addToPage(page, { x: 50, y: 640 })
+
+        page.drawText('Fecha: ', { x: 50, y: 550, size: 15 })
+        page.drawText('---------------------------------', { x: 100, y: 540, size: 15 })
+        page.drawText(userData.fechaActual, { x: 120, y: 550, size: 13 })
+        page.drawText('Código: ', { x: 275, y: 550, size: 15 })
+        page.drawText('-------------------------------', { x: 330, y: 540, size: 15 })
+        page.drawText(userData.codigo, { x: 350, y: 550, size: 13 })
+        page.drawText('Nombre: ', { x: 50, y: 500, size: 15 })
+        page.drawText('---------------------------------------------------------------------------', { x: 113, y: 490, size: 15 })
+        page.drawText(userData.nombre, { x: 133, y: 500, size: 13 })
+        page.drawText('Hora Inicio: ', { x: 50, y: 450, size: 15 })
+        page.drawText('---------------------------', { x: 130, y: 440, size: 15 })
+        page.drawText(userData.horaInicio, { x: 150, y: 450, size: 13 })
+        page.drawText('Hora Fin: ', { x: 275, y: 450, size: 15 })
+        page.drawText('-----------------------------', { x: 340, y: 440, size: 15 })
+        page.drawText(userData.horaFin, { x: 360, y: 450, size: 13 })
+        page.drawText('Motivo: ', { x: 50, y: 400, size: 15 })
+        page.drawText('---------------------------------------------------------------------------', { x: 113, y: 390, size: 15 })
+        page.drawText('-----------------------------------------------------------------------------------------', { x: 50, y: 340, size: 15 })
+        page.drawText('Fecha aprobación: ', { x: 20, y: 30, size: 10 })
+        page.drawText(userData.fechaAprobacion, { x: 110, y: 30, size: 10 })
+
+
+        const pdfBytes = await pdfDoc.save()
+
+        // Crear un blob a partir de los bytes del PDF
+        const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+        // Descargar el archivo PDF
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = 'output.pdf';
+        link.click();
+    }
 
 }

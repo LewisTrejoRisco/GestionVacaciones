@@ -10,6 +10,7 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { MovilidadModalComponent } from './solicitar-modal/movilidad-modal.component';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-movilidad',
@@ -43,8 +44,6 @@ export class MovilidadComponent implements OnInit {
     this.sesion = JSON.parse(this.authService.userToken);
     this.listarSolicitudesGroupBy();
     this.listarHistorialSolicitudes();
-    console.log("solicitar componente")
-    console.log(this.sesion.p_codipers)
   }
 
   listarSolicitudesGroupBy() {
@@ -55,6 +54,11 @@ export class MovilidadComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -67,6 +71,11 @@ export class MovilidadComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -82,7 +91,6 @@ export class MovilidadComponent implements OnInit {
   }
 
   modalShowSolicitar(tipo: any, row: any) {
-    console.log(row)
     const modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
@@ -158,9 +166,21 @@ export class MovilidadComponent implements OnInit {
           console.log(resp)
           this.listarSolicitudesGroupBy();
           this.listarHistorialSolicitudes();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
 
@@ -191,6 +211,11 @@ export class MovilidadComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {

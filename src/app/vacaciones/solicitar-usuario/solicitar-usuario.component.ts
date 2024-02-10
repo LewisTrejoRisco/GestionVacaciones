@@ -9,6 +9,7 @@ import { SolicitarModalComponent } from '../solicitar/solicitar-modal/solicitar-
 import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solicitar-usuario',
@@ -21,10 +22,8 @@ export class SolicitarUsuarioComponent implements OnInit {
 
   @ViewChild('tableRowDetails') tableRowDetails: any;
   public ColumnMode = ColumnMode;
-  // row data
   public rows = DataVacation;
   public userRows = DataUserVacation;
-
   public expanded: any = {};
   closeResult: string;
 
@@ -53,14 +52,14 @@ export class SolicitarUsuarioComponent implements OnInit {
         "cantidad": usuario.p_diaspaga,
       },
       {
+        "status": "p_diasvenc",
+        "statusDesc": "Vencidos",
+        "cantidad": usuario.p_diasvenc
+      },
+      {
         "status": "p_diaspend",
         "statusDesc": "Pendientes",
         "cantidad": usuario.p_diaspend
-      },
-      {
-        "status": "p_diastota",
-        "statusDesc": "Totales",
-        "cantidad": usuario.p_diastota
       },
       {
         "status": "p_diastrun",
@@ -68,9 +67,19 @@ export class SolicitarUsuarioComponent implements OnInit {
         "cantidad": usuario.p_diastrun
       },
       {
-        "status": "p_diasvenc",
-        "statusDesc": "Vencidos",
-        "cantidad": usuario.p_diasvenc
+        "status": "p_diasadela",
+        "statusDesc": "Adelantado",
+        "cantidad": '0'
+      },
+      {
+        "status": "p_diastota",
+        "statusDesc": "Totales",
+        "cantidad": usuario.p_diastota
+      },
+      {
+        "status": "p_diasprog",
+        "statusDesc": "Programados",
+        "cantidad": '0'
       }
     ]
   }
@@ -91,6 +100,11 @@ export class SolicitarUsuarioComponent implements OnInit {
       },
       error => {
         this.solicitarFlag = false;
+        Swal.fire(
+          'Error',
+          'error al obtener usuario:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -99,7 +113,11 @@ export class SolicitarUsuarioComponent implements OnInit {
     const modalRef = this.modalService.open(SolicitarModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, hasta: null, descripcion: null }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: null, 
+                                          hasta: null, 
+                                          descripcion: null, 
+                                          codipers: this.usuarioSolicitar.p_codipers,
+                                          periodo: null }; // should be the data
     } else {
       let fechInicEdit = null;
       if(row.tfechinicsoli.split('/').length == 3){
@@ -109,8 +127,11 @@ export class SolicitarUsuarioComponent implements OnInit {
           "day": parseInt(row.tfechinicsoli.split('/')[0])
         };
       }
-      console.log(fechInicEdit)
-      modalRef.componentInstance.data = { fechaInic: fechInicEdit, hasta: row.tcantidad, descripcion: row.tdescripcion }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
+                                          hasta: row.tcantidad, 
+                                          descripcion: row.tdescripcion, 
+                                          codipers: this.usuarioSolicitar.p_codipers,
+                                          periodo: null }; // should be the data
     }
     modalRef.result.then((result) => {
       let objSolicitud = null;
@@ -124,7 +145,8 @@ export class SolicitarUsuarioComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           cantidaddias : result.hasta.name,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          periodo: result.periodo
         }
       } else {
         objSolicitud = {
@@ -136,7 +158,8 @@ export class SolicitarUsuarioComponent implements OnInit {
           fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           status : "1",
           cantidaddias : result.hasta.name,
-          descripcion : result.descripcion
+          descripcion : result.descripcion,
+          periodo: result.periodo
         }
       }
       console.log(objSolicitud);
@@ -145,27 +168,27 @@ export class SolicitarUsuarioComponent implements OnInit {
           console.log(resp)
           this.poblarListaResumen(this.usuarioSolicitar.p_codipers);
           this.listarHistorialSolicitudesUsua();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud generada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al grabar la solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
       console.log(error);
     });
   }
-
-  // listarSolicitudesUsuaGroupBy() {
-  //   this.solicitarService.listarSolicitudes(this.usuarioSolicitar.p_codipers, 1).subscribe(
-  //     resp => {
-  //       this.listaSolicitudesUsua = resp;
-  //       console.log(this.listaSolicitudesUsua);
-  //     }, 
-  //     error => {
-  //       console.log("error:", error.message)
-  //     }
-  //   )
-  // }
 
   listarHistorialSolicitudesUsua() {
     this.solicitarService.listarHistorialSolicitudes(this.usuarioSolicitar.p_codipers, 1).subscribe(
@@ -175,6 +198,11 @@ export class SolicitarUsuarioComponent implements OnInit {
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
       }
     )
   }
@@ -190,13 +218,11 @@ export class SolicitarUsuarioComponent implements OnInit {
   }
 
   public modalEliminarSolicitar(user: any){
-    console.log(user);
     const modalRef = this.modalService.open(CancelarModalComponent);
     modalRef.componentInstance.titulo = 'vacaciones'; // should be the id
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
@@ -210,6 +236,11 @@ export class SolicitarUsuarioComponent implements OnInit {
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al eliminar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {

@@ -97,10 +97,12 @@ export class MovilidadModalComponent implements OnInit{
       motivo: [item.motivo || null, Validators.required],
       monto: [item.monto || null, Validators.required]
     });
+    // this.startTour();
   }
 
   submitForm() {
     this.activeModal.close(this.myForm.value);
   }
+
 
 }

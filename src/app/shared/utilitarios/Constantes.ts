@@ -1,4 +1,5 @@
-export const URL_END_POINT_BASE = 'http://localhost:8080';
+// export const URL_END_POINT_BASE = 'http://localhost:8080';
+export const URL_END_POINT_BASE = 'http://128.0.1.52:8080/vacaciones'
 //Auth
 export const OBTENERDATOS = "/autenticar/obtenerDatos?pCodipers="
 
@@ -6,12 +7,14 @@ export const OBTENERDATOS = "/autenticar/obtenerDatos?pCodipers="
 export const SOLICITUDXUSUARIO = "/solicitud/listarXUsuarioGroupByStatus?codiUsua=";
 export const SOLICITUD_HISTORIALXUSUARIO = "/solicitud/listarHistorialXUsuario?codiUsua=";
 export const LISTAR_SOLICITUD_PENDIENTE = "/solicitud/listarSolicitudesXUsuarioXStatusXTipoSolicitud?";
+export const LISTAR_SOLICITUD_APROBADA = "/solicitud/historialAprobados?";
 export const APROBAR_SOLICITUD = "/solicitud/aprobarSolicitud";
 export const RECHAZAR_SOLICITUD = "/solicitud/rechazarSolicitud";
 export const GENERAR_PAGO = "/generar/pagoPersonasTiposolicitud?"
 
 // Solicitar vacaciones
 export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";
+export const REGLAS_VACACIONES = "/vacaciones/reglasVacaciones?";
 
 // Aprobar vacaciones
 export const LISTAR_DETALLE_USUARIO = "/vacaciones/listarXSolicitud?tsolicitudId=";

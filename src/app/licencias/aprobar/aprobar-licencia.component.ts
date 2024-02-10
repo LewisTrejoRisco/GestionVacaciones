@@ -9,6 +9,9 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { Trabajador } from 'app/vacaciones/aprobar/trabajador.model';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
+import Swal from 'sweetalert2';
+import { DataUserVacation } from 'app/vacaciones/data/datauservacation.data';
+import { User } from 'app/vacaciones/aprobar/user.model';
 
 @Component({
   selector: 'app-aprobar-licencia',
@@ -20,7 +23,7 @@ import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-mo
 export class AprobarLicenciaComponent implements OnInit {
 
   public ColumnMode = ColumnMode;
-  // public userRows = DataUserVacation;
+  public userRows = DataUserVacation;
   public expanded: any = {};
 
 
@@ -28,37 +31,58 @@ export class AprobarLicenciaComponent implements OnInit {
   sesion: any;
   trabajador: any = null;
   public solicitudesLicencias: any = [];
+  public solicitudesAprobadas: any = [];
   public detalleSolicitudUsuario: any = null;
   objLiceUsua: any;
+  solicitudPendiente: User = null;
 
   constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
     private authService: AuthService) {
-    // this.trabajador = aprobarService.trabajador;
   }
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
+    this.listarSolicitudesAprobadas();
     this.listarSolicitudesLicencias();
-    console.log(this.detalleSolicitudUsuario)
   }
 
   listarSolicitudesLicencias() {
     this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 4).subscribe(
       resp => {
-        // this.listaHistorialSolicitudes = resp;
         console.log(resp);
         this.solicitudesLicencias = resp;
         this.trabajador = null;
       }, 
       error => {
         console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  listarSolicitudesAprobadas() {
+    this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 4).subscribe(
+      resp => {
+        console.log(resp);
+        this.solicitudesAprobadas = resp;
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes aprobadas:'+ error.message,
+          'error'
+        );
       }
     )
   }
 
   detalleSolicitud(user: any) {
     this.detalleSolicitudUsuario = user;
-    console.log(this.detalleSolicitudUsuario)
     this.aprobarService.listarDetalleUsuarioLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
         console.log(resp)
@@ -76,22 +100,25 @@ export class AprobarLicenciaComponent implements OnInit {
           tcantidaddias: this.objLiceUsua.tcantidaddias,
           tfechinicio: this.objLiceUsua.tfechinicio,
           tmotivo: this.objLiceUsua.tmotivo,
-          tficheroadjunto: this.objLiceUsua.tficheroadjunto,
+          tficheroadjunto: this.objLiceUsua.tficheroadjunto
         };
+        
+        this.solicitudesLicencias.forEach(user => {
+            user.isActive = false;
+        })
+        this.solicitudPendiente = user;
+        this.solicitudPendiente.isActive = true;
       },
       error => {
         console.log("error detalle de solicitud:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar detalle solicitud:'+ error.message,
+          'error'
+        );
       }
     )
   }
-
-  // @ViewChild('tableRowDetails') tableRowDetails: any;
-  // public ColumnMode = ColumnMode;
-  // row data
-  // public rows = DataVacation;
-  // public userRows = DataUserVacation;
-
-  // public expanded: any = {};
 
   /**
    * rowDetailsToggleExpand
@@ -103,13 +130,11 @@ export class AprobarLicenciaComponent implements OnInit {
   // }
 
   modalShowCancelar(user: any) {
-    console.log(user);
     const modalRef = this.modalService.open(CancelarModalComponent);
     modalRef.componentInstance.titulo = 'permisos'; // should be the id
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
@@ -121,9 +146,15 @@ export class AprobarLicenciaComponent implements OnInit {
           console.log(resp)
           this.trabajador = null;
           this.listarSolicitudesLicencias();
+          this.listarSolicitudesAprobadas();
         }, 
         error => {
           console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al rechazar solicitud:'+ error.message,
+            'error'
+          );
         }
       );
     }).catch((error) => {
@@ -132,8 +163,6 @@ export class AprobarLicenciaComponent implements OnInit {
   }
 
   aprobarSolicitud(user: any) {
-    console.log(user.tsolicitudId)
-    console.log(user.tusuasoli)
     let objAprobar = {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
@@ -144,9 +173,22 @@ export class AprobarLicenciaComponent implements OnInit {
         console.log(resp)
         this.trabajador = null;
         this.listarSolicitudesLicencias();
+        this.listarSolicitudesAprobadas();
+        Swal.fire({
+          title: 'Exito',
+          text: 'Solicitud aprobada',
+          icon: 'success',
+          timer: 1500, 
+          showConfirmButton: false,
+        })
       }, 
       error => {
         console.log("Error: " + error.message)
+        Swal.fire(
+          'Error',
+          'error al aprobar solicitud:'+ error.message,
+          'error'
+        );
       }
     );
   }
