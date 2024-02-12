@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { PDFDocument, rgb } from 'pdf-lib';
@@ -241,14 +241,21 @@ export class SolicitarService {
             })
         );
     }
+
+    public obtenerDatosBasicos(pCodipers: string) {
+        console.log(URL_END_POINT_BASE + OBTENERDATOSBASICOS + pCodipers )
+            return this.http.get(URL_END_POINT_BASE + OBTENERDATOSBASICOS + pCodipers )
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener datos básicos. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
     
     // Función para crear un PDF
     
-    async createPDF(userData: any, imagePath: string, outputPath: string) {
-
-        
+    async createPDF(userData: any) {
         const pdfDoc = await PDFDocument.create()
-
         const page = pdfDoc.addPage([550, 750])
           // Cargar la imagen
         const imgUrl = 'assets/img/nettalco.jpg'; // URL de la imagen
@@ -304,7 +311,7 @@ export class SolicitarService {
         // Descargar el archivo PDF
         const link = document.createElement('a');
         link.href = URL.createObjectURL(pdfBlob);
-        link.download = 'output.pdf';
+        link.download = 'permiso_'+userData.codigo+'.pdf';
         link.click();
     }
 

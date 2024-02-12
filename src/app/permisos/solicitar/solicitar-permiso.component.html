@@ -39,9 +39,13 @@
                     [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div class="ml-5 my-1">
-                          <div><strong>Tiempo permiso : </strong> {{ row.thorasfin }}:{{ row.tminufin }}</div>
-                          <div><strong>Motivo :</strong> {{ row.tmotivo }}</div>
+                        <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
+                          <div><strong>*Tiempo permiso : </strong> {{ row.thorasfin }} hora(s) - {{ row.tminufin }} minutos</div>
+                          <div  *ngIf="row.tmotivo"><strong>Motivo :</strong> {{ row.tmotivo }}</div>
+                        </div>
+                        <div class="ml-5 my-1" *ngIf="row.tmotivorech">
+                          <div><strong>*Tiempo permiso : </strong> {{ row.thorasfin }} hora(s) - {{ row.tminufin }} minutos</div>
+                          <div  *ngIf="row.tmotivorech"><strong>*Rechazo :</strong> {{ row.tmotivorech }}</div>
                         </div>
                       </ng-template>
                     </ngx-datatable-row-detail>
@@ -73,9 +77,9 @@
                         <i class="ft-x text-primary cursor-pointer" 
                           [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" 
                           (click)="modalEliminarSolicitar(row)"></i>
-                          <i class="fa fa-print text-primary cursor-pointer" 
-                            [ngClass]="{'pace-inactive':row.tstatus == '1'}" 
-                            (click)="createPDF(row)"></i>
+                        <i class="fa fa-print text-primary cursor-pointer" 
+                          *ngIf="row.tstatus == 2"
+                          (click)="createPDF(row)"></i>
                       </ng-template>
                     </ngx-datatable-column>
                   </ngx-datatable>

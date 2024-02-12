@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ChangeDetectorRef } from '@angular/core';
 import {
   ColumnMode
 } from '@swimlane/ngx-datatable';
@@ -43,12 +43,14 @@ export class SolicitarComponent implements OnInit {
 
   constructor(private modalService: NgbModal, 
     private solicitarService: SolicitarService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private changeDetector:ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
     this.listarHistorialSolicitudes();
     this.poblarListaResumen();
+    this.changeDetector.detectChanges()
   }
 
   poblarListaResumen() {
@@ -116,9 +118,11 @@ export class SolicitarComponent implements OnInit {
 
   rowDetailsToggleExpand(row) {
     this.tableRowDetails.rowDetail.toggleExpandRow(row);
+    this.changeDetector.detectChanges();
   }
 
   modalShowSolicitar(tipo: any, row: any) {
+    this.changeDetector.detectChanges();
     const modalRef = this.modalService.open(SolicitarModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
@@ -203,6 +207,7 @@ export class SolicitarComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
+    this.changeDetector.detectChanges();
   }
 
   public modalEliminarSolicitar(user: any){

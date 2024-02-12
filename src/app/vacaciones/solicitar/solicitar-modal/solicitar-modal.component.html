@@ -1,20 +1,4 @@
 
-    <!-- <div class="modal-content"> -->
-      
-<!-- <div class="col-xl-4 col-lg-4 col-12">
-  <div class="card">
-    <div class="card-header">
-      <h4>User Tour</h4>
-    </div>
-    <div class="card-body">
-      <div>
-        <p>
-          Haga clic en este botón para iniciar un recorrido de demostración para el usuario.</p>
-        <button id="btnStartTour" class="btn btn-primary" (click)="startTour()">Empezar</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 <div class="modal-header">
   <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Vacaciones' : 'Solicitar Vacaciones'}} </h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
@@ -48,11 +32,8 @@
       <div class="row">
         <div class="col">
           <div class="form-group position-relative has-icon-left">
-            <!-- <span class="input-group-text" id="hasta">Hasta</span> -->
-            <!-- <input type="text" placeholder="Agregar Nombre" aria-label="Agregar Nombre"
-              aria-describedby="basic-nombre-largo" id="nombreComida"> -->
-              <ng-select [items]="dias" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta">
-              </ng-select>
+            <ng-select [items]="dias" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta">
+            </ng-select>
             </div>
         </div>
       </div>
@@ -69,8 +50,6 @@
         <div class="col">
           <div class="input-group">
             <span class="input-group-text" id="hasta">Descripción</span>
-            <!-- <input type="text" placeholder="Agregar Nombre" aria-label="Agregar Nombre"
-              aria-describedby="basic-nombre-largo" id="nombreComida"> -->
             <input type="text" [formControl]="myForm.controls['descripcion']" formControlName="descripcion" class="form-control"
             id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" required #descripcion>
           </div>

@@ -92,6 +92,7 @@ export class AprobarPermisoComponent implements OnInit {
           periodo: this.detalleSolicitudUsuario.periodo,
           tusuaaprob: this.detalleSolicitudUsuario.tusuaaprob,
           tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
+          tdescpues: this.detalleSolicitudUsuario.tdescpues,
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           thorasfin: this.objVacaUsua.thorasfin,
           tminufin: this.objVacaUsua.tminufin,

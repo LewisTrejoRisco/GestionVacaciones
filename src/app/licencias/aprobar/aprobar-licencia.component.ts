@@ -95,6 +95,7 @@ export class AprobarLicenciaComponent implements OnInit {
           periodo: this.detalleSolicitudUsuario.periodo,
           tusuaaprob: this.detalleSolicitudUsuario.tusuaaprob,
           tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
+          tdescpues: this.detalleSolicitudUsuario.tdescpues,
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tfechregi: this.detalleSolicitudUsuario.tfechregi,
           tcantidaddias: this.objLiceUsua.tcantidaddias,

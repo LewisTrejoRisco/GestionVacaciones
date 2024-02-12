@@ -39,11 +39,13 @@
                     [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div class="ml-5 my-1">
-                          <div><strong>- Número viaje : </strong> {{ row.tnumeviaje }} <strong>  - Transporte :</strong> {{ row.ttransporte }}  <strong>  - Monto :</strong> {{ row.tmonto }}</div>
-                          
-                          <div><strong>- Origen :</strong> {{ row.torigen }}  <strong>  - Destino :</strong> {{ row.tdestino }}  <strong>  - Motivo :</strong> {{ row.tmotivo }}</div>
-                          
+                        <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
+                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
+                          <div><strong>*Origen :</strong> {{ row.torigen }}  <strong>  *Destino :</strong> {{ row.tdestino }}  <strong>  *Motivo :</strong> {{ row.tmotivo }}</div>
+                        </div>
+                        <div class="ml-5 my-1" *ngIf="row.tmotivorech">
+                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
+                          <div><strong>*Origen :</strong> {{ row.torigen }}  <strong>  *Destino :</strong> {{ row.tdestino }}  <strong>  *Motivo :</strong> {{ row.tmotivo }}  <strong>  *Rechazo :</strong> {{ row.tmotivorech }}</div>
                         </div>
                       </ng-template>
                     </ngx-datatable-row-detail>

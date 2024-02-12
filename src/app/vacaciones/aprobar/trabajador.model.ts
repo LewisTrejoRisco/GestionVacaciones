@@ -7,9 +7,10 @@ export class Trabajador {
     tcantidaddias: number;
     tusuaaprob: string;
     tdescunidfuncsoli: string;
+    tdescpues: string;
     tfechingrsoli: string;
     tdescripcion: string;
     tperiodo: string;
     tfechregi: string;
-    treemplazo: string;
+    treemplazo: string; 
 }

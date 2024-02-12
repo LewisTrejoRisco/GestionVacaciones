@@ -94,6 +94,7 @@ export class AprobarComponent implements OnInit {
           tcantidaddias: this.objVacaUsua.tcantidaddias,
           tusuaaprob: this.detalleSolicitudUsuario.tusuaaprob,
           tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
+          tdescpues: this.detalleSolicitudUsuario.tdescpues,
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tdescripcion: this.objVacaUsua.tdescripcion,
           tperiodo: this.objVacaUsua.tperiodo,

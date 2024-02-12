@@ -73,12 +73,12 @@
                 <div class="card-body">
                   <!-- <p>Add <code>.col-form-label</code> to your <code>&lt;label&gt;</code> so that they’re vertically centered with their associated form controls.</p> -->
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-md-2 col-2">
                           <label for="puesto" class="col-form-label">Puesto:</label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-md-10 col-10">
                           <label id="puesto" class="form-control">{{trabajador.tdescunidfuncsoli}}</label>
                         </div>
                       </div>
@@ -93,8 +93,16 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-3">
+                          <label for="descr" class="col-form-label"># de viaje: </label>
+                        </div>
+                        <div class="col-lg-9 col-9">
+                          <label id="descr" class="form-control">{{trabajador.tnumeviaje}}</label>
+                        </div>
+                      </div>
+                    </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
                         <div class="col-lg-3 col-3">
@@ -115,8 +123,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
                         <div class="col-lg-3 col-3">
@@ -137,18 +143,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
-                          <label for="descr" class="col-form-label"># de viaje: </label>
-                        </div>
-                        <div class="col-lg-9 col-9">
-                          <label id="descr" class="form-control">{{trabajador.tnumeviaje}}</label>
-                        </div>
-                      </div>
-                    </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
                         <div class="col-lg-3 col-3">
@@ -159,8 +153,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
                         <div class="col-lg-3 col-3">
@@ -171,12 +163,12 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-md-2 col-2">
                           <label for="periVaca" class="col-form-label">Motivo: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-md-10 col-10">
                           <label id="periVaca" class="form-control">{{trabajador.tmotivo}}</label>
                         </div>
                       </div>

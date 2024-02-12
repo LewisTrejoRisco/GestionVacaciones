@@ -1,7 +1,8 @@
-// export const URL_END_POINT_BASE = 'http://localhost:8080';
-export const URL_END_POINT_BASE = 'http://128.0.1.52:8080/vacaciones'
+export const URL_END_POINT_BASE = 'http://localhost:8080';
+// export const URL_END_POINT_BASE = 'http://128.0.1.52:8080/vacaciones'
 //Auth
 export const OBTENERDATOS = "/autenticar/obtenerDatos?pCodipers="
+export const OBTENERDATOSBASICOS = "/autenticar/obtenerDatosBasicos?pCodipers="
 
 //Comunes
 export const SOLICITUDXUSUARIO = "/solicitud/listarXUsuarioGroupByStatus?codiUsua=";

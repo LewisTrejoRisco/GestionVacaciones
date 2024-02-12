@@ -10,6 +10,7 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
 import Swal from 'sweetalert2';
+const now = new Date();
 
 @Component({
   selector: 'app-solicitar-permiso',
@@ -28,6 +29,7 @@ export class SolicitarPermisoComponent implements OnInit {
   public listaHistorialSolicitudes: any = [];
   //NUEVO
   sesion: any;
+  userExport: any;
 
   constructor(private modalService: NgbModal, 
     private solicitarService: SolicitarService,
@@ -212,15 +214,25 @@ export class SolicitarPermisoComponent implements OnInit {
   }
 
   createPDF(user: any) {
-    var userData = {
-      nombre: 'lewis bryan trejo risco',
-      codigo : '00E003625',
-      horaInicio: '08/02/2024 3:40',
-      horaFin: '08/02/2024 6:40',
-      fechaActual: '08/02/2024',
-      fechaAprobacion: '06/02/2024'
-    };
-    this.solicitarService.createPDF(userData, 'assets/img/logo-nettalco-1.png', 'output');
+    this.solicitarService.obtenerDatosBasicos(user.tusuasoli).subscribe(
+      resp => {
+        this.userExport = resp;
+
+        var userData = {
+          nombre: this.userExport.p_nombcomp,
+          codigo : this.userExport.p_codipers,
+          horaInicio: user.tfechinicsoli,
+          horaFin: user.tfechfinasoli,
+          fechaActual: now.getDate()+"/"+(now.getMonth() + 1)+"/"+ (now.getFullYear()),
+          fechaAprobacion: user.tfechresp
+        };
+        console.log(userData);
+        this.solicitarService.createPDF(userData);
+      },
+      error => {
+
+      }
+    )
   }
 
 }

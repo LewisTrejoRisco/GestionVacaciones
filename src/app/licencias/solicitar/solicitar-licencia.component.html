@@ -42,8 +42,8 @@
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1">
-                          <div><strong>Cantidad días : </strong> {{ row.tcantidaddias }}</div>
-                          <div><strong>Motivo :</strong> {{ row.tmotivo }}</div>
+                          <div><strong>*Cantidad días : </strong> {{ row.tcantidaddias }} <strong> *Motivo :</strong> {{ row.tmotivo }}</div>
+                          <div *ngIf="row.tmotivorech"><strong>*Rechazo :</strong> {{ row.tmotivorech }}</div>
                         </div>
                       </ng-template>
                     </ngx-datatable-row-detail>

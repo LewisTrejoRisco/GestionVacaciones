@@ -37,9 +37,12 @@
                     [headerHeight]="30" [footerHeight]="50" >
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-                        <div class="ml-5 my-1">
-                          <div><strong> - Dias a salir : </strong> {{ row.tcantidad }}  <strong *ngIf="row.treemplazo"> - Persona reemplazo : </strong> {{ row.treemplazo }}</div>
-                          <div *ngIf="row.tdescripcion"><strong> - Motivo :</strong> {{ row.tdescripcion }}</div>
+                        <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
+                          <div><strong> *Dias a salir : </strong> {{ row.tcantidad }}  <strong *ngIf="row.treemplazo"> *Persona reemplazo : </strong> {{ row.treemplazo }}</div>
+                          <div *ngIf="row.tdescripcion"><strong> *Motivo :</strong> {{ row.tdescripcion }}</div>
+                        </div>
+                        <div class="ml-5 my-1" *ngIf="row.tmotivorech">
+                          <div><strong> *Dias a salir : </strong> {{ row.tcantidad }}  <strong> *Rechazo : </strong> {{ row.tmotivorech }}</div>
                         </div>
                       </ng-template>
                     </ngx-datatable-row-detail>

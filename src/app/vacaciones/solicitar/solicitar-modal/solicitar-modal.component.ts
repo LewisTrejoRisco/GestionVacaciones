@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input, OnInit, Injectable } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit, Injectable, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
@@ -51,11 +51,6 @@ export class SolicitarModalComponent implements OnInit{
   reglas: any;
   modelFecha: NgbDateStruct;
   dias = [
-    // { id: 1, name: '7' },
-    // { id: 2, name: '8' },
-    // { id: 3, name: '9', disabled: true },
-    // { id: 4, name: '15' },
-    // { id: 5, name: '30' }
   ];
 
   constructor(public activeModal: NgbActiveModal,
@@ -102,7 +97,7 @@ export class SolicitarModalComponent implements OnInit{
     }
     if(item.fechaInic == null){
     //   if(item.periodo != null) {
-        item.fechaInic = {year: now.getFullYear, month: now.getMonth() + 1, day: now.getDate()};
+        item.fechaInic = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
     //   }
     }
     this.myForm = this.formBuilder.group({
