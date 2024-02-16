@@ -14,8 +14,8 @@
           <a class="nav-link apptogglefullscreen" id="navbar-fullscreen" href="javascript:;" appToggleFullscreen
             (click)="ToggleClass()"><i class=" {{toggleClass}} font-medium-3"></i></a>
         </li>
-        <li class="nav-item nav-search">
-          <!-- search -->
+        <!-- search -->
+        <!-- <li class="nav-item nav-search">
           <a class="nav-link nav-link-search" id="navbar-search" href="javascript:" (click)="toggleSearchOpenClass(true)"><i
               class="ft-search font-medium-3"></i></a>
           <div class="search-input {{searchOpenClass}}">
@@ -44,7 +44,7 @@
               </ng-template>
             </app-autocomplete>
           </div>
-        </li>
+        </li> -->
       </ul>
       <div class="navbar-brand-center">
         <div class="navbar-header">
@@ -270,7 +270,8 @@
               href="javascript:;" data-toggle="dropdown" ngbDropdownToggle>
               <!-- <div class="user d-md-flex d-none mr-2"> -->
               <div class="user d-flex d-none mr-2">
-                <span class="text-right">{{nombreUsuario}}</span>
+                <!-- <span class="text-right">{{codigoUsuario}}</span> -->
+                <span class="text-right">({{codigoUsuario}}) {{nombreUsuario}}</span>
                 <span class="text-right text-muted font-small-3">{{descripcionArea}}</span>
               </div>
               <img class="avatar" src="{{fotoUsuario}}" alt="avatar" height="35" width="35" />
@@ -292,25 +293,25 @@
                   <i class="ft-calendar mr-2"></i><span>{{fechaIngreso}}</span>
                 </div>
               </a> -->
-              <a class="d-flex justify-content-between read-notification" href="javascript:void(0)">
-                <div class="media d-flex align-items-center">
+              <!-- <a class="d-flex justify-content-between read-notification" href="javascript:void(0)">
+                <div class="media d-flex align-items-center"> -->
                   <!-- <div class="media-left">
                     <div class="mr-3">
                       <img class="avatar" src="assets/img/portrait/small/avatar-s-7.png" alt="avatar" height="45"
                         width="45" />
                     </div>
                   </div> -->
-                  <div class="media-left">
+                  <!-- <div class="media-left">
                     <h6 class="m-2" style="font-weight: 300!important;">
                       <i class="ft-user mr-1"></i><span>{{codigoUsuario}}</span>
                     </h6>
                     <h6 class="m-2" style="font-weight: 300!important;">
                       <i class="ft-calendar mr-1"></i><span>Fecha Ingreso: {{fechaIngreso}}</span>
                     </h6>
-                  </div>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
+                  </div> -->
+                <!-- </div>
+              </a> -->
+              <!-- <div class="dropdown-divider"></div> -->
               <a class="dropdown-item" routerLink="/pages/login">
                 <div class="d-flex align-items-center">
                   <i class="ft-power mr-2"></i><span>Cerrar sesión</span>

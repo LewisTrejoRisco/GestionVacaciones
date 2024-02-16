@@ -10,6 +10,8 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
 import Swal from 'sweetalert2';
+import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
+import { Reporte } from 'app/shared/utilitarios/reporte.model';
 
 @Component({
   selector: 'app-solicitar-licencia',
@@ -28,6 +30,7 @@ export class SolicitarLicenciaComponent implements OnInit {
   public listaHistorialLicencias: any = [];
   //NUEVO
   sesion: any;
+  public listReporte: Array<Reporte> = [];
 
   constructor(private modalService: NgbModal, 
     private solicitarService: SolicitarService,
@@ -194,6 +197,31 @@ export class SolicitarLicenciaComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  public createXLSX() : void {
+    this.solicitarService.reporteAprobadosRRHH(4, "1").subscribe(
+      resp => {
+        console.log(resp)
+        this.listReporte = resp;
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const report = new ReportAdapter(this.listReporte);
+        console.log(report)
+        this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_licencias_rrhh.xlsx');
+        Swal.fire(
+          'Exito',
+          'Se generó con éxito',
+          'success'
+        );
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'error obtener imagen:'+ error.message,
+          'error'
+        );
+      }
+    )
   }
 
 }

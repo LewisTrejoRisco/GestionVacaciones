@@ -12,6 +12,7 @@ import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-mo
 import { BancosService } from 'app/shared/services/bancos.service';
 import { CODIGO_BANCO_CUENTA_BENEFICIARIO, CODIGO_DEVOLUCION, CUENTA_CARGO, CUENTA_ORDENANTE, DIVISA_CUENTA_SOLES, DOCUMENTO_RUC_ORDENANTE, FLAG_IDC, INDICADOR_DEVOLUCION, MONEDA_CARGO_SOLES, MONEDA_IMPORTE_SOLES, NOMBRE_ORDENANTE, NUMERO_CUENTA_CARGO, PLANILLA_HABERES, PRIMER_BENEFICIARIO, PRIMER_BENEFICIARIO_SEGUNDO, PRIMER_ORDENANTE, REGISTRO_TOTALES, SEGUNDO_ORDENANTE, SERVICIO_QUINTA_CATEGORIA, SOLICITUDXUSUARIO, TIPO_ABONO_PROPIO, TIPO_CUENTA_ABONO_AHORRO, TIPO_CUENTA_TITULAR, TIPO_DOCUMENTO_RUC, TIPO_REGISTRO, TIPO_REGISTRO_BENEFICIARIO, URL_END_POINT_BASE, VALIDACION_PERTENENCIA_VALIDA } from "app/shared/utilitarios/Constantes";
 import Swal from 'sweetalert2';
+import { GenerarModalComponent } from './generar-modal/generar-modal.component';
 
 @Component({
   selector: 'app-generar-txt',
@@ -23,6 +24,7 @@ import Swal from 'sweetalert2';
 export class GenerarTxtComponent implements OnInit {
 
   @ViewChild('tableRowDetails') tableRowDetails: any;
+  @ViewChild('tableRowDetailsPagado') tableRowDetailsPagado: any;
   public ColumnMode = ColumnMode;
 
   public expanded: any = {};
@@ -30,6 +32,7 @@ export class GenerarTxtComponent implements OnInit {
 
   public listaMovilidad: any = [];
   public listaHistorialSolicitudes: any = [];
+  public listaHistorialSolicitudesPagadas: any = [];
   public personasPagar: any;
 
   //NUEVO
@@ -43,6 +46,75 @@ export class GenerarTxtComponent implements OnInit {
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
     this.listarHistorialSolicitudes();
+    this.listarHistorialSolicitudesGeneradoPago();
+  }
+
+
+  listarSolicitudesGroupBy() {
+    this.solicitarService.listarSolicitudes(this.sesion.p_codipers, 5).subscribe(
+      resp => {
+        this.listaMovilidad = resp;
+        console.log(this.listaMovilidad);
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar listado de solicitudes:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  listarHistorialSolicitudes() {
+    this.solicitarService.listarMovilidadesAprobados("2", 5).subscribe(
+      resp => {
+        this.listaHistorialSolicitudes = resp;
+        console.log(this.listaHistorialSolicitudes);
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pendientes:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  listarHistorialSolicitudesGeneradoPago() {
+    this.solicitarService.listarMovilidadesAprobados("4", 5).subscribe(
+      resp => {
+        this.listaHistorialSolicitudesPagadas = resp;
+        console.log(this.listaHistorialSolicitudesPagadas);
+      }, 
+      error => {
+        console.log("error:", error.message)
+        Swal.fire(
+          'Error',
+          'error al mostrar solicitudes pagadas:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  /**
+   * rowDetailsToggleExpand
+   *
+   * @param row
+   */
+
+  rowDetailsToggleExpand(row) {
+    console.log(row)
+    this.tableRowDetails.rowDetail.toggleExpandRow(row);
+  }
+
+  rowDetailsPayToggleExpand(row) {
+    console.log(row)
+    this.tableRowDetailsPagado.rowDetail.toggleExpandRow(row);
   }
 
   saveTextAsFile (data: any, filename: any){
@@ -54,7 +126,6 @@ export class GenerarTxtComponent implements OnInit {
     var blob = new Blob([data], {type: 'text/plain'}),
         e    = document.createEvent('MouseEvents'),
         a    = document.createElement('a')
-// FOR IE:
     const nav = (window.navigator as any)
 
     if (window.navigator && nav.msSaveOrOpenBlob) {
@@ -189,9 +260,10 @@ export class GenerarTxtComponent implements OnInit {
           this.PadLeftCeros(totalEntero, 12) +
           this.PadLeftCeros(totalDecimal, 2) +
           this.PadLeft(" ", 106);
-    var fileName = "HABERE_LIQUIDACIONEN.txt"
+    var fileName = "HABERE_LIQUIDACION_BBVA.txt"
     this.saveTextAsFile(primerRegistro, fileName);
     this.listarHistorialSolicitudes();
+    this.listarHistorialSolicitudesGeneradoPago();
   }
 
   docuBCP(listBanco: any, fecha: string, sumatoriaCuenta: number, totalEntero: any, totalDecimal: any) {
@@ -232,61 +304,28 @@ export class GenerarTxtComponent implements OnInit {
           this.PadLeft(e.numeDocu, 12) +
           this.PadLeft("", 3) +
           this.PadLeft(e.nombComp, 75) +
-          this.PadLeft("Referencia Beneficiario", 40) +
-          this.PadLeft("Ref Emp", 20) +
+          this.PadLeft("Referencia Beneficiario "+e.numeDocu, 40) +
+          this.PadLeft("Ref Emp "+e.numeDocu, 20) +
           MONEDA_IMPORTE_SOLES +
           this.PadLeftCeros(e.montoEntero + "." + e.montoDecimal, 17) +
           FLAG_IDC
     });
-    var fileName = "Referencia Haberes.txt"
+    var fileName = "Referencia Haberes BCP.txt"
     this.saveTextAsFile(primerRegistro, fileName);
     this.listarHistorialSolicitudes();
-
+    this.listarHistorialSolicitudesGeneradoPago();
   }
 
-
-  listarSolicitudesGroupBy() {
-    this.solicitarService.listarSolicitudes(this.sesion.p_codipers, 5).subscribe(
-      resp => {
-        this.listaMovilidad = resp;
-        console.log(this.listaMovilidad);
-      }, 
-      error => {
-        console.log("error:", error.message)
-        Swal.fire(
-          'Error',
-          'error al mostrar listado de solicitudes:'+ error.message,
-          'error'
-        );
-      }
-    )
-  }
-
-  listarHistorialSolicitudes() {
-    this.solicitarService.listarMovilidadesAprobados("2", 5).subscribe(
-      resp => {
-        this.listaHistorialSolicitudes = resp;
-        console.log(this.listaHistorialSolicitudes);
-      }, 
-      error => {
-        console.log("error:", error.message)
-        Swal.fire(
-          'Error',
-          'error al mostrar solicitudes pendientes:'+ error.message,
-          'error'
-        );
-      }
-    )
-  }
-
-  /**
-   * rowDetailsToggleExpand
-   *
-   * @param row
-   */
-
-  rowDetailsToggleExpand(row) {
-    this.tableRowDetails.rowDetail.toggleExpandRow(row);
+  exportarTXTContabilidad() {
+    const modalRef = this.modalService.open(GenerarModalComponent, { size: 'md' });
+    modalRef.componentInstance.data = {
+      fechaInic: null,
+      tiempo: null,
+      tipoCambio: null
+    }
+    modalRef.result.then((result) => {
+      console.log(result)
+    })
   }
 
 }

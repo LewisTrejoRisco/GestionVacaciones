@@ -10,13 +10,15 @@ import { MovilidadComponent } from './solicitar/movilidad.component';
 import { MovilidadModalComponent } from './solicitar/solicitar-modal/movilidad-modal.component';
 import { AprobarMovilidadComponent } from './aprobar/aprobar-movilidad.component';
 import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
+import { GenerarModalComponent } from './generar-txt/generar-modal/generar-modal.component';
 
 
 @NgModule({
   declarations: [MovilidadComponent,
                  MovilidadModalComponent,
                  AprobarMovilidadComponent,
-                 GenerarTxtComponent],
+                 GenerarTxtComponent,
+                 GenerarModalComponent],
   imports: [
     CommonModule,
     MovilidadRoutingModule,

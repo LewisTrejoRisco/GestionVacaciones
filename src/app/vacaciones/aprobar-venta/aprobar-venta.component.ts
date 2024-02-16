@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { DataUserVacation } from '../data/datauservacation.data';
 import { User } from '../aprobar/user.model';
+import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
+import { Reporte } from 'app/shared/utilitarios/reporte.model';
 
 @Component({
   selector: 'app-aprobar-venta',
@@ -29,6 +31,7 @@ export class AprobarVentaComponent implements OnInit {
   objVacaUsua: any;
   trabajador: Trabajador = null;
   solicitudPendiente: User = null;
+  public listReporte: Array<Reporte> = [];
 
   constructor(private aprobarVentaService: SolicitarService, 
     private modalService: NgbModal,
@@ -179,6 +182,31 @@ export class AprobarVentaComponent implements OnInit {
         );
       }
     );
+  }
+
+  public createXLSX() : void {
+    this.aprobarVentaService.reporteAprobados(1, this.sesion.p_codipers, "2").subscribe(
+      resp => {
+        console.log(resp)
+        this.listReporte = resp;
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const report = new ReportAdapter(this.listReporte);
+        console.log(report)
+        this.aprobarVentaService.generateReportWithAdapter(headers,report.data, 'Reporte_vacaciones.xlsx');
+        Swal.fire(
+          'Exito',
+          'Se generó con éxito',
+          'success'
+        );
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'error obtener imagen:'+ error.message,
+          'error'
+        );
+      }
+    )
   }
 
 }

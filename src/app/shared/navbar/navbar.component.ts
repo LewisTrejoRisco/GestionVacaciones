@@ -22,7 +22,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
    fotoUsuario: string = null;
    descripcionArea: string = null;
    codigoUsuario: string = null;
-   fechaIngreso: string = null;
 
   currentLang = "en";
   selectedLanguageText = "English";
@@ -88,7 +87,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fotoUsuario = this.sesion.p_foto;
     this.descripcionArea = this.sesion.p_descpues;
     this.codigoUsuario = this.sesion.p_codipers
-    this.fechaIngreso = this.sesion.p_fechingr.split("T")[0]
   }
 
   ngAfterViewInit() {

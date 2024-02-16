@@ -12,6 +12,8 @@ import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-mo
 import Swal from 'sweetalert2';
 import { DataUserVacation } from 'app/vacaciones/data/datauservacation.data';
 import { User } from 'app/vacaciones/aprobar/user.model';
+import { Reporte } from 'app/shared/utilitarios/reporte.model';
+import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 
 @Component({
   selector: 'app-aprobar-movilidad',
@@ -35,6 +37,7 @@ export class AprobarMovilidadComponent implements OnInit {
   public detalleSolicitudUsuario: any = null;
   objMoviUsua: any;
   solicitudPendiente: User = null;
+  public listReporte: Array<Reporte> = [];
 
   constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
     private authService: AuthService) {
@@ -195,6 +198,31 @@ export class AprobarMovilidadComponent implements OnInit {
         );
       }
     );
+  }
+
+  public createXLSX() : void {
+    this.aprobarService.reporteAprobados(5, this.sesion.p_codipers, "1").subscribe(
+      resp => {
+        console.log(resp)
+        this.listReporte = resp;
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const report = new ReportAdapter(this.listReporte);
+        console.log(report)
+        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Reporte_movilidad.xlsx');
+        Swal.fire(
+          'Exito',
+          'Se generó con éxito',
+          'success'
+        );
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'error obtener imagen:'+ error.message,
+          'error'
+        );
+      }
+    )
   }
 
 }

@@ -10,6 +10,8 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarVentaModalComponent } from './solicitar-venta-modal/solicitar-venta-modal.component';
 import Swal from 'sweetalert2';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
+import { Reporte } from 'app/shared/utilitarios/reporte.model';
+import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 
 @Component({
   selector: 'app-solicitar-venta',
@@ -33,6 +35,7 @@ export class SolicitarVentaComponent implements OnInit {
   public listaHistorialSolicitudesVenta: any = [];
   //NUEVO
   sesion: any;
+  public listReporte: Array<Reporte> = [];
 
   constructor(private modalService: NgbModal, 
     private solicitarVentaService: SolicitarService,
@@ -181,6 +184,31 @@ export class SolicitarVentaComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  public createXLSX() : void {
+    this.solicitarVentaService.reporteAprobadosRRHH(2, "1").subscribe(
+      resp => {
+        console.log(resp)
+        this.listReporte = resp;
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const report = new ReportAdapter(this.listReporte);
+        console.log(report)
+        this.solicitarVentaService.generateReportWithAdapter(headers,report.data, 'Reporte_venta_vacaciones_rrhh.xlsx');
+        Swal.fire(
+          'Exito',
+          'Se generó con éxito',
+          'success'
+        );
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'error obtener imagen:'+ error.message,
+          'error'
+        );
+      }
+    )
   }
 
 

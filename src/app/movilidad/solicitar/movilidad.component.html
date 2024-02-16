@@ -1,3 +1,19 @@
+<div class="" *ngIf="sesion.rrhh==3">
+  <div class="dropdown btn-group  mr-1 mb-1" ngbDropdown>
+    <button type="button" class="btn btn-outline-secondary">Acciones</button>
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle" ngbDropdownToggle
+      aria-haspopup="true" aria-expanded="false">
+      <span class="sr-only"></span>
+    </button>
+    <div ngbDropdownMenu class="dropdown-menu" role="menu">
+      <a class="dropdown-item"  (click)="createXLSX()">Reporte personal aprobado</a>
+      <!-- <a class="dropdown-item">Another action</a>
+      <a class="dropdown-item">Something else here</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item">Separated link</a> -->
+    </div>
+  </div>
+</div>
 <div class="row match-height">
     <div class="col-xl-3 col-lg-12">
       <div class="card">

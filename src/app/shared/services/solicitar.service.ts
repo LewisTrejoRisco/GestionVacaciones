@@ -1,10 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { Observable, throwError } from "rxjs";
 import { PDFDocument, rgb } from 'pdf-lib';
+import * as XLSX from 'xlsx'
 import { async } from "@angular/core/testing";
+import { Reporte } from "../utilitarios/reporte.model";
 
 @Injectable()
 export class SolicitarService {
@@ -251,6 +253,26 @@ export class SolicitarService {
             })
         );
     }
+
+    public reporteAprobados(ttiposolicitudId: number, tusuaaprob: string, status: string): Observable<any>  {
+        console.log(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob + "&status=" + status)
+            return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob  + "&status=" + status)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener datos APROBADOS. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public reporteAprobadosRRHH(ttiposolicitudId: number, status: string): Observable<any>  {
+        console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
+            return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener datos APROBADOS. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
     
     // Función para crear un PDF
     
@@ -275,11 +297,10 @@ export class SolicitarService {
 
         const form = pdfDoc.getForm()
 
-        page.drawText('BOLETA DE PERMISO', { x: 180, y: 650, size: 18 })
-
-        // const superheroField = form.createTextField('favorite.superhero')
-        // superheroField.setText('One Punch Man')
-        // superheroField.addToPage(page, { x: 50, y: 640 })
+        page.drawText('BOLETA DE PERMISO', { x: 180, y: 670, size: 18 })
+        page.drawText('Revisión:  001', { x: 420, y: 720, size: 12 })
+        page.drawText('Página:    1 DE 1', { x: 420, y: 700, size: 12 })
+        page.drawText('Código:    FSF-002', { x: 420, y: 680, size: 12 })
 
         page.drawText('Fecha: ', { x: 50, y: 550, size: 15 })
         page.drawText('---------------------------------', { x: 100, y: 540, size: 15 })
@@ -299,8 +320,11 @@ export class SolicitarService {
         page.drawText('Motivo: ', { x: 50, y: 400, size: 15 })
         page.drawText('---------------------------------------------------------------------------', { x: 113, y: 390, size: 15 })
         page.drawText('-----------------------------------------------------------------------------------------', { x: 50, y: 340, size: 15 })
+        page.drawText(userData.nombreAprob, { x: 180, y: 240, size: 15 })
+        page.drawText('-------------------------------------------------', { x: 160, y: 230, size: 15 })
+        page.drawText('Jefe de Sector ' + userData.codigoAprob, { x: 180, y: 210, size: 15 })
         page.drawText('Fecha aprobación: ', { x: 20, y: 30, size: 10 })
-        page.drawText(userData.fechaAprobacion, { x: 110, y: 30, size: 10 })
+        page.drawText('04/08/2023', { x: 110, y: 30, size: 10 })
 
 
         const pdfBytes = await pdfDoc.save()
@@ -314,5 +338,16 @@ export class SolicitarService {
         link.download = 'permiso_'+userData.codigo+'.pdf';
         link.click();
     }
+
+    generateReportWithAdapter(headers: string[], data: Reporte[], filename: string) {
+      let workbook = XLSX.utils.book_new();
+      let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
+    
+      XLSX.utils.sheet_add_json(worksheet, data, { origin: 'A2', skipHeader: true })
+    
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja 1")
+      XLSX.writeFileXLSX(workbook, filename);
+    }
+  
 
 }

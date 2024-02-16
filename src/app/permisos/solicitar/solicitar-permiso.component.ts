@@ -10,6 +10,8 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from 'app/vacaciones/cancelarModal/cancelar-modal.component';
 import Swal from 'sweetalert2';
+import { Reporte } from 'app/shared/utilitarios/reporte.model';
+import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 const now = new Date();
 
 @Component({
@@ -30,6 +32,8 @@ export class SolicitarPermisoComponent implements OnInit {
   //NUEVO
   sesion: any;
   userExport: any;
+  userExportAprob: any;
+  public listReporte: Array<Reporte> = [];
 
   constructor(private modalService: NgbModal, 
     private solicitarService: SolicitarService,
@@ -217,20 +221,54 @@ export class SolicitarPermisoComponent implements OnInit {
     this.solicitarService.obtenerDatosBasicos(user.tusuasoli).subscribe(
       resp => {
         this.userExport = resp;
+        this.solicitarService.obtenerDatosBasicos(user.tusuaaprob).subscribe(
+          resp => {
+            this.userExportAprob = resp;
+            var userData = {
+              nombre: this.userExport.p_nombcomp,
+              codigo : this.userExport.p_codipers,
+              horaInicio: user.tfechinicsoli,
+              horaFin: user.tfechfinasoli,
+              fechaActual: now.getDate()+"/"+(now.getMonth() + 1)+"/"+ (now.getFullYear()),
+              fechaAprobacion: user.tfechresp,
+              codigoAprob: user.tusuaaprob,
+              nombreAprob: this.userExportAprob.p_nombcomp
+            };
+            console.log(userData);
+            this.solicitarService.createPDF(userData);
+          },
+          error => {
 
-        var userData = {
-          nombre: this.userExport.p_nombcomp,
-          codigo : this.userExport.p_codipers,
-          horaInicio: user.tfechinicsoli,
-          horaFin: user.tfechfinasoli,
-          fechaActual: now.getDate()+"/"+(now.getMonth() + 1)+"/"+ (now.getFullYear()),
-          fechaAprobacion: user.tfechresp
-        };
-        console.log(userData);
-        this.solicitarService.createPDF(userData);
+          }
+        )
       },
       error => {
 
+      }
+    )
+  }
+
+  public createXLSX() : void {
+    this.solicitarService.reporteAprobadosRRHH(3, "1").subscribe(
+      resp => {
+        console.log(resp)
+        this.listReporte = resp;
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const report = new ReportAdapter(this.listReporte);
+        console.log(report)
+        this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_permiso_rrhh.xlsx');
+        Swal.fire(
+          'Exito',
+          'Se generó con éxito',
+          'success'
+        );
+      },
+      error => {
+        Swal.fire(
+          'Error',
+          'error obtener imagen:'+ error.message,
+          'error'
+        );
       }
     )
   }
