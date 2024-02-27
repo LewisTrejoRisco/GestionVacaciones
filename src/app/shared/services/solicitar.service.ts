@@ -1,12 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, LISTAR_TXT_CONTABILIDAD, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { PDFDocument, rgb } from 'pdf-lib';
 import * as XLSX from 'xlsx'
 import { async } from "@angular/core/testing";
 import { Reporte } from "../utilitarios/reporte.model";
+import { ReporteMovi } from "../utilitarios/reporteMovi.model";
 
 @Injectable()
 export class SolicitarService {
@@ -104,7 +105,7 @@ export class SolicitarService {
         );
     }
 
-    public listarSolicitudesPendientes(codiUsua: string, status: string, idtiposolicitud: number) {
+    public listarSolicitudesPendientes(codiUsua: string, status: number, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             .pipe(catchError(e => {
@@ -124,7 +125,7 @@ export class SolicitarService {
         );
     }
 
-    public listarSolicitudesPendientesXStatusXTipo(status: string, idtiposolicitud: number) {
+    public listarSolicitudesPendientesXStatusXTipo(status: number, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             .pipe(catchError(e => {
@@ -204,7 +205,7 @@ export class SolicitarService {
         );
     }
 
-    public listarMovilidadesAprobados(status: string, idtiposolicitud: number) {
+    public listarMovilidadesAprobados(status: number, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_MOVILIDAD_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_MOVILIDAD_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
@@ -214,7 +215,7 @@ export class SolicitarService {
         );
     }
 
-    public generarTxtPersonas(codipers: string, status: string, idtiposolicitud: number) {
+    public generarTxtPersonas(codipers: string, status: number, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
@@ -224,7 +225,7 @@ export class SolicitarService {
         );
     }
 
-    public listarVacacionesAprobados(status: string, idtiposolicitud: number) {
+    public listarVacacionesAprobados(status: number, idtiposolicitud: number) {
         console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
@@ -254,7 +255,7 @@ export class SolicitarService {
         );
     }
 
-    public reporteAprobados(ttiposolicitudId: number, tusuaaprob: string, status: string): Observable<any>  {
+    public reporteAprobados(ttiposolicitudId: number, tusuaaprob: string, status: number): Observable<any>  {
         console.log(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob + "&status=" + status)
             return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob  + "&status=" + status)
             .pipe(catchError(e => {
@@ -264,11 +265,21 @@ export class SolicitarService {
         );
     }
 
-    public reporteAprobadosRRHH(ttiposolicitudId: number, status: string): Observable<any>  {
+    public reporteAprobadosRRHH(ttiposolicitudId: number, status: number): Observable<any>  {
         console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             .pipe(catchError(e => {
-                console.error(' Error al intentar obtener datos APROBADOS. Msg: ' + e.error);
+                console.error(' Error al intentar obtener datos APROBADOS RRHH. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public exportarTxtCont(pFechInic: string, pTiempo: string, pTipoCambio: number,) {
+        console.log(URL_END_POINT_BASE + LISTAR_TXT_CONTABILIDAD + "pFechInic=" + pFechInic + "&pTiempo=" + pTiempo + "&pTipoCambio=" + pTipoCambio)
+            return this.http.get(URL_END_POINT_BASE + LISTAR_TXT_CONTABILIDAD + "pFechInic=" + pFechInic + "&pTiempo=" + pTiempo + "&pTipoCambio=" + pTipoCambio)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener txt para contabilidad. Msg: ' + e.error);
                 return throwError(e);
             })
         );
@@ -340,6 +351,16 @@ export class SolicitarService {
     }
 
     generateReportWithAdapter(headers: string[], data: Reporte[], filename: string) {
+      let workbook = XLSX.utils.book_new();
+      let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
+    
+      XLSX.utils.sheet_add_json(worksheet, data, { origin: 'A2', skipHeader: true })
+    
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja 1")
+      XLSX.writeFileXLSX(workbook, filename);
+    }
+
+    generateReporMovitWithAdapter(headers: string[], data: ReporteMovi[], filename: string) {
       let workbook = XLSX.utils.book_new();
       let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
     

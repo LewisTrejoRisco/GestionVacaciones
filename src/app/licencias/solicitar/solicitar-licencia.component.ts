@@ -200,7 +200,7 @@ export class SolicitarLicenciaComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.solicitarService.reporteAprobadosRRHH(4, "1").subscribe(
+    this.solicitarService.reporteAprobadosRRHH(4, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;

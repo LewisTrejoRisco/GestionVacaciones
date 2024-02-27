@@ -50,7 +50,7 @@ export class AprobarLicenciaComponent implements OnInit {
   }
 
   listarSolicitudesLicencias() {
-    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 4).subscribe(
+    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 4).subscribe(
       resp => {
         console.log(resp);
         this.solicitudesLicencias = resp;
@@ -198,7 +198,7 @@ export class AprobarLicenciaComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.aprobarService.reporteAprobados(4, this.sesion.p_codipers, "1").subscribe(
+    this.aprobarService.reporteAprobados(4, this.sesion.p_codipers, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;

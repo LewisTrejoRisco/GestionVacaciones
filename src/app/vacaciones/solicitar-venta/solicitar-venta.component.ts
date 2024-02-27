@@ -187,7 +187,7 @@ export class SolicitarVentaComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.solicitarVentaService.reporteAprobadosRRHH(2, "1").subscribe(
+    this.solicitarVentaService.reporteAprobadosRRHH(2, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;

@@ -47,7 +47,7 @@ export class AprobarPermisoComponent implements OnInit {
   }
 
   listarSolicitudesPendientes() {
-    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 3).subscribe(
+    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 3).subscribe(
       resp => {
         console.log(resp);
         this.solicitudesPendientes = resp;
@@ -198,7 +198,7 @@ export class AprobarPermisoComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.aprobarService.reporteAprobados(3, this.sesion.p_codipers, "1").subscribe(
+    this.aprobarService.reporteAprobados(3, this.sesion.p_codipers, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;

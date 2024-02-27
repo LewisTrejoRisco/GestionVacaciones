@@ -39,7 +39,7 @@
     </div>
     
     <div class="col-xl-9 col-lg-12">
-      <section id="ngx-datatable-basic">
+      <section id="ngx-datatable-row-details">
         <div class="row">
           <div class="col-12">
             <div class="card">
@@ -49,10 +49,9 @@
               </div>
               <div class="card-content">
                 <div class="card-body">
-                  <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2" [columnMode]="ColumnMode.force" 
-                    [rows]="listaHistorialSolicitudes" [rowHeight]="30"[limit]="10"
-                    [headerHeight]="30" [footerHeight]="50" >
-                    <ngx-datatable-row-detail [rowHeight]="50">
+                  <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force" 
+                    [rows]="listaHistorialSolicitudes" [rowHeight]="30"[limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
+                    <ngx-datatable-row-detail [rowHeight]="40">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
                           <div><strong> *Dias a salir : </strong> {{ row.tcantidad }}  <strong *ngIf="row.treemplazo"> *Persona reemplazo : </strong> {{ row.treemplazo }}</div>
@@ -64,7 +63,7 @@
                       </ng-template>
                     </ngx-datatable-row-detail>
                     <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false"
-                      [canAutoResize]="false">
+                    [canAutoResize]="false">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
                         <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded"
                           [class.datatable-icon-down]="expanded" title="Expand/Collapse Row"
@@ -72,10 +71,10 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Período" prop="tperiodo"></ngx-datatable-column>
-                    <ngx-datatable-column name="Dias" prop="periodo"></ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="tstatus">
+                    <ngx-datatable-column name="Período" prop="tperiodo" [width]="80"></ngx-datatable-column>
+                    <ngx-datatable-column name="Dias" prop="periodo" [width]="160"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
@@ -83,10 +82,15 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column prop="tsolicitudId" name="Actions">
+                    <ngx-datatable-column name="Aprobación" prop="tfechresp" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column  name="Actions"prop="tsolicitudId" [width]="100">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
-                        <i class="ft-edit text-primary cursor-pointer mr-2 btnEditar" [ngClass]="{'pace-inactive':row.tstatus === '4' || row.tstatus === '2' || row.tstatus === '3' }" (click)="modalShowSolicitar(1, row)"></i>
-                        <i class="ft-x text-primary cursor-pointer btnCancelar" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" (click)="modalEliminarSolicitar(row)"></i>
+                        <i class="ft-edit text-primary cursor-pointer mr-2 btnEditar" 
+                          [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" 
+                          (click)="modalShowSolicitar(1, row)"></i>
+                        <i class="ft-x text-primary cursor-pointer btnCancelar" 
+                          [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" 
+                          (click)="modalEliminarSolicitar(row)"></i>
                       </ng-template>
                     </ngx-datatable-column>
       

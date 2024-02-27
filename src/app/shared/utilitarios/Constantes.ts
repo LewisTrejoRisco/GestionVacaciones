@@ -1,6 +1,8 @@
-export const URL_END_POINT_BASE = 'http://localhost:8080';
-// export const URL_END_POINT_BASE = 'http://128.0.1.52:8080/gestionHumana'
+// export const URL_END_POINT_BASE = 'http://localhost:8080';
+export const URL_END_POINT_BASE = 'http://128.0.1.52:8080/gestionHumana'
 //Auth
+export const OBTENERTOKEN = "http://sicb.nettalco.com.pe/recursosHumanosWS/servicio/obtenerToken";
+export const AUTENTICAR = "http://sicb.nettalco.com.pe/recursosHumanosWS/servicio/autenticarUsuario";
 export const OBTENERDATOS = "/autenticar/obtenerDatos?pCodipers="
 export const OBTENERDATOSBASICOS = "/autenticar/obtenerDatosBasicos?pCodipers="
 
@@ -14,6 +16,7 @@ export const RECHAZAR_SOLICITUD = "/solicitud/rechazarSolicitud";
 export const GENERAR_PAGO = "/generar/pagoPersonasTiposolicitud?"
 export const REPORTE_APROBADOSXAPROB = "/solicitud/buscarXTtiposolicitudIdAndTusuaaprobAndNotInTstatus?ttiposolicitudId=";
 export const REPORTE_APROBADOS = "/solicitud/buscarXTipoSolicitudAndNotinStatus?ttiposolicitudId=";
+export const LISTAR_TXT_CONTABILIDAD = "/generar/reporteTxtContabilidad?";
 
 // Solicitar vacaciones
 export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";

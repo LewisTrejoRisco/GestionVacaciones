@@ -52,16 +52,16 @@
       
                   <!-- ngx-datatable Basic -->
                   <ngx-datatable #tableRowDetails  [rows]="listaHistorialSolicitudes" [rowHeight]="30" class="bootstrap core-bootstrap font-small-2" [limit]="10"
-                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
+                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" [scrollbarH]="true">
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
-                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
-                          <div><strong>*Origen :</strong> {{ row.torigen }}  <strong>  *Destino :</strong> {{ row.tdestino }}  <strong>  *Motivo :</strong> {{ row.tmotivo }}</div>
+                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
+                          <div><strong>  *Motivo :</strong> {{ row.tmotivo }}</div>
                         </div>
                         <div class="ml-5 my-1" *ngIf="row.tmotivorech">
-                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
-                          <div><strong>*Origen :</strong> {{ row.torigen }}  <strong>  *Destino :</strong> {{ row.tdestino }}  <strong>  *Motivo :</strong> {{ row.tmotivo }}  <strong>  *Rechazo :</strong> {{ row.tmotivorech }}</div>
+                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
+                          <div><strong>  *Motivo :</strong> {{ row.tmotivo }}  <strong>  *Rechazo :</strong> {{ row.tmotivorech }}</div>
                         </div>
                       </ng-template>
                     </ngx-datatable-row-detail>
@@ -85,6 +85,7 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
+                    <ngx-datatable-column name="Fecha Pago" prop="tfechactu"></ngx-datatable-column>
                     <ngx-datatable-column prop="tsolicitudId" name="Actions">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
                         <!-- <i class="ft-eye text-primary cursor-pointer mr-2"></i> -->

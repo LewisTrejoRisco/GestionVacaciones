@@ -67,6 +67,7 @@ export class SolicitarPermisoModalComponent implements OnInit{
   ];
   time: NgbTimeStruct = { hour: 13, minute: 30, second: 30 };
   public profileImage:any;
+  modalPermFormSubmitted = false;
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -94,6 +95,11 @@ export class SolicitarPermisoModalComponent implements OnInit{
     }
   }
 
+  get lf() {
+    // console.log(this.myForm.controls)
+    return this.myForm.controls;
+  }
+
   private buildItemForm(item) {
     console.log(item)
     if(item.horas != null) {
@@ -108,31 +114,18 @@ export class SolicitarPermisoModalComponent implements OnInit{
       horas: [item.horas || null, Validators.required],
       minutos: [item.minutos || null, Validators.required],
       descripcion: [item.descripcion || '', Validators.required],
-      documento: [item.documento || null, Validators.required]
+      documento: [item.documento || null]
     });
     this.profileImage = this.myForm.value.documento;
   }
 
   submitForm() {
+    this.modalPermFormSubmitted = true;
+    if (this.myForm.invalid) {
+      return;
+    }
     this.myForm.value.documento = this.profileImage;
     this.activeModal.close(this.myForm.value);
-  }
-
-  public encodeImageFileAsURL() {
-    var filesSelected = (<HTMLInputElement>document.getElementById("idFoto")).files;
-    if (filesSelected.length > 0) {
-      var fileToLoad = filesSelected[0];
-
-      var fileReader = new FileReader();
-      fileReader.onload = function(fileLoadedEvent) {
-        var srcData = fileLoadedEvent.target.result; // <--- data: base64
-        var newImage = document.createElement('img');
-        newImage.src = <string>srcData;
-        document.getElementById("dummy").innerHTML = newImage.outerHTML;
-        (<HTMLInputElement>document.getElementById("txt")).value = newImage.src;
-      }
-      fileReader.readAsDataURL(fileToLoad);
-    }
   }
 
 }

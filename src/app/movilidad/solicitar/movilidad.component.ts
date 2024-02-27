@@ -34,6 +34,7 @@ export class MovilidadComponent implements OnInit {
 
   public listaMovilidad: any = [];
   public listaHistorialSolicitudes: any = [];
+  public distritos: any = null;
 
   //NUEVO
   sesion: any;
@@ -97,7 +98,14 @@ export class MovilidadComponent implements OnInit {
     const modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
     modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, fechaFina: null, numeViajes: null, transporte: null , origen: null, destino: null , motivo: null , monto: null  }; // should be the data
+      modalRef.componentInstance.data = { fechaInic: null, 
+                                          fechaFina: null, 
+                                          numeViajes: null, 
+                                          transporte: null , 
+                                          origen: null, 
+                                          destino: null , 
+                                          motivo: null , 
+                                          monto: null  }; // should be the data
     } else {
       let fechInicEdit = null;
       let fechFinEdit = null;
@@ -139,9 +147,9 @@ export class MovilidadComponent implements OnInit {
           tfechinicio : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
           tnumeviaje : result.numeViajes,
-          ttransporte : result.transporte.name,
-          torigen : result.origen.descripcion_distrito,
-          tdestino : result.destino.descripcion_distrito,
+          ttransporte : result.transporte.id,
+          torigen : result.origen.id_distrito,
+          tdestino : result.destino.id_distrito,
           tmotivo : result.motivo,
           tmonto : result.monto.toFixed(2),
         }
@@ -156,9 +164,9 @@ export class MovilidadComponent implements OnInit {
           tfechinicio : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
           tfechfin : result.fechaFina.day + '/' + result.fechaFina.month + '/' + result.fechaFina.year,
           tnumeviaje : result.numeViajes,
-          ttransporte : result.transporte.name,
-          torigen : result.origen.descripcion_distrito,
-          tdestino : result.destino.descripcion_distrito,
+          ttransporte : result.transporte.id,
+          torigen : result.origen.id_distrito,
+          tdestino : result.destino.id_distrito,
           tmotivo : result.motivo,
           tmonto : result.monto.toFixed(2),
         }
@@ -227,7 +235,7 @@ export class MovilidadComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.solicitarService.reporteAprobadosRRHH(5, "1").subscribe(
+    this.solicitarService.reporteAprobadosRRHH(5, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;

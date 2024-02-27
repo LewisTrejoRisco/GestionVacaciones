@@ -1,5 +1,3 @@
-
-    <!-- <div class="modal-content"> -->
 <div class="modal-header">
   <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Permiso' : 'Solicitar Permiso'}} </h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
@@ -15,6 +13,8 @@
       <div class="row">
         <div class="col-xs-12 col-md-6">
           <div class="form-group position-relative has-icon-left" style="top: 34%!important;">
+            <div *ngIf="modalPermFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
+                  class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
             <div class="input-group">
               <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
                 id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
@@ -23,18 +23,16 @@
                   <i class="fa fa-calendar" style="cursor: pointer;"></i>
                 </div>
               </div>
-              
-              <!-- <ngb-timepicker [(ngModel)]="time"></ngb-timepicker> -->
             </div>
           </div>
         </div>
         <div class="col-xs-12 col-md-6">
           <div class="">
+            <div *ngIf="modalPermFormSubmitted && (lf.timeInic.invalid || lf.timeInic.errors?.required)"
+                  class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
             <div class="">
               <ngb-timepicker [formControl]="myForm.controls['timeInic']" formControlName="timeInic" id="timeInic"></ngb-timepicker>
-              <!-- <button class="btn mb-3 mt-3" style="opacity: 0;">&nbsp;</button> -->
-              <!-- <hr> -->
-              <!-- <p>Selected time: {{timeInic | json}}</p> -->
+              
             </div>
           </div>
         </div>
@@ -43,46 +41,44 @@
         <span>Hasta: </span>
       </div>
       <div class="form-group position-relative has-icon-left">
+        <div *ngIf="modalPermFormSubmitted && (lf.horas.invalid || lf.horas.errors?.required)"
+              class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
         <div>
           <ng-select  [items]="horas" [formControl]="myForm.controls['horas']" bindLabel="name" formControlName="horas" placeholder="Elegir horas a salir" id="horas">
           </ng-select>
         </div>
       </div>
       <div class="form-group position-relative has-icon-left">
+        <div *ngIf="modalPermFormSubmitted && (lf.minutos.invalid || lf.minutos.errors?.required)"
+              class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
         <div>
           <ng-select  [items]="minutos" [formControl]="myForm.controls['minutos']" bindLabel="name" formControlName="minutos" placeholder="Elegir minutos a salir" id="minutos">
           </ng-select>
         </div>
       </div>
-      <div class="form-group position-relative has-icon-left">
-        <div class="form-control-position">
-          <i class="ft-grid"></i>
+      <div class="row">
+        <div class="col">
+          <div *ngIf="modalPermFormSubmitted && (lf.descripcion.invalid || lf.descripcion.errors?.required)"
+                class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+          <div class="input-group">
+            <span class="input-group-text" id="hasta">Descripción</span>
+            <input type="text" [formControl]="myForm.controls['descripcion']" formControlName="descripcion" class="form-control"
+            id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" #descripcion>
+          </div>
         </div>
-        <input type="text" [formControl]="myForm.controls['descripcion']" formControlName="descripcion" class="form-control"
-          id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" required #descripcion>
-        <div class="form-control-position control-position-right">
-          <i class="ft-grid"></i>
-        </div>
       </div>
-      <div class="form-group position-relative has-icon-left">
-        <input class="form-control" id="formFileSm" type="file" multiple accept="pdf/*"
-                  (change)="imageUpload($event)">
-      </div>
-      <button class="btn btn-secondary" >Tomar foto <i class="fa fa-camera-retro"></i></button>
-      <!-- <button class="btn btn-secondary" onclick="document.getElementById('idFoto').click()">Tomar foto <i class="fa fa-camera-retro"></i></button>
-      <input type="file" accept="image/*" capture="camera" id="idFoto" (change)="encodeImageFileAsURL()" style="display: none;">
-      <div id="dummy" style="display: none;">
-      </div>
-      <div>
-        <input type="text" style="width:100%;height:500px;display: none" formControlName="idFoto" id="txt">
-      </div> -->
+      <button type="button" class="btn btn-secondary mr-2 mb-1" onclick="document.getElementById('formFileSm').click()"><i class="fa fa-file-o mr-1"></i>Archivo</button>
+      <button type="button" class="btn btn-secondary mr-2 mb-1" onclick="document.getElementById('idFoto').click()"><i class="fa fa-camera mr-1"></i>Foto</button>
+      <input class="form-control" id="formFileSm" type="file" multiple accept="pdf/*" (change)="imageUpload($event)" style="display: none;">
+      <input type="file" accept="image/*" capture="camera" id="idFoto" (change)="imageUpload($event)" style="display: none;">
+      
       <div class="col" *ngIf="profileImage">
         <a download='documento' [href]=profileImage ><i class="ft-download mr-1"></i>Descargar documento adjunto</a>
       </div>
     </div>
   </div>
   <div class="modal-footer taskboard-modal-footer">
-    <button class="btn btn-primary btn-save">
+    <button class="btn btn-secondary btn-save">
       {{ id != 0 ? 'Actualizar' : 'Solicitar'}}
     </button>
   </div>

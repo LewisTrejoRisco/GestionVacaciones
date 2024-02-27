@@ -80,7 +80,7 @@ export class GenerarTxtComponent implements OnInit {
 
 
   exportarTXT() {
-    this.solicitarService.generarTxtPersonas(this.sesion.p_codipers,"2", 2).subscribe(
+    this.solicitarService.generarTxtPersonas(this.sesion.p_codipers, 2, 2).subscribe(
       resp => {
         this.personasPagar = resp;
         console.log(this.personasPagar);
@@ -176,7 +176,7 @@ export class GenerarTxtComponent implements OnInit {
   }
 
   listarHistorialSolicitudes() {
-    this.solicitarService.listarVacacionesAprobados("2", 2).subscribe(
+    this.solicitarService.listarVacacionesAprobados(2, 2).subscribe(
       resp => {
         this.listaHistorialSolicitudes = resp;
         console.log(this.listaHistorialSolicitudes);

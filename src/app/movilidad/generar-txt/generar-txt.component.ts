@@ -13,6 +13,7 @@ import { BancosService } from 'app/shared/services/bancos.service';
 import { CODIGO_BANCO_CUENTA_BENEFICIARIO, CODIGO_DEVOLUCION, CUENTA_CARGO, CUENTA_ORDENANTE, DIVISA_CUENTA_SOLES, DOCUMENTO_RUC_ORDENANTE, FLAG_IDC, INDICADOR_DEVOLUCION, MONEDA_CARGO_SOLES, MONEDA_IMPORTE_SOLES, NOMBRE_ORDENANTE, NUMERO_CUENTA_CARGO, PLANILLA_HABERES, PRIMER_BENEFICIARIO, PRIMER_BENEFICIARIO_SEGUNDO, PRIMER_ORDENANTE, REGISTRO_TOTALES, SEGUNDO_ORDENANTE, SERVICIO_QUINTA_CATEGORIA, SOLICITUDXUSUARIO, TIPO_ABONO_PROPIO, TIPO_CUENTA_ABONO_AHORRO, TIPO_CUENTA_TITULAR, TIPO_DOCUMENTO_RUC, TIPO_REGISTRO, TIPO_REGISTRO_BENEFICIARIO, URL_END_POINT_BASE, VALIDACION_PERTENENCIA_VALIDA } from "app/shared/utilitarios/Constantes";
 import Swal from 'sweetalert2';
 import { GenerarModalComponent } from './generar-modal/generar-modal.component';
+import { ReportMoviAdapter } from 'app/shared/utilitarios/ReportMoviAdapter.class';
 
 @Component({
   selector: 'app-generar-txt',
@@ -34,6 +35,7 @@ export class GenerarTxtComponent implements OnInit {
   public listaHistorialSolicitudes: any = [];
   public listaHistorialSolicitudesPagadas: any = [];
   public personasPagar: any;
+  public listTxtCont: any = [];
 
   //NUEVO
   sesion: any;
@@ -68,7 +70,7 @@ export class GenerarTxtComponent implements OnInit {
   }
 
   listarHistorialSolicitudes() {
-    this.solicitarService.listarMovilidadesAprobados("2", 5).subscribe(
+    this.solicitarService.listarMovilidadesAprobados(2, 5).subscribe(
       resp => {
         this.listaHistorialSolicitudes = resp;
         console.log(this.listaHistorialSolicitudes);
@@ -85,7 +87,7 @@ export class GenerarTxtComponent implements OnInit {
   }
 
   listarHistorialSolicitudesGeneradoPago() {
-    this.solicitarService.listarMovilidadesAprobados("4", 5).subscribe(
+    this.solicitarService.listarMovilidadesAprobados(4, 5).subscribe(
       resp => {
         this.listaHistorialSolicitudesPagadas = resp;
         console.log(this.listaHistorialSolicitudesPagadas);
@@ -152,7 +154,7 @@ export class GenerarTxtComponent implements OnInit {
 
 
   exportarTXT() {
-    this.solicitarService.generarTxtPersonas(this.sesion.p_codipers,"2", 5).subscribe(
+    this.solicitarService.generarTxtPersonas(this.sesion.p_codipers,2, 5).subscribe(
       resp => {
         this.personasPagar = resp;
         console.log(this.personasPagar);
@@ -325,7 +327,63 @@ export class GenerarTxtComponent implements OnInit {
     }
     modalRef.result.then((result) => {
       console.log(result)
-    })
+      const pFechInic = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+      const pTiempo = result.tiempo.id;
+      const pTipoCambio = result.tipoCambio;
+      this.solicitarService.exportarTxtCont(pFechInic, pTiempo, pTipoCambio).subscribe(
+        resp => {
+          console.log(resp)
+          this.listTxtCont = resp;
+          var primerRegistro = '';
+          this.listTxtCont.forEach(e => {
+            primerRegistro = primerRegistro +
+            e.tcentcost + "," +
+            e.tcuencont + "," +
+            e.tfuente + "," +
+            this.PadLeft(e.tdescripcion, 28) + "," +
+            e.tdebitosoles + "," +
+            e.tdebitodolares + "," +
+            e.tunidades + "," +
+            e.ttipo + "," +
+            e.tnit + "\r\n"
+          })
+          // this.listarSolicitudesGroupBy();
+          // this.listarHistorialSolicitudes();
+          var fileName = "Contabilidad.txt"
+          this.saveTextAsFile(primerRegistro, fileName);
+          Swal.fire({
+            title: 'Exito',
+            text: 'Txt generado para contabilidad',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
+        }, 
+        error => {
+          console.log("Error: " + error.message)
+          Swal.fire(
+            'Error',
+            'error al generar TXT para contabilidad:'+ error.message,
+            'error'
+          );
+        }
+      )
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  createXLSX() {
+    // this.listaHistorialSolicitudesPagadas
+    const headers = ['Colaborador', 'Fecha Aprobación', 'Aprobador', 'Fecha pago', 'Usuario Pago', 'Tipo', 'Status']
+    const report = new ReportMoviAdapter(this.listaHistorialSolicitudesPagadas)
+    console.log(report)
+    this.solicitarService.generateReporMovitWithAdapter(headers, report.data, 'Reporte.xlsx');
+    Swal.fire(
+      'Exito',
+      'Se generó con éxito',
+      'success'
+    );
   }
 
 }

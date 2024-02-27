@@ -3,6 +3,8 @@ import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 
+declare var require: any;
+const dataDistrito: any = require('../../../../assets/data/distritos-data.json');
 /**
  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
  */
@@ -49,11 +51,12 @@ export class MovilidadModalComponent implements OnInit{
   d2: any;
   d3: any;
   transporte = [
-    { id: 1, name: 'Urbano' },
-    { id: 2, name: 'Taxi' }
+    { id: 'U', name: 'Urbano' },
+    { id: 'T', name: 'Taxi' }
   ];
   origen: any = null;
   destino: any = null;
+  modalFormSubmitted = false;
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -64,28 +67,31 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.solicitarService.listarDistrito().subscribe(
-      resp => {
-        this.origen = resp;
-        this.destino = resp;
+    // this.solicitarService.listarDistrito().subscribe(
+    //   resp => {
+        this.origen = dataDistrito;
+        this.destino = dataDistrito;
         this.buildItemForm(this.data);
-      }, 
-      error => {
-        console.log("error:", error.message)
-      }
-    )
+    //   }, 
+    //   error => {
+    //     console.log("error:", error.message)
+    //   }
+    // )
+  }
+
+  get lf() {
+    return this.myForm.controls;
   }
 
   private buildItemForm(item) {
-    console.log(this.origen)
     if(item.transporte != null) {
-      item.transporte = this.transporte.find(a => a.name == item.transporte);
+      item.transporte = this.transporte.find(a => a.id == item.transporte);
     }
     if(item.origen != null) {
-      item.origen = this.origen.find(a => a.descripcion_distrito == item.origen);
+      item.origen = this.origen.find(a => a.id_distrito == item.origen);
     }
     if(item.destino != null) {
-      item.destino = this.destino.find(a => a.descripcion_distrito == item.destino);
+      item.destino = this.destino.find(a => a.id_distrito == item.destino);
     }
     this.myForm = this.formBuilder.group({
       fechaInic: [item.fechaInic || null, Validators.required],
@@ -101,6 +107,10 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   submitForm() {
+    this.modalFormSubmitted = true;
+    if (this.myForm.invalid) {
+      return;
+    }
     this.activeModal.close(this.myForm.value);
   }
 

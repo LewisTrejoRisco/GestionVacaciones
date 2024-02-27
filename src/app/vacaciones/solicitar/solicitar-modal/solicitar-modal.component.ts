@@ -52,6 +52,8 @@ export class SolicitarModalComponent implements OnInit{
   modelFecha: NgbDateStruct;
   dias = [
   ];
+  fechaMayor: boolean = false;
+  modalVacaFormSubmitted = false;
 
   constructor(public activeModal: NgbActiveModal,
     private solicitarService: SolicitarService,
@@ -60,6 +62,10 @@ export class SolicitarModalComponent implements OnInit{
   ngOnInit() {
     console.log(this.data)
     this.buildDays(this.data)
+  }
+
+  get lf() {
+    return this.myForm.controls;
   }
 
   private buildDays(item) {
@@ -103,15 +109,44 @@ export class SolicitarModalComponent implements OnInit{
     this.myForm = this.formBuilder.group({
       fechaInic: [item.fechaInic || null, Validators.required],
       hasta: [item.hasta || null, Validators.required],
-      descripcion: [item.descripcion || null, Validators.required],
+      descripcion: [item.descripcion || null],
       periodo: [item.periodo || null, Validators.required],
-      reemplazo: [item.reemplazo || null, Validators.required]
+      reemplazo: [item.reemplazo || null]
     });
     // this.startTour();
   }
 
   submitForm() {
+    this.modalVacaFormSubmitted = true;
+    if (this.myForm.invalid) {
+      return;
+    }
+    if(this.reglas.p_fecha_inicio_minimo == null) {
+      return;
+    }
+    const anioBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[2]);
+    const anioFront: number = this.myForm.value.fechaInic.year;
+    const montBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[1]);
+    const montFront: number = this.myForm.value.fechaInic.month;
+    const dayBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[0]);
+    const dayFront: number = this.myForm.value.fechaInic.day;
+    if( anioBack > anioFront) {
+      this.fechaMayor = true;
+      return;
+    }
+    if( montBack > montFront) {
+      this.fechaMayor = true; 
+      return;
+    }
+    if( dayBack > dayFront) {
+      this.fechaMayor = true;
+      return;
+    }
     this.activeModal.close(this.myForm.value);
+  }
+
+  PadLeftCeros(value: string, length: number) {
+    return (value.toString().length < length) ? this.PadLeftCeros("0"+value, length) : value;
   }
 
   startTour() {

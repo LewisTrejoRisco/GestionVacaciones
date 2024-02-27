@@ -8,11 +8,14 @@
 <form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm">
   <div class="modal-body">
     <div class="container">
-      
       <div class="form-group position-relative has-icon-left">
+        <div *ngIf="fechaMayor"
+          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Debe colocar fecha mayor o igual a {{reglas.p_fecha_inicio_minimo}}</div>
+        <div *ngIf="modalVacaFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
+          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
         <div class="input-group">
           <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
-            id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker"  >
+            id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" required>
           <div class="input-group-append">
             <div class="input-group-text" (click)="d2.toggle()">
               <i class="fa fa-calendar" id="fechInicVaca" style="cursor: pointer;"></i>
@@ -22,8 +25,10 @@
       </div>
       <div class="row">
         <div class="col">
+          <div *ngIf="modalVacaFormSubmitted && (lf.periodo.invalid || lf.periodo.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
           <div class="input-group">
-            <span class="input-group-text" id="hasta">Período</span>
+            <span class="input-group-text" id="periodo">Período</span>
             <input type="text" [formControl]="myForm.controls['periodo']" readonly formControlName="periodo" class="form-control"
             id="periodo" placeholder="Período" (keydown.enter)="$event.preventDefault()" required #periodo>
           </div>
@@ -31,8 +36,10 @@
       </div>
       <div class="row">
         <div class="col">
+          <div *ngIf="modalVacaFormSubmitted && (lf.hasta.invalid || lf.hasta.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
           <div class="form-group position-relative has-icon-left">
-            <ng-select [items]="dias" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta">
+            <ng-select [items]="dias" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta" required>
             </ng-select>
             </div>
         </div>
@@ -42,7 +49,7 @@
           <div class="input-group">
             <span class="input-group-text" id="hasta">Reemplazo</span>
             <input type="text" [formControl]="myForm.controls['reemplazo']" formControlName="reemplazo" class="form-control"
-            id="reemplazo" placeholder="Reemplazo" (keydown.enter)="$event.preventDefault()" required #reemplazo>
+            id="reemplazo" placeholder="Reemplazo" (keydown.enter)="$event.preventDefault()" #reemplazo>
           </div>
         </div>
       </div>
@@ -51,7 +58,7 @@
           <div class="input-group">
             <span class="input-group-text" id="hasta">Descripción</span>
             <input type="text" [formControl]="myForm.controls['descripcion']" formControlName="descripcion" class="form-control"
-            id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" required #descripcion>
+            id="descripcion" placeholder="Descripcion" (keydown.enter)="$event.preventDefault()" #descripcion>
           </div>
         </div>
       </div>

@@ -84,7 +84,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "baseHref": "/gestorVacaciones/",
+              "baseHref": "/GestionHumana/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

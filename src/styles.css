@@ -6,3 +6,14 @@
 .heightScroll {
     height: calc(100vh - 300px);
 }
+/* .tabla-de-datos {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 300px !important; Ajusta la altura según sea necesario
+  } */
+  
+/* Hacer las columnas receptivas */
+/* .ngx-datatable .datatable-header .datatable-header-cell,
+.ngx-datatable .datatable-body .datatable-body-cell {
+    flex: 1;
+} */

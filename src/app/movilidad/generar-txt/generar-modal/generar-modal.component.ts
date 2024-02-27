@@ -47,9 +47,11 @@ export class GenerarModalComponent implements OnInit{
   d2: any;
   d3: any;
   tiempo = [
-    { id: 1, name: 'Semana' },
-    { id: 2, name: 'Mes' }
+    { id: 'S', name: 'Semana' },
+    { id: 'M', name: 'Mes' }
   ];
+  formSubmitted = false;
+  
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -61,6 +63,7 @@ export class GenerarModalComponent implements OnInit{
 
   ngOnInit() {
     this.buildItemForm(this.data);
+    console.log(this.myForm.controls)
     // this.solicitarService.listarDistrito().subscribe(
     //   resp => {
     //     this.origen = resp;
@@ -73,6 +76,11 @@ export class GenerarModalComponent implements OnInit{
     // )
   }
 
+  get lf() {
+    console.log(this.myForm.controls)
+    return this.myForm.controls;
+  }
+
   private buildItemForm(item) {
     this.myForm = this.formBuilder.group({
       fechaInic: [item.fechaInic || null, Validators.required],
@@ -82,6 +90,9 @@ export class GenerarModalComponent implements OnInit{
   }
 
   submitForm() {
+    if (this.myForm.invalid) {
+      return;
+    }
     this.activeModal.close(this.myForm.value);
   }
 

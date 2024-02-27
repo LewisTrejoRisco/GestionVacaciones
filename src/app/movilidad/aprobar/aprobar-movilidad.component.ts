@@ -14,6 +14,8 @@ import { DataUserVacation } from 'app/vacaciones/data/datauservacation.data';
 import { User } from 'app/vacaciones/aprobar/user.model';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
+declare var require: any;
+const dataDistrito: any = require('../../../assets/data/distritos-data.json');
 
 @Component({
   selector: 'app-aprobar-movilidad',
@@ -38,6 +40,7 @@ export class AprobarMovilidadComponent implements OnInit {
   objMoviUsua: any;
   solicitudPendiente: User = null;
   public listReporte: Array<Reporte> = [];
+  distritos: any = null;
 
   constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
     private authService: AuthService) {
@@ -45,12 +48,13 @@ export class AprobarMovilidadComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userToken);
+    this.distritos = dataDistrito;
     this.listarSolicitudesAprobadas();
     this.listarSolicitudesMovilidad();
   }
 
   listarSolicitudesMovilidad() {
-    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, '1', 5).subscribe(
+    this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 5).subscribe(
       resp => {
         console.log(resp);
         this.solicitudesPendientes = resp;
@@ -101,15 +105,14 @@ export class AprobarMovilidadComponent implements OnInit {
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tfechregi: this.detalleSolicitudUsuario.tfechregi,
           tmotivo: this.objMoviUsua.tmotivo,
-          tdestino: this.objMoviUsua.tdestino,
+          tdestino:  this.distritos.find(a => a.id_distrito == this.objMoviUsua.tdestino).descripcion_distrito,
           tmonto: this.objMoviUsua.tmonto,
           tnumeviaje: this.objMoviUsua.tnumeviaje,
-          torigen: this.objMoviUsua.torigen,
+          torigen: this.distritos.find(a => a.id_distrito == this.objMoviUsua.torigen).descripcion_distrito,
           ttransporte: this.objMoviUsua.ttransporte,
           tfechinicio: this.objMoviUsua.tfechinicio,
           tfechfin: this.objMoviUsua.tfechfin
         };
-        
         this.solicitudesPendientes.forEach(user => {
             user.isActive = false;
         })
@@ -201,14 +204,14 @@ export class AprobarMovilidadComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.aprobarService.reporteAprobados(5, this.sesion.p_codipers, "1").subscribe(
+    this.aprobarService.reporteAprobados(5, this.sesion.p_codipers, 1).subscribe(
       resp => {
         console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapter(this.listReporte);
         console.log(report)
-        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Reporte_movilidad.xlsx');
+        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Reporte_historial_movilidad.xlsx');
         Swal.fire(
           'Exito',
           'Se generó con éxito',

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from 'firebase/app'
 import { Observable, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { OBTENERDATOS, URL_END_POINT_BASE } from 'app/shared/utilitarios/Constantes';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AUTENTICAR, OBTENERDATOS, OBTENERTOKEN, URL_END_POINT_BASE } from 'app/shared/utilitarios/Constantes';
 import { catchError } from "rxjs/operators";
 
 @Injectable()
@@ -28,10 +28,10 @@ export class AuthService {
 
   }
 
-  signupUser(user: string, password: string) {
+  signupUser(user: string) {
     //your code for signing up the new user
     // return this.http.get<any>('assets/json/loginResponse.json');
-    return this.obtenerDatos(user.toUpperCase());
+     return this.obtenerDatos(user.toUpperCase());
   }
 
   signinUser(email: string, password: string) {
@@ -69,7 +69,41 @@ export class AuthService {
       this.token = null;
       sessionStorage.clear();
   }
-  
+
+  public obtenerToken() {
+    let objCredenciales = {
+      parametro: 'KEY_SIST_VACA',
+      valor: 'Nettalco$2024'
+    }
+    console.log(OBTENERTOKEN + objCredenciales)
+    const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+    });
+    return this.http.post(OBTENERTOKEN, objCredenciales, { headers })
+        .pipe(catchError(e => {
+            console.error(' Error al intentar rechazar solicitud. Msg: ' + e.error);
+            return throwError(e);
+        })
+    );
+  }
+
+  public autenticarUsuario(user: string, password: string, token: string) {
+    let objCredenciales = {
+      p_codipers: user.toUpperCase(),
+      p_clavpers: password
+    }
+    console.log(AUTENTICAR + objCredenciales)
+    const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': token
+    });
+    return this.http.post(AUTENTICAR, objCredenciales, { headers })
+        .pipe(catchError(e => {
+            console.error(' Error al intentar rechazar solicitud. Msg: ' + e.error);
+            return throwError(e);
+        })
+    );
+  }
 
   public obtenerDatos(codiUsua: string) {
     console.log(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
@@ -79,5 +113,5 @@ export class AuthService {
             return throwError(e);
         })
     );
-}
+  }
 }

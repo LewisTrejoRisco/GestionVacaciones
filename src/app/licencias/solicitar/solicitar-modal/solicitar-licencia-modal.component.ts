@@ -59,6 +59,7 @@ export class SolicitarLicenciaModalComponent implements OnInit{
     { id: 10, name: '10' },
     { id: 11, name: '11' }
   ];
+  modalLiceFormSubmitted = false;
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -86,6 +87,11 @@ export class SolicitarLicenciaModalComponent implements OnInit{
     }
   }
 
+  get lf() {
+    // console.log(this.myForm.controls)
+    return this.myForm.controls;
+  }
+
   private buildItemForm(item) {
     if(item.hasta != null) {
       item.hasta = this.dias.find(a => a.name == item.hasta);
@@ -100,6 +106,10 @@ export class SolicitarLicenciaModalComponent implements OnInit{
   }
 
   submitForm() {
+    this.modalLiceFormSubmitted = true;
+    if (this.myForm.invalid) {
+      return;
+    }
     this.myForm.value.documento = this.profileImage;
     this.activeModal.close(this.myForm.value);
   }
