@@ -46,15 +46,13 @@
               <div class="card-header">
                 <!-- <h4 class="card-title float-left font-small-2">HISTORIAL DE MOVILIDAD</h4> -->
                 <h4 class="card-title float-left font-small-2">HISTORIAL POR GENERAR PAGO</h4>
-                <h4 class="card-title float-right font-small-2">Aprobador: {{sesion.p_nombresp}}</h4>
               </div>
               <div class="card-content">
                 <div class="card-body">
-      
                   <!-- ngx-datatable Basic -->
-                  <ngx-datatable #tableRowDetails  [rows]="listaHistorialSolicitudes" [rowHeight]="30" class="bootstrap core-bootstrap font-small-2" [limit]="10"
-                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
-                    <ngx-datatable-row-detail [rowHeight]="50">
+                  <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"  
+                    [rows]="listaHistorialSolicitudes" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true" >
+                    <ngx-datatable-row-detail [rowHeight]="40">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1">
                           <div><strong>- Número viaje : </strong> {{ row.tnumeviaje }} <strong>  - Transporte :</strong> {{ row.ttransporte }} </div>
@@ -73,11 +71,11 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Colaborador" prop="tusuasoli"></ngx-datatable-column>
-                    <ngx-datatable-column name="Monto" prop="tmonto"></ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Aprobado" prop="tfechresp"></ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="tstatus">
+                    <ngx-datatable-column name="Colaborador" prop="tusuasoli" [width]="80"></ngx-datatable-column>
+                    <ngx-datatable-column name="Monto" prop="tmonto" [width]="80"></ngx-datatable-column>
+                    <ngx-datatable-column name="Fecha Aprobado" prop="tfechresp" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
@@ -116,8 +114,8 @@
                 <div class="card-body">
       
                   <!-- ngx-datatable Basic -->
-                  <ngx-datatable #tableRowDetailsPagado  [rows]="listaHistorialSolicitudesPagadas" [rowHeight]="30" class="bootstrap core-bootstrap font-small-2" [limit]="10"
-                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
+                  <ngx-datatable #tableRowDetailsPagado class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"
+                    [rows]="listaHistorialSolicitudesPagadas" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
                     <ngx-datatable-row-detail [rowHeight]="50">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1">
@@ -137,13 +135,13 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Colaborador" prop="tusuasoli"></ngx-datatable-column>
+                    <ngx-datatable-column name="Colaborador" prop="tusuasoli" [width]="80"></ngx-datatable-column>
                     <!-- <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
                     <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column> -->
-                    <ngx-datatable-column name="Fecha Aprobado" prop="tfechresp"></ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Pagada" prop="tfechactu"></ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="tstatus">
+                    <ngx-datatable-column name="Fecha Aprobado" prop="tfechresp" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Fecha Pagada" prop="tfechactu" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">

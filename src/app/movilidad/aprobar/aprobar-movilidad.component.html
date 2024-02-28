@@ -75,101 +75,101 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group row align-items-center">
-                        <div class="col-md-2 col-2">
+                        <div class="col-md-2 col-xs-12">
                           <label for="puesto" class="col-form-label">Puesto:</label>
                         </div>
-                        <div class="col-md-10 col-10">
+                        <div class="col-md-10 col-xs-12">
                           <label id="puesto" class="form-control">{{trabajador.tdescunidfuncsoli}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="fechSoli" class="col-form-label">Fecha Solicitud:</label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="fechSoli" class="form-control">{{trabajador.tfechregi}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="descr" class="col-form-label"># de viaje: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="descr" class="form-control">{{trabajador.tnumeviaje}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="descr" class="col-form-label">Fecha inicio: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="descr" class="form-control">{{trabajador.tfechinicio}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="periVaca" class="col-form-label">Fecha fin: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="periVaca" class="form-control">{{trabajador.tfechfin}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="descr" class="col-form-label">Origen: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="descr" class="form-control">{{trabajador.torigen}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="periVaca" class="col-form-label">Destino: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="periVaca" class="form-control">{{trabajador.tdestino}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="periVaca" class="col-form-label">Transporte: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="periVaca" class="form-control">{{ trabajador.ttransporte == 'U' ? 'Urbano' : (trabajador.ttransporte == 'T' ? 'Taxi' : trabajador.ttransporte) }}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group row align-items-center">
-                        <div class="col-lg-3 col-3">
+                        <div class="col-lg-3 col-xs-12">
                           <label for="descr" class="col-form-label">Monto: </label>
                         </div>
-                        <div class="col-lg-9 col-9">
+                        <div class="col-lg-9 col-xs-12">
                           <label id="descr" class="form-control">{{trabajador.tmonto}}</label>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <div class="form-group row align-items-center">
-                        <div class="col-md-2 col-2">
-                          <label for="periVaca" class="col-form-label">Motivo: </label>
+                        <div class="col-md-2 col-xs-12">
+                          <label for="periVaca2" class="col-form-label">Motivo: </label>
                         </div>
-                        <div class="col-md-10 col-10">
-                          <label id="periVaca" class="form-control">{{trabajador.tmotivo}}</label>
+                        <div class="col-md-10 col-xs-12">
+                          <textarea id="periVaca2" rows="4" class="form-control">{{trabajador.tmotivo}}</textarea>
                         </div>
                       </div>
                     </div>
@@ -191,15 +191,14 @@
         </div>
         <div class="card-content">
           <div class="card-body">
-            <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2" [columnMode]="ColumnMode.force" 
-              [rows]="solicitudesAprobadas" [rowHeight]="30"[limit]="10"
-              [headerHeight]="30" [footerHeight]="50" >
-              <ngx-datatable-column name="Código" prop="tusuasoli"></ngx-datatable-column>
-              <ngx-datatable-column name="Nombre Completo" prop="tdescusuasoli"></ngx-datatable-column>
-              <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
-              <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column>
-              <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-              <ngx-datatable-column name="Estado" prop="tstatus">
+            <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force" 
+              [rows]="solicitudesAprobadas" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
+              <ngx-datatable-column name="Código" prop="tusuasoli" [width]="100"></ngx-datatable-column>
+              <ngx-datatable-column name="Nombre Completo" prop="tdescusuasoli" [width]="200"></ngx-datatable-column>
+              <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli" [width]="120"></ngx-datatable-column>
+              <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli" [width]="120"></ngx-datatable-column>
+              <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+              <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                 <ng-template let-status="value" ngx-datatable-cell-template>
                   <div class="badge badge-pill"
                     [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">

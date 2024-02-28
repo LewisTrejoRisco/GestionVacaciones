@@ -51,9 +51,9 @@
                 <div class="card-body">
       
                   <!-- ngx-datatable Basic -->
-                  <ngx-datatable #tableRowDetails  [rows]="listaHistorialSolicitudes" [rowHeight]="30" class="bootstrap core-bootstrap font-small-2" [limit]="10"
-                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" [scrollbarH]="true">
-                    <ngx-datatable-row-detail [rowHeight]="50">
+                  <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"
+                    [rows]="listaHistorialSolicitudes" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
+                    <ngx-datatable-row-detail [rowHeight]="40">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
                           <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
@@ -74,10 +74,10 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="tstatus">
+                    <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
@@ -85,8 +85,8 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Pago" prop="tfechactu"></ngx-datatable-column>
-                    <ngx-datatable-column prop="tsolicitudId" name="Actions">
+                    <ngx-datatable-column name="Fecha Pago" prop="tfechactu" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column prop="tsolicitudId" name="Actions" [width]="100">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
                         <!-- <i class="ft-eye text-primary cursor-pointer mr-2"></i> -->
                         <i class="ft-edit text-primary cursor-pointer mr-2" 

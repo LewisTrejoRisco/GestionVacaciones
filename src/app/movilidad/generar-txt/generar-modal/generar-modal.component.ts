@@ -50,7 +50,7 @@ export class GenerarModalComponent implements OnInit{
     { id: 'S', name: 'Semana' },
     { id: 'M', name: 'Mes' }
   ];
-  formSubmitted = false;
+  modalFormSubmitted = false;
   
 
   constructor(
@@ -77,7 +77,6 @@ export class GenerarModalComponent implements OnInit{
   }
 
   get lf() {
-    console.log(this.myForm.controls)
     return this.myForm.controls;
   }
 
@@ -90,6 +89,7 @@ export class GenerarModalComponent implements OnInit{
   }
 
   submitForm() {
+    this.modalFormSubmitted = true;
     if (this.myForm.invalid) {
       return;
     }

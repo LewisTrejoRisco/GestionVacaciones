@@ -48,12 +48,12 @@
               </div>
               <div class="card-content">
                 <div class="card-body">
-                  <ngx-datatable #tableResponsive  [rows]="listaHistorialSolicitudesVenta" [rowHeight]="30" class="bootstrap core-bootstrap" [limit]="10"
-                    [columnMode]="ColumnMode.force" [headerHeight]="30" [footerHeight]="50" >
-                    <ngx-datatable-column name="Período" prop="tperiodo"></ngx-datatable-column>
-                    <ngx-datatable-column name="Dias" prop="tcantidad"></ngx-datatable-column>
-                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud"></ngx-datatable-column>
-                    <ngx-datatable-column name="Estado" prop="tstatus">
+                  <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"
+                    [rows]="listaHistorialSolicitudesVenta" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
+                    <ngx-datatable-column name="Período" prop="tperiodo" [width]="80"></ngx-datatable-column>
+                    <ngx-datatable-column name="Dias" prop="tcantidad" [width]="80"></ngx-datatable-column>
+                    <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
+                    <ngx-datatable-column name="Estado" prop="tstatus" [width]="100">
                       <ng-template let-status="value" ngx-datatable-cell-template>
                         <div class="badge badge-pill"
                           [ngClass]="{'bg-light-warning': status == '1', 'bg-light-success':status == '2', 'bg-light-danger':status == '3' , 'bg-light-primary':status == '4' }">
@@ -61,7 +61,7 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column prop="tsolicitudId" name="Actions">
+                    <ngx-datatable-column prop="tsolicitudId" name="Actions" [width]="100">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
                         <i class="ft-edit text-primary cursor-pointer mr-2" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" (click)="modalShowSolicitar(1, row)"></i>
                         <i class="ft-x text-primary cursor-pointer" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" (click)="modalEliminarSolicitar(row)"></i>

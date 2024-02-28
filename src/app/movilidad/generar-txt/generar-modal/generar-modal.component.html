@@ -12,12 +12,11 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-md-12">
-          <div *ngIf="myForm.invalid && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
+          <div *ngIf="modalFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
             class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
           <div class="input-group">
             <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
-              id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" 
-              [ngClass]="{ 'is-invalid': myForm.invalid && lf.fechaInic.invalid, 'is-valid': myForm.invalid && !lf.fechaInic.invalid }" required>
+              id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" required>
             <div class="input-group-append">
               <div class="input-group-text" (click)="d2.toggle()">
                 <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
@@ -28,28 +27,25 @@
       </div>
       <div class="row mb-2">
         <div class="col-xs-12 col-md-12">
-          <div *ngIf="myForm.invalid && (lf.tiempo.invalid || lf.tiempo.errors?.required)"
+          <div *ngIf="modalFormSubmitted && (lf.tiempo.invalid || lf.tiempo.errors?.required)"
             class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
           <div>
             <ng-select  [items]="tiempo" [formControl]="myForm.controls['tiempo']" bindLabel="name" formControlName="tiempo" 
-                        placeholder="Elegir semana o mes" id="tiempo"
-                        
-              [ngClass]="{ 'is-invalid': myForm.invalid && lf.tiempo.invalid, 'is-valid': myForm.invalid && !lf.tiempo.invalid }" required>
+                        placeholder="Elegir semana o mes" id="tiempo" required>
             </ng-select>
           </div>
         </div>
       </div>
       <div class="row mb-2">
         <div class="col-xs-12 col-md-6">
-          <div *ngIf="myForm.invalid && (lf.tipoCambio.invalid || lf.tipoCambio.errors?.required)"
+          <div *ngIf="modalFormSubmitted && (lf.tipoCambio.invalid || lf.tipoCambio.errors?.required)"
             class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
           <fieldset class="form-group position-relative has-icon-left">
             <div class="form-control-position">
               <i class="ft-grid"></i>
             </div>
             <input type="number" [formControl]="myForm.controls['tipoCambio']" formControlName="tipoCambio" class="form-control"
-              id="tipoCambio" placeholder="Tipo de cambio" (keydown.enter)="$event.preventDefault()" #tipoCambio
-              [ngClass]="{ 'is-invalid': myForm.invalid && lf.tipoCambio.invalid, 'is-valid': myForm.invalid && !lf.tipoCambio.invalid }" required>
+              id="tipoCambio" placeholder="Tipo de cambio" (keydown.enter)="$event.preventDefault()" #tipoCambio required>
             <div class="form-control-position control-position-right">
               <i class="ft-grid"></i>
             </div>

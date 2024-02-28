@@ -100,12 +100,13 @@ export class SolicitarLicenciaModalComponent implements OnInit{
       fechaInic: [item.fechaInic || null, Validators.required],
       hasta: [item.hasta || null, Validators.required],
       descripcion: [item.descripcion || null, Validators.required],
-      documento: [item.documento || null, Validators.required]
+      documento: [item.documento || null]
     });
     this.profileImage = this.myForm.value.documento;
   }
 
   submitForm() {
+    debugger;
     this.modalLiceFormSubmitted = true;
     if (this.myForm.invalid) {
       return;
