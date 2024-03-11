@@ -88,7 +88,7 @@ export class SolicitarLicenciaModalComponent implements OnInit{
   }
 
   get lf() {
-    // console.log(this.myForm.controls)
+    // //console.log(this.myForm.controls)
     return this.myForm.controls;
   }
 
@@ -106,7 +106,6 @@ export class SolicitarLicenciaModalComponent implements OnInit{
   }
 
   submitForm() {
-    debugger;
     this.modalLiceFormSubmitted = true;
     if (this.myForm.invalid) {
       return;

@@ -29,7 +29,7 @@ export class HorizontalMenuComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit() {
-    console.log('Hola')
+    //console.log('Hola')
     this.menuItems = HROUTES;
   }
 

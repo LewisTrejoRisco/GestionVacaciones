@@ -51,7 +51,8 @@ export class SolicitarComponent implements OnInit {
     private changeDetector:ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
+    //console.log(this.sesion)
     this.fechaIngreso = this.sesion.p_fechingr.split("T")[0]
     this.listarHistorialSolicitudes();
     this.poblarListaResumen();
@@ -102,10 +103,10 @@ export class SolicitarComponent implements OnInit {
     this.solicitarService.listarHistorialSolicitudes(this.sesion.p_codipers, 1).subscribe(
       resp => {
         this.listaHistorialSolicitudes = resp;
-        console.log(this.listaHistorialSolicitudes);
+        //console.log(this.listaHistorialSolicitudes);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -156,63 +157,114 @@ export class SolicitarComponent implements OnInit {
                                         }; // should be the data
     }
     modalRef.result.then((result) => {
-      let objSolicitud = null;
-      if(row == null) {
-        objSolicitud = {
-          tsolicitudId : 0,
-          idtiposolicitud : "1",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          usuarioactual : this.sesion.p_matrresp,
-          fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-          status : "1",
-          cantidaddias : result.hasta.name,
-          descripcion : result.descripcion,
-          periodo: result.periodo,
-          treemplazo: result.reemplazo
+      let fechaInicio:string = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+      let cantidadDias: number = result.hasta.id;
+      let periodo: number = Number(result.periodo);
+      
+      let listTipoDia = [];
+      if(this.sesion.p_diasvenc > 0 && cantidadDias > 0) {
+        let diasProg: number = cantidadDias;
+        let periProg: number = periodo;
+        if (this.sesion.p_diasvenc <= cantidadDias) {
+          diasProg = this.sesion.p_diasvenc;
         }
-      } else {
-        objSolicitud = {
-          tsolicitudId : row.tsolicitudId,
-          idtiposolicitud : "1",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          usuarioactual : this.sesion.p_matrresp,
-          fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-          status : "1",
-          cantidaddias : result.hasta.name,
-          descripcion : result.descripcion,
-          periodo: result.periodo,
-          treemplazo: result.reemplazo
+        let objTipoDia = {
+          tfechaInicio : fechaInicio,
+          tcantidadDias : diasProg,
+          tperiodo : periProg.toString()
         }
+        listTipoDia.push(objTipoDia);
+        fechaInicio = this.sumarFecha(result.fechaInic.year, result.fechaInic.month, result.fechaInic.day, diasProg);
+        cantidadDias = cantidadDias - diasProg;
+        periodo = periodo + 1;
       }
-      console.log(objSolicitud);
-      this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
-        resp => {
-          console.log(resp)
-          this.poblarListaResumen();
-          this.listarHistorialSolicitudes();
-          Swal.fire({
-            title: 'Exito',
-            text: 'Solicitud generada',
-            icon: 'success',
-            timer: 1500, 
-            showConfirmButton: false,
-          })
-        }, 
-        error => {
-          console.log("Error: " + error.message)
-          Swal.fire(
-            'Error',
-            'error al grabar la solicitud:'+ error.message,
-            'error'
-          );
+      if(this.sesion.p_diaspend > 0 && cantidadDias > 0) {
+        let diasProg: number = cantidadDias;
+        let periProg: number = periodo;
+        if (this.sesion.p_diaspend <= cantidadDias) {
+          diasProg = this.sesion.p_diaspend;
         }
-      );
+        let objTipoDia = {
+          tfechaInicio : fechaInicio,
+          tcantidadDias : diasProg,
+          tperiodo : periProg.toString()
+        }
+        listTipoDia.push(objTipoDia);
+        fechaInicio = this.sumarFecha(result.fechaInic.year, result.fechaInic.month, result.fechaInic.day, diasProg);
+        cantidadDias = cantidadDias - diasProg;
+        periodo = periodo + 1;
+      }
+      if(this.sesion.p_diastrun > 0 && cantidadDias > 0) {
+        let diasProg: number = cantidadDias;
+        let periProg: number = periodo;
+        if (this.sesion.p_diastrun <= cantidadDias) {
+          diasProg = this.sesion.p_diastrun;
+        }
+        let objTipoDia = {
+          tfechaInicio : fechaInicio,
+          tcantidadDias : diasProg,
+          tperiodo : periProg.toString()
+        }
+        listTipoDia.push(objTipoDia);
+      }
+      for (var i = 0; i < listTipoDia.length; i++) {
+        this.grabarSolicitud(row, listTipoDia[i].tfechaInicio, listTipoDia[i].tcantidadDias, listTipoDia[i].tperiodo, result);
+      }
     }).catch((error) => {
       console.log(error);
     });
     this.changeDetector.detectChanges();
+  }
+
+  public grabarSolicitud(row: any, fechaInicio:string, cantidadDias: number, periodo: number, result: any) {
+    let objSolicitud = null;
+    objSolicitud = {
+      tsolicitudId : row == null ? 0 : row.tsolicitudId,
+      idtiposolicitud : "1",
+      usuarioregistro : this.sesion.p_codipers,
+      usuariosolicitado : this.sesion.p_codipers,
+      usuarioactual : this.sesion.p_matrresp,
+      fechainiciosolicitud : fechaInicio,
+      status : "1",
+      cantidaddias : cantidadDias,
+      descripcion : result.descripcion,
+      periodo: periodo,
+      treemplazo: result.reemplazo
+    }
+    //console.log(objSolicitud);
+    this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
+      resp => {
+        //console.log(resp)
+        this.poblarListaResumen();
+        this.listarHistorialSolicitudes();
+        Swal.fire({
+          title: 'Exito',
+          text: 'Solicitud generada',
+          icon: 'success',
+          timer: 1500, 
+          showConfirmButton: false,
+        })
+      }, 
+      error => {
+        //console.log("Error: " + error.message)
+        Swal.fire(
+          'Error',
+          'error al grabar la solicitud:'+ error.message,
+          'error'
+        );
+      }
+    );
+  }
+
+  public sumarFecha(anio: number, mes: number, dia: number, diasProg): string {
+    const startDate  = new Date(anio, mes - 1, dia)
+        const currentDate = new Date(startDate.getTime());
+        currentDate.setDate(startDate.getDate() + diasProg);
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Agregar 1 al mes porque los meses van de 0 a 11
+        const day = currentDate.getDate().toString().padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate
   }
 
   public modalEliminarSolicitar(user: any){
@@ -226,14 +278,14 @@ export class SolicitarComponent implements OnInit {
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
-      console.log(objRechazar);
+      //console.log(objRechazar);
       this.solicitarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.listarHistorialSolicitudes();
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al eliminar solicitud:'+ error.message,
@@ -249,11 +301,11 @@ export class SolicitarComponent implements OnInit {
   public createXLSX() : void {
     this.solicitarService.reporteAprobadosRRHH(1, 1).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapter(this.listReporte);
-        console.log(report)
+        //console.log(report)
         this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_vacaciones_rrhh.xlsx');
         Swal.fire(
           'Exito',

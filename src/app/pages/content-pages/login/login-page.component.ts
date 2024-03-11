@@ -18,6 +18,8 @@ export class LoginPageComponent {
   isLoginFailed = false;
   token: any = null;
   user: any = null;
+  sesion: any = null;
+  imagenUrl: string;
 
   loginForm = new UntypedFormGroup({
     username: new UntypedFormControl('', [Validators.required]),
@@ -54,18 +56,22 @@ export class LoginPageComponent {
     this.authService.obtenerToken().subscribe(
       resp => {
         this.token = resp;
-        console.log(this.token)
+        this.authService.guardarToken(JSON.stringify(resp))
         this.authService.autenticarUsuario(this.loginForm.value.username, this.loginForm.value.password, this.token.token).subscribe(
           resp => {
             this.user = resp;
-            console.log(this.user);
+            //console.log(this.user);
             if (this.user.p_mensavis == '0'){
               this.authService.signupUser(this.user.trabajador.codigoMatricula)
                 .subscribe(res => {
-                  this.authService.guardarToken(JSON.stringify(res));
-                  console.log(this.authService.userToken)
-                  this.spinner.hide();
-                  this.router.navigate(['/vacaciones/solicitar']);
+                  this.sesion = res;
+                  this.authService.obtenerFoto(this.sesion.p_codipers, this.token.token).subscribe(
+                    (imagen: Blob) =>{
+                      this.createImageFromBlob(imagen);
+                    }, error=> {
+                      console.log(error)
+                    }
+                  )
                 }, error => {
                   console.log(error.message)
                   Swal.fire(
@@ -93,7 +99,7 @@ export class LoginPageComponent {
         )
       }, 
       error => {
-        console.log("Error: " + error.message)
+        //console.log("Error: " + error.message)
         Swal.fire(
           'Error',
           'error al generar Token:'+ error.message,
@@ -104,9 +110,24 @@ export class LoginPageComponent {
       // .catch((err) => {
       //   this.isLoginFailed = true;
       //   this.spinner.hide();
-      //   console.log('error: ' + err)
+      //   //console.log('error: ' + err)
       // }
       // );
+  }
+  // Convierte la imagen Blob en una URL para mostrarla en la vista
+  createImageFromBlob(image: Blob): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.imagenUrl = reader.result as string;
+      this.sesion.p_foto = this.imagenUrl
+      //console.log(this.sesion)
+      this.authService.guardarSesion(JSON.stringify(this.sesion));
+      this.spinner.hide();
+      this.router.navigate(['/vacaciones/solicitar']);
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 
 }

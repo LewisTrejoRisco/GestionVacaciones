@@ -34,7 +34,7 @@ export class CancelarModalComponent implements OnInit{
   }
 
   private buildItemForm(item) {
-    console.log(item)
+    //console.log(item)
     this.myForm = this.formBuilder.group({
       motivo: [item.motivo || '', Validators.required],
     });

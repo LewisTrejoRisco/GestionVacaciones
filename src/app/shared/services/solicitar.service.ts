@@ -16,7 +16,7 @@ export class SolicitarService {
     }
 
     public listarSolicitudes(codiUsua: string, ttiposolicitudId: number) {
-        console.log(URL_END_POINT_BASE + SOLICITUDXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+        //console.log(URL_END_POINT_BASE + SOLICITUDXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUDXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -26,7 +26,7 @@ export class SolicitarService {
     }
 
     public listarHistorialSolicitudes(codiUsua: string, ttiposolicitudId: number) {
-        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+        //console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar historial. Msg: ' + e.error);
@@ -36,7 +36,7 @@ export class SolicitarService {
     }
 
     public listarHistorialPermisoSolicitudes(codiUsua: string, ttiposolicitudId: number) {
-        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALPERMISOXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+        //console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALPERMISOXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALPERMISOXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar historial. Msg: ' + e.error);
@@ -46,7 +46,7 @@ export class SolicitarService {
     }
 
     public listarHistorialLicenciasSolicitudes(codiUsua: string, ttiposolicitudId: number) {
-        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALLICENCIAXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+        //console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALLICENCIAXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALLICENCIAXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar historial. Msg: ' + e.error);
@@ -56,7 +56,7 @@ export class SolicitarService {
     }
 
     public listarHistorialMovilidadSolicitudes(codiUsua: string, ttiposolicitudId: number) {
-        console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALMOVILIDADXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
+        //console.log(URL_END_POINT_BASE + SOLICITUD_HISTORIALMOVILIDADXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             return this.http.get(URL_END_POINT_BASE + SOLICITUD_HISTORIALMOVILIDADXUSUARIO + codiUsua + '&ttiposolicitudId=' + ttiposolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar historial. Msg: ' + e.error);
@@ -66,7 +66,7 @@ export class SolicitarService {
     }
 
     public grabarSolicitud(objSolicitud: any) {
-        console.log(URL_END_POINT_BASE + GRABAR_SOLICITUD + objSolicitud)
+        //console.log(URL_END_POINT_BASE + GRABAR_SOLICITUD + objSolicitud)
         return this.http.post(URL_END_POINT_BASE + GRABAR_SOLICITUD, objSolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar grabar solicitud. Msg: ' + e.error);
@@ -76,7 +76,7 @@ export class SolicitarService {
     }
 
     public grabarPermiso(objSolicitud: any) {
-        console.log(URL_END_POINT_BASE + GRABAR_PERMISO + objSolicitud)
+        //console.log(URL_END_POINT_BASE + GRABAR_PERMISO + objSolicitud)
         return this.http.post(URL_END_POINT_BASE + GRABAR_PERMISO, objSolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar grabar permiso. Msg: ' + e.error);
@@ -86,7 +86,7 @@ export class SolicitarService {
     }
 
     public grabarLicencia(objSolicitud: any) {
-        console.log(URL_END_POINT_BASE + GRABAR_LICENCIA + objSolicitud)
+        //console.log(URL_END_POINT_BASE + GRABAR_LICENCIA + objSolicitud)
         return this.http.post(URL_END_POINT_BASE + GRABAR_LICENCIA, objSolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar grabar licencia. Msg: ' + e.error);
@@ -96,7 +96,7 @@ export class SolicitarService {
     }
 
     public grabarMovilidad(objSolicitud: any) {
-        console.log(URL_END_POINT_BASE + GRABAR_MOVILIDAD + objSolicitud)
+        //console.log(URL_END_POINT_BASE + GRABAR_MOVILIDAD + objSolicitud)
         return this.http.post(URL_END_POINT_BASE + GRABAR_MOVILIDAD, objSolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar grabar movilidad. Msg: ' + e.error);
@@ -106,7 +106,7 @@ export class SolicitarService {
     }
 
     public listarSolicitudesPendientes(codiUsua: string, status: number, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "codiUsua=" + codiUsua + "&status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -116,7 +116,7 @@ export class SolicitarService {
     }
 
     public listarSolicitudesAprobadas(codiUsua: string, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_APROBADA + "codiUsua=" + codiUsua + "&ttiposolicitudId=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_APROBADA + "codiUsua=" + codiUsua + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_APROBADA + "codiUsua=" + codiUsua + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -126,7 +126,7 @@ export class SolicitarService {
     }
 
     public listarSolicitudesPendientesXStatusXTipo(status: number, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "status=" + status + "&idtiposolicitud=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_PENDIENTE + "status=" + status + "&idtiposolicitud=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -136,7 +136,7 @@ export class SolicitarService {
     }
 
     public listarDetalleUsuario(tsolicitudId: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO + tsolicitudId)
+        //console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO + tsolicitudId)
             return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO + tsolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
@@ -146,7 +146,7 @@ export class SolicitarService {
     }
 
     public listarDetalleUsuarioPermiso(tsolicitudId: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_PERMISO + tsolicitudId)
+        //console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_PERMISO + tsolicitudId)
             return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_PERMISO + tsolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
@@ -156,7 +156,7 @@ export class SolicitarService {
     }
 
     public listarDetalleUsuarioLicencia(tsolicitudId: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_LICENCIA + tsolicitudId)
+        //console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_LICENCIA + tsolicitudId)
             return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_LICENCIA + tsolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
@@ -166,7 +166,7 @@ export class SolicitarService {
     }
 
     public listarDetalleMovilidadLicencia(tsolicitudId: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_MOVILIDAD + tsolicitudId)
+        //console.log(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_MOVILIDAD + tsolicitudId)
             return this.http.get(URL_END_POINT_BASE + LISTAR_DETALLE_USUARIO_MOVILIDAD + tsolicitudId)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar el detalle de usuario. Msg: ' + e.error);
@@ -176,7 +176,7 @@ export class SolicitarService {
     }
 
     public aprobarSolicitud(objAprobar: any) {
-        console.log(URL_END_POINT_BASE + APROBAR_SOLICITUD + objAprobar)
+        //console.log(URL_END_POINT_BASE + APROBAR_SOLICITUD + objAprobar)
         return this.http.post(URL_END_POINT_BASE + APROBAR_SOLICITUD, objAprobar)
             .pipe(catchError(e => {
                 console.error(' Error al intentar aprobar solicitud. Msg: ' + e.error);
@@ -186,7 +186,7 @@ export class SolicitarService {
     }
 
     public rechazarSolicitud(objRechazar: any) {
-        console.log(URL_END_POINT_BASE + RECHAZAR_SOLICITUD + objRechazar)
+        //console.log(URL_END_POINT_BASE + RECHAZAR_SOLICITUD + objRechazar)
         return this.http.post(URL_END_POINT_BASE + RECHAZAR_SOLICITUD, objRechazar)
             .pipe(catchError(e => {
                 console.error(' Error al intentar rechazar solicitud. Msg: ' + e.error);
@@ -196,7 +196,7 @@ export class SolicitarService {
     }
 
     public listarDistrito() {
-        console.log(URL_END_POINT_BASE + LISTAR_DISTRITO)
+        //console.log(URL_END_POINT_BASE + LISTAR_DISTRITO)
         return this.http.get(URL_END_POINT_BASE + LISTAR_DISTRITO)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar distritos. Msg: ' + e.error);
@@ -206,7 +206,7 @@ export class SolicitarService {
     }
 
     public listarMovilidadesAprobados(status: number, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_MOVILIDAD_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_MOVILIDAD_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_MOVILIDAD_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -216,7 +216,7 @@ export class SolicitarService {
     }
 
     public generarTxtPersonas(codipers: string, status: number, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar personas para pago. Msg: ' + e.error);
@@ -226,7 +226,7 @@ export class SolicitarService {
     }
 
     public listarVacacionesAprobados(status: number, idtiposolicitud: number) {
-        console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
+        //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar. Msg: ' + e.error);
@@ -236,7 +236,7 @@ export class SolicitarService {
     }
 
     public reglasVacaciones(pCodipers: string) {
-        console.log(URL_END_POINT_BASE + REGLAS_VACACIONES + "pCodipers=" + pCodipers )
+        //console.log(URL_END_POINT_BASE + REGLAS_VACACIONES + "pCodipers=" + pCodipers )
             return this.http.get(URL_END_POINT_BASE + REGLAS_VACACIONES + "pCodipers=" + pCodipers )
             .pipe(catchError(e => {
                 console.error(' Error al intentar listar las reglas. Msg: ' + e.error);
@@ -246,7 +246,7 @@ export class SolicitarService {
     }
 
     public obtenerDatosBasicos(pCodipers: string) {
-        console.log(URL_END_POINT_BASE + OBTENERDATOSBASICOS + pCodipers )
+        //console.log(URL_END_POINT_BASE + OBTENERDATOSBASICOS + pCodipers )
             return this.http.get(URL_END_POINT_BASE + OBTENERDATOSBASICOS + pCodipers )
             .pipe(catchError(e => {
                 console.error(' Error al intentar obtener datos básicos. Msg: ' + e.error);
@@ -256,7 +256,7 @@ export class SolicitarService {
     }
 
     public reporteAprobados(ttiposolicitudId: number, tusuaaprob: string, status: number): Observable<any>  {
-        console.log(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob + "&status=" + status)
+        // console.log(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob + "&status=" + status)
             return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOSXAPROB + ttiposolicitudId + "&tusuaaprob=" + tusuaaprob  + "&status=" + status)
             .pipe(catchError(e => {
                 console.error(' Error al intentar obtener datos APROBADOS. Msg: ' + e.error);
@@ -266,7 +266,7 @@ export class SolicitarService {
     }
 
     public reporteAprobadosRRHH(ttiposolicitudId: number, status: number): Observable<any>  {
-        console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
+        //console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             .pipe(catchError(e => {
                 console.error(' Error al intentar obtener datos APROBADOS RRHH. Msg: ' + e.error);
@@ -276,7 +276,7 @@ export class SolicitarService {
     }
 
     public exportarTxtCont(pFechInic: string, pTiempo: string, pTipoCambio: number,) {
-        console.log(URL_END_POINT_BASE + LISTAR_TXT_CONTABILIDAD + "pFechInic=" + pFechInic + "&pTiempo=" + pTiempo + "&pTipoCambio=" + pTipoCambio)
+        //console.log(URL_END_POINT_BASE + LISTAR_TXT_CONTABILIDAD + "pFechInic=" + pFechInic + "&pTiempo=" + pTiempo + "&pTipoCambio=" + pTipoCambio)
             return this.http.get(URL_END_POINT_BASE + LISTAR_TXT_CONTABILIDAD + "pFechInic=" + pFechInic + "&pTiempo=" + pTiempo + "&pTipoCambio=" + pTipoCambio)
             .pipe(catchError(e => {
                 console.error(' Error al intentar obtener txt para contabilidad. Msg: ' + e.error);

@@ -12,104 +12,390 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-md-6">
-          <!-- <fieldset class="form-group position-relative has-icon-left"> -->
-          <div *ngIf="modalFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
+            <div class="input-group">
+              <ul class="list-unstyled mb-0">
+                <li class="d-inline-block align-top mr-2">
+                  <div class="radio">
+                    <input type="radio" id="idDia" value="D" [formControl]="myForm.controls['idTiempo']" formControlName="idTiempo" (change)="onDateChange()">
+                    <label for="idDia">Dia</label>
+                  </div>
+                </li>
+                <li class="d-inline-block">
+                  <div class="radio">
+                    <input type="radio" id="idSemana" value="S" [formControl]="myForm.controls['idTiempo']" formControlName="idTiempo" (change)="onDateChange()">
+                    <label for="idSemana">Semana</label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <div *ngIf="modalFormSubmitted && (lf.fecha.invalid || lf.fecha.errors?.required)"
           class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
             <div class="input-group">
-              <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
-                id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+              <input type="text" [formControl]="myForm.controls['fecha']" readonly formControlName="fecha" class="form-control"
+                id="fecha" placeholder="Fecha" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" (ngModelChange)="onDateChange()">
               <div class="input-group-append">
                 <div class="input-group-text" (click)="d2.toggle()">
                   <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
                 </div>
               </div>
             </div>
-          <!-- </fieldset> -->
         </div>
-        <div class="col-xs-12 col-md-6">
-          <div *ngIf="modalFormSubmitted && (lf.fechaFina.invalid || lf.fechaFina.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <div class="input-group">
-            <input type="text" [formControl]="myForm.controls['fechaFina']" readonly formControlName="fechaFina" class="form-control"
-              id="fechaFina" placeholder="Fecha Fin" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d3="ngbDatepicker" >
-            <div class="input-group-append">
-              <div class="input-group-text" (click)="d3.toggle()">
-                <i class="fa fa-calendar" id="calendarFechFin" style="cursor: pointer;"></i>
+      </div>
+      <!-- myForm.controls['idTiempo'].value == 0 -->
+      <div *ngIf="selectedOption">
+        <div class="row">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic']" readonly formControlName="fechaInic" class="form-control"
+                  id="fechaInic" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina.invalid || lf.fechaFina.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina']" formControlName="fechaFina" id="fechaFina" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-xs-12 col-md-6">
-          <div *ngIf="modalFormSubmitted && (lf.numeViajes.invalid || lf.numeViajes.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <fieldset class="form-group position-relative has-icon-left">
-            <div class="form-control-position">
-              <i class="ft-grid"></i>
-            </div>
-            <input type="text" [formControl]="myForm.controls['numeViajes']" formControlName="numeViajes" class="form-control"
-              id="numeViajes" placeholder="N° de Viajes" (keydown.enter)="$event.preventDefault()" required #numeViajes>
-            <div class="form-control-position control-position-right">
-              <i class="ft-grid"></i>
-            </div>
-          </fieldset>
-        </div>
-        <div class="col-xs-12 col-md-6">
-          <div *ngIf="modalFormSubmitted && (lf.transporte.invalid || lf.transporte.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <div>
-            <ng-select  [items]="transporte" [formControl]="myForm.controls['transporte']" bindLabel="name" formControlName="transporte" placeholder="Elegir transporte" id="transporte">
-            </ng-select>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto.invalid || lf.monto.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto']" formControlName="monto" class="form-control"
+                id="monto" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
           </div>
         </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-xs-12 col-md-6">
-          <div *ngIf="modalFormSubmitted && (lf.origen.invalid || lf.origen.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <div>
-            <ng-select  [items]="origen" [formControl]="myForm.controls['origen']" bindLabel="descripcion_distrito" formControlName="origen" placeholder="Elegir origen" id="origen">
-            </ng-select>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic1.invalid || lf.fechaInic1.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic1']" readonly formControlName="fechaInic1" class="form-control"
+                  id="fechaInic1" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina1.invalid || lf.fechaFina1.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina1']" formControlName="fechaFina1" id="fechaFina1" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto1.invalid || lf.monto1.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto1']" formControlName="monto1" class="form-control"
+                id="monto1" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto1 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
           </div>
         </div>
-        <div class="col-xs-12 col-md-6">
-          <div *ngIf="modalFormSubmitted && (lf.destino.invalid || lf.destino.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <div>
-            <ng-select  [items]="destino" [formControl]="myForm.controls['destino']" bindLabel="descripcion_distrito" formControlName="destino" placeholder="Elegir destino" id="destino">
-            </ng-select>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic2.invalid || lf.fechaInic2.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic2']" readonly formControlName="fechaInic2" class="form-control"
+                  id="fechaInic2" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina2.invalid || lf.fechaFina2.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina2']" formControlName="fechaFina2" id="fechaFina2" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto2.invalid || lf.monto2.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto2']" formControlName="monto2" class="form-control"
+                id="monto2" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto2 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
           </div>
         </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-xs-12 col-md-9">
-          <div *ngIf="modalFormSubmitted && (lf.motivo.invalid || lf.motivo.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <fieldset class="form-group position-relative has-icon-left">
-            <div class="form-control-position">
-              <i class="ft-grid"></i>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic3.invalid || lf.fechaInic3.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic3']" readonly formControlName="fechaInic3" class="form-control"
+                  id="fechaInic3" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina3.invalid || lf.fechaFina3.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina3']" formControlName="fechaFina3" id="fechaFina3" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
             </div>
-            <input type="text" [formControl]="myForm.controls['motivo']" formControlName="motivo" class="form-control"
-              id="motivo" placeholder="Motivo desplazamiento" (keydown.enter)="$event.preventDefault()" required #motivo>
-            <div class="form-control-position control-position-right">
-              <i class="ft-grid"></i>
-            </div>
-          </fieldset>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto3.invalid || lf.monto3.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto3']" formControlName="monto3" class="form-control"
+                id="monto3" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto3 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div>
         </div>
-        <div class="col-xs-12 col-md-3">
-          <div *ngIf="modalFormSubmitted && (lf.monto.invalid || lf.monto.errors?.required)"
-          class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-          <fieldset class="form-group position-relative has-icon-left">
-            <div class="form-control-position">
-              <i class="ft-grid"></i>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic4.invalid || lf.fechaInic4.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic4']" readonly formControlName="fechaInic4" class="form-control"
+                  id="fechaInic4" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina4.invalid || lf.fechaFina4.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina4']" formControlName="fechaFina4" id="fechaFina4" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
             </div>
-            <input type="number" [formControl]="myForm.controls['monto']" formControlName="monto" class="form-control"
-              id="monto" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto >
-            <div class="form-control-position control-position-right">
-              <i class="ft-grid"></i>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto4.invalid || lf.monto4.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto4']" formControlName="monto4" class="form-control"
+                id="monto4" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto4 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic5.invalid || lf.fechaInic5.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic5']" readonly formControlName="fechaInic5" class="form-control"
+                  id="fechaInic5" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina5.invalid || lf.fechaFina5.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina5']" formControlName="fechaFina5" id="fechaFina5" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
             </div>
-          </fieldset>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto5.invalid || lf.monto5.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto5']" formControlName="monto5" class="form-control"
+                id="monto5" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto5 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row" *ngIf="myForm.controls['idTiempo'].value =='S' ">
+          <div class="col-xs-12 col-md-4">
+            Fecha Inicio
+            <div *ngIf="modalFormSubmitted && (lf.fechaInic6.invalid || lf.fechaInic6.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+              <div class="input-group">
+                <input type="text" [formControl]="myForm.controls['fechaInic6']" readonly formControlName="fechaInic6" class="form-control"
+                  id="fechaInic6" placeholder="Fecha Inicio" (keydown.enter)="$event.preventDefault()" ngbDatepicker #d2="ngbDatepicker" >
+                <!-- <div class="input-group-append">
+                  <div class="input-group-text" (click)="d2.toggle()">
+                    <i class="fa fa-calendar" id="calendarFechInic" style="cursor: pointer;"></i>
+                  </div>
+                </div> -->
+              </div>
+          </div>
+          <div class="col-xs-12 col-md-5">
+            Hora Salida
+            <div class="input-group">
+              <div *ngIf="modalFormSubmitted && (lf.fechaFina6.invalid || lf.fechaFina6.errors?.required)"
+                    class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido hora y minuto</div>
+              <div class="">
+                <ngb-timepicker [formControl]="myForm.controls['fechaFina6']" formControlName="fechaFina6" id="fechaFina6" [meridian]="meridian" [spinners]="spinners"></ngb-timepicker>
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            Monto
+            <div *ngIf="modalFormSubmitted && (lf.monto6.invalid || lf.monto6.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="number" [formControl]="myForm.controls['monto6']" formControlName="monto6" class="form-control"
+                id="monto6" placeholder="Monto" (keydown.enter)="$event.preventDefault()" required #monto6 >
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <!-- <div class="col-xs-12 col-md-6">
+            <div *ngIf="modalFormSubmitted && (lf.numeViajes.invalid || lf.numeViajes.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="text" [formControl]="myForm.controls['numeViajes']" formControlName="numeViajes" class="form-control"
+                id="numeViajes" placeholder="N° de Viajes" (keydown.enter)="$event.preventDefault()" required #numeViajes>
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div> -->
+          <div class="col-xs-12 col-md-6">
+            <div *ngIf="modalFormSubmitted && (lf.transporte.invalid || lf.transporte.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <div>
+              <ng-select  [items]="transporte" [formControl]="myForm.controls['transporte']" bindLabel="name" formControlName="transporte" placeholder="Elegir transporte" id="transporte">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-xs-12 col-md-6">
+            <div *ngIf="modalFormSubmitted && (lf.origen.invalid || lf.origen.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <div>
+              <ng-select  [items]="origen" [formControl]="myForm.controls['origen']" bindLabel="descripcion_distrito" formControlName="origen" placeholder="Elegir origen" id="origen">
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <div *ngIf="modalFormSubmitted && (lf.destino.invalid || lf.destino.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <div>
+              <ng-select  [items]="destino" [formControl]="myForm.controls['destino']" bindLabel="descripcion_distrito" formControlName="destino" placeholder="Elegir destino" id="destino">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-xs-12 col-md-12">
+            <div *ngIf="modalFormSubmitted && (lf.motivo.invalid || lf.motivo.errors?.required)"
+            class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
+            <fieldset class="form-group position-relative has-icon-left">
+              <div class="form-control-position">
+                <i class="ft-grid"></i>
+              </div>
+              <input type="text" [formControl]="myForm.controls['motivo']" formControlName="motivo" class="form-control"
+                id="motivo" placeholder="Motivo desplazamiento" (keydown.enter)="$event.preventDefault()" required #motivo>
+              <div class="form-control-position control-position-right">
+                <i class="ft-grid"></i>
+              </div>
+            </fieldset>
+          </div>
         </div>
       </div>
     </div>

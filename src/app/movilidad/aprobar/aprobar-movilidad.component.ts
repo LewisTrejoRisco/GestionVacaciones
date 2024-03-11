@@ -16,6 +16,7 @@ import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 declare var require: any;
 const dataDistrito: any = require('../../../assets/data/distritos-data.json');
+const now = new Date();
 
 @Component({
   selector: 'app-aprobar-movilidad',
@@ -47,7 +48,7 @@ export class AprobarMovilidadComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.distritos = dataDistrito;
     this.listarSolicitudesAprobadas();
     this.listarSolicitudesMovilidad();
@@ -56,12 +57,22 @@ export class AprobarMovilidadComponent implements OnInit {
   listarSolicitudesMovilidad() {
     this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 5).subscribe(
       resp => {
-        console.log(resp);
         this.solicitudesPendientes = resp;
+        // console.log(this.solicitudesPendientes)
+        this.solicitudesPendientes.forEach(user => {
+          this.authService.obtenerFoto(user.tusuasoli, JSON.parse(this.authService.userToken).token).subscribe(
+            (imagen: Blob) =>{
+              this.createImageFromBlob(imagen, user);
+            }, error=> {
+              console.log(error)
+            }
+          )
+      })
+      //console.log(this.solicitudesPendientes);
         this.trabajador = null;
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -71,14 +82,24 @@ export class AprobarMovilidadComponent implements OnInit {
     )
   }
 
+  createImageFromBlob(image: Blob, user: any): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      user.tfoto = reader.result as string;
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+  }
+
   listarSolicitudesAprobadas() {
     this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 5).subscribe(
       resp => {
-        console.log(resp);
+        //console.log(resp);
         this.solicitudesAprobadas = resp;
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes aprobadas:'+ error.message,
@@ -92,8 +113,20 @@ export class AprobarMovilidadComponent implements OnInit {
     this.detalleSolicitudUsuario = user;
     this.aprobarService.listarDetalleMovilidadLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
-        console.log(resp)
         this.objMoviUsua = resp;
+        let tmotivo = this.objMoviUsua[0].tmotivo
+        let tdestino = this.objMoviUsua[0].tdestino
+        let tmonto = 0
+        let tnumeviaje = 0
+        let torigen = this.objMoviUsua[0].torigen
+        let ttransporte = this.objMoviUsua[0].ttransporte
+        let tfechinicio = this.objMoviUsua[0].tfechinicio
+        const tamanio = this.objMoviUsua.length - 1;
+        let tfechfin = this.objMoviUsua[tamanio].tfechinicio
+        this.objMoviUsua.forEach(user => {
+            tmonto = tmonto + user.tmonto;
+            tnumeviaje = tnumeviaje + user.tnumeviaje;
+        })
         this.trabajador = {
           tsolicitudId: this.detalleSolicitudUsuario.tsolicitudId,
           tusuasoli: this.detalleSolicitudUsuario.tusuasoli,
@@ -104,14 +137,14 @@ export class AprobarMovilidadComponent implements OnInit {
           tdescunidfuncsoli: this.detalleSolicitudUsuario.tdescunidfuncsoli,
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tfechregi: this.detalleSolicitudUsuario.tfechregi,
-          tmotivo: this.objMoviUsua.tmotivo,
-          tdestino:  this.distritos.find(a => a.id_distrito == this.objMoviUsua.tdestino).descripcion_distrito,
-          tmonto: this.objMoviUsua.tmonto,
-          tnumeviaje: this.objMoviUsua.tnumeviaje,
-          torigen: this.distritos.find(a => a.id_distrito == this.objMoviUsua.torigen).descripcion_distrito,
-          ttransporte: this.objMoviUsua.ttransporte,
-          tfechinicio: this.objMoviUsua.tfechinicio,
-          tfechfin: this.objMoviUsua.tfechfin
+          tmotivo: tmotivo,
+          tdestino:  this.distritos.find(a => a.id_distrito == tdestino).descripcion_distrito,
+          tmonto: tmonto,
+          tnumeviaje: tnumeviaje,
+          torigen: this.distritos.find(a => a.id_distrito == torigen).descripcion_distrito,
+          ttransporte: ttransporte,
+          tfechinicio: tfechinicio,
+          tfechfin: tfechfin
         };
         this.solicitudesPendientes.forEach(user => {
             user.isActive = false;
@@ -120,7 +153,7 @@ export class AprobarMovilidadComponent implements OnInit {
         this.solicitudPendiente.isActive = true;
       },
       error => {
-        console.log("error detalle de solicitud:", error.message)
+        //console.log("error detalle de solicitud:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar detalle solicitud:'+ error.message,
@@ -150,16 +183,16 @@ export class AprobarMovilidadComponent implements OnInit {
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
-      console.log(objRechazar);
+      //console.log(objRechazar);
       this.aprobarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.trabajador = null;
           this.listarSolicitudesMovilidad();
           this.listarSolicitudesAprobadas();
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al rechazar solicitud:'+ error.message,
@@ -177,10 +210,10 @@ export class AprobarMovilidadComponent implements OnInit {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
     }
-    console.log(objAprobar);
+    //console.log(objAprobar);
     this.aprobarService.aprobarSolicitud(objAprobar).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.trabajador = null;
         this.listarSolicitudesMovilidad();
         this.listarSolicitudesAprobadas();
@@ -193,7 +226,7 @@ export class AprobarMovilidadComponent implements OnInit {
         })
       }, 
       error => {
-        console.log("Error: " + error.message)
+        //console.log("Error: " + error.message)
         Swal.fire(
           'Error',
           'error al aprobar solicitud:'+ error.message,
@@ -206,12 +239,12 @@ export class AprobarMovilidadComponent implements OnInit {
   public createXLSX() : void {
     this.aprobarService.reporteAprobados(5, this.sesion.p_codipers, 1).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapter(this.listReporte);
-        console.log(report)
-        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Reporte_historial_movilidad.xlsx');
+        //console.log(report)
+        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Movilidades_Aprobadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
         Swal.fire(
           'Exito',
           'Se generó con éxito',

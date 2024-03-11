@@ -42,7 +42,7 @@ export class SolicitarVentaComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.listarSolicitudesGroupBy();
     this.listarHistorialSolicitudes();
   }
@@ -51,10 +51,10 @@ export class SolicitarVentaComponent implements OnInit {
     this.solicitarVentaService.listarSolicitudes(this.sesion.p_codipers, 2).subscribe(
       resp => {
         this.listaSolicitudesVenta = resp;
-        console.log(this.listaSolicitudesVenta);
+        //console.log(this.listaSolicitudesVenta);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes:'+ error.message,
@@ -68,10 +68,10 @@ export class SolicitarVentaComponent implements OnInit {
     this.solicitarVentaService.listarHistorialSolicitudes(this.sesion.p_codipers, 2).subscribe(
       resp => {
         this.listaHistorialSolicitudesVenta = resp;
-        console.log(this.listaHistorialSolicitudesVenta);
+        //console.log(this.listaHistorialSolicitudesVenta);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -126,10 +126,10 @@ export class SolicitarVentaComponent implements OnInit {
           cantidaddias : result.hasta.name
         }
       }
-      console.log(objSolicitud);
+      //console.log(objSolicitud);
       this.solicitarVentaService.grabarSolicitud(objSolicitud).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.listarSolicitudesGroupBy();
           this.listarHistorialSolicitudes();
           Swal.fire({
@@ -141,7 +141,7 @@ export class SolicitarVentaComponent implements OnInit {
           })
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al grabar la solicitud:'+ error.message,
@@ -166,14 +166,14 @@ export class SolicitarVentaComponent implements OnInit {
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
-      console.log(objRechazar);
+      //console.log(objRechazar);
       this.solicitarVentaService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.listarHistorialSolicitudes();
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al eliminar solicitud:'+ error.message,
@@ -189,11 +189,11 @@ export class SolicitarVentaComponent implements OnInit {
   public createXLSX() : void {
     this.solicitarVentaService.reporteAprobadosRRHH(2, 1).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapter(this.listReporte);
-        console.log(report)
+        //console.log(report)
         this.solicitarVentaService.generateReportWithAdapter(headers,report.data, 'Reporte_venta_vacaciones_rrhh.xlsx');
         Swal.fire(
           'Exito',

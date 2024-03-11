@@ -4,13 +4,14 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from 'firebase/app'
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AUTENTICAR, OBTENERDATOS, OBTENERTOKEN, URL_END_POINT_BASE } from 'app/shared/utilitarios/Constantes';
+import { AUTENTICAR, OBTENERDATOS, OBTENERFOTO, OBTENERTOKEN, URL_END_POINT_BASE } from 'app/shared/utilitarios/Constantes';
 import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class AuthService {
   private user: Observable<firebase.User>;
   private userDetails: firebase.User = null;
+  private sesion: string;
   private token: string;
 
   constructor(public _firebaseAuth: AngularFireAuth, public router: Router, private http: HttpClient) {
@@ -36,7 +37,7 @@ export class AuthService {
 
   signinUser(email: string, password: string) {
     //your code for checking credentials and getting tokens for for signing in user
-    console.log(this._firebaseAuth.signInWithEmailAndPassword(email, password))
+    //console.log(this._firebaseAuth.signInWithEmailAndPassword(email, password))
     return this._firebaseAuth.signInWithEmailAndPassword(email, password)
 
   }
@@ -50,9 +51,24 @@ export class AuthService {
     return true;
   }
   
-  public guardarToken(accessToken: string): void {
-      this.token = accessToken;
+  public guardarSesion(sesion: string): void {
+      this.sesion = sesion;
+      sessionStorage.setItem('sesion', this.sesion);
+  }
+  
+  public guardarToken(token: string): void {
+      this.token = token;
       sessionStorage.setItem('token', this.token);
+  }
+
+  public get userSesion(): string {
+      if (this.sesion != null) {
+          return this.sesion;
+      } else if (this.sesion == null && sessionStorage.getItem('sesion') != null) {
+          this.sesion = sessionStorage.getItem('sesion');
+          return this.sesion;
+      }
+      return null;
   }
 
   public get userToken(): string {
@@ -66,6 +82,7 @@ export class AuthService {
   }
 
   public cerrarSesion(): void {
+      this.sesion = null;
       this.token = null;
       sessionStorage.clear();
   }
@@ -75,7 +92,7 @@ export class AuthService {
       parametro: 'KEY_SIST_VACA',
       valor: 'Nettalco$2024'
     }
-    console.log(OBTENERTOKEN + objCredenciales)
+    //console.log(OBTENERTOKEN + objCredenciales)
     const headers = new HttpHeaders({
         'Content-Type': 'application/json'
     });
@@ -92,7 +109,7 @@ export class AuthService {
       p_codipers: user.toUpperCase(),
       p_clavpers: password
     }
-    console.log(AUTENTICAR + objCredenciales)
+    //console.log(AUTENTICAR + objCredenciales)
     const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': token
@@ -106,10 +123,28 @@ export class AuthService {
   }
 
   public obtenerDatos(codiUsua: string) {
-    console.log(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
+    //console.log(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
         return this.http.get(URL_END_POINT_BASE + OBTENERDATOS + codiUsua)
         .pipe(catchError(e => {
             console.error(' Error al intentar listar. Msg: ' + e.error);
+            return throwError(e);
+        })
+    );
+  }
+
+  public obtenerFoto(codiUsua: string, token: string ) {
+    console.log(OBTENERFOTO + codiUsua)
+    console.log(token)
+    const headers = new HttpHeaders({
+        'Authorization': token
+    });
+    //console.log(headers)
+        return this.http.get(OBTENERFOTO + codiUsua, { 
+          headers: headers,
+          responseType: 'blob'
+        })
+        .pipe(catchError(e => {
+            console.error(' Error al intentar mostrar foto. Msg: ' + e.error);
             return throwError(e);
         })
     );

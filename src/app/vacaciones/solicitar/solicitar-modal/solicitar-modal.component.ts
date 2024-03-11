@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, Input, OnInit, Injectable, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import * as hopscotch from 'hopscotch';
 const now = new Date();
@@ -48,19 +49,23 @@ export class SolicitarModalComponent implements OnInit{
   @Input() data: {};
   myForm: UntypedFormGroup;
   d2: any;
+  sesion: any;
   reglas: any;
   modelFecha: NgbDateStruct;
   dias = [
   ];
   fechaMayor: boolean = false;
   modalVacaFormSubmitted = false;
+  numberOfWeek: boolean = false;
 
   constructor(public activeModal: NgbActiveModal,
     private solicitarService: SolicitarService,
+    private authService: AuthService,
     private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
-    console.log(this.data)
+    // //console.log(this.data)
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.buildDays(this.data)
   }
 
@@ -72,12 +77,12 @@ export class SolicitarModalComponent implements OnInit{
     if (item.codipers.length > 0) {
       this.solicitarService.reglasVacaciones(item.codipers).subscribe(
         resp => {
-          console.log(resp);
+          //console.log(resp);
           this.reglas = resp;
           if (this.reglas.p_ejercicio_vacacional != null) {
             this.dias = []
             var iMin = this.reglas.p_dias_minimo;
-            var iMax = this.reglas.p_dias_maximo
+            var iMax = this.sesion.p_diastota
             for ( var i = iMin; i <= iMax; i++) {
               let dia = {
                 id : i,
@@ -142,6 +147,30 @@ export class SolicitarModalComponent implements OnInit{
       this.fechaMayor = true;
       return;
     }
+    if(this.reglas.p_incluir_fin_semana == 1){
+      const startDate  = new Date(this.myForm.value.fechaInic.year, this.myForm.value.fechaInic.month - 1, this.myForm.value.fechaInic.day)
+      const numberOfDays = this.myForm.value.hasta.id;
+      // Iterar sobre las fechas
+      var numberOfWeekend: number = 0;
+      for (let i = 0; i < numberOfDays; i++) {
+        // Crear una nueva fecha sumando 'i' días a la fecha inicial
+        const currentDate = new Date(startDate.getTime());
+        currentDate.setDate(startDate.getDate() + i);
+
+        // Mostrar la fecha actual en la consola o realizar cualquier otra operación que necesites
+        // //console.log('Fecha', i + 1, ':', currentDate.getDay());
+        // 6 = sabado
+        // 0 = domingo
+        if (currentDate.getDay() == 6 || currentDate.getDay() == 0){
+          numberOfWeekend = numberOfWeekend + 1;
+        }
+      }
+      // //console.log(numberOfWeekend)
+      if (numberOfWeekend < 2) {
+        this.numberOfWeek = true;
+        return;
+      }
+    }
     this.activeModal.close(this.myForm.value);
   }
 
@@ -150,7 +179,7 @@ export class SolicitarModalComponent implements OnInit{
   }
 
   startTour() {
-    console.log('Ayuda');
+    //console.log('Ayuda');
     // Destroy running tour
     hopscotch.endTour(true);
     // Initialize new tour

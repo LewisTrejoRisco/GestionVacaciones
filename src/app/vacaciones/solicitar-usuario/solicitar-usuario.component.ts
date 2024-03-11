@@ -41,7 +41,7 @@ export class SolicitarUsuarioComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
   }
 
   poblarListaResumen(usuario: any) {
@@ -89,7 +89,14 @@ export class SolicitarUsuarioComponent implements OnInit {
       resp => {
         this.usuarioSolicitar = resp;
         if (this.usuarioSolicitar.p_menserro == null) {
-          console.log(this.usuarioSolicitar)
+          this.authService.obtenerFoto(this.usuarioSolicitar.p_codipers, JSON.parse(this.authService.userToken).token).subscribe(
+            (imagen: Blob) =>{
+              this.createImageFromBlob(imagen, this.usuarioSolicitar);
+            }, error=> {
+              console.log(error)
+            }
+          )
+          // console.log(this.usuarioSolicitar)
           this.nombreCompleto = this.usuarioSolicitar.p_nombcompleto;
           this.solicitarFlag = true;
           this.poblarListaResumen(this.usuarioSolicitar);
@@ -107,6 +114,16 @@ export class SolicitarUsuarioComponent implements OnInit {
         );
       }
     )
+  }
+
+  createImageFromBlob(image: Blob, user: any): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      user.tfoto = reader.result as string;
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 
   modalShowSolicitar(tipo: any, row: any) {
@@ -162,11 +179,11 @@ export class SolicitarUsuarioComponent implements OnInit {
           periodo: result.periodo
         }
       }
-      console.log(objSolicitud);
+      //console.log(objSolicitud);
       this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
         resp => {
-          console.log(resp)
-          this.poblarListaResumen(this.usuarioSolicitar.p_codipers);
+          //console.log(resp)
+          this.poblarListaResumen(this.usuarioSolicitar);
           this.listarHistorialSolicitudesUsua();
           Swal.fire({
             title: 'Exito',
@@ -177,7 +194,7 @@ export class SolicitarUsuarioComponent implements OnInit {
           })
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al grabar la solicitud:'+ error.message,
@@ -194,10 +211,10 @@ export class SolicitarUsuarioComponent implements OnInit {
     this.solicitarService.listarHistorialSolicitudes(this.usuarioSolicitar.p_codipers, 1).subscribe(
       resp => {
         this.listaHistorialSolicitudesUsua = resp;
-        console.log(this.listaHistorialSolicitudesUsua);
+        //console.log(this.listaHistorialSolicitudesUsua);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -228,14 +245,14 @@ export class SolicitarUsuarioComponent implements OnInit {
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
-      console.log(objRechazar);
+      //console.log(objRechazar);
       this.solicitarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.listarHistorialSolicitudesUsua();
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al eliminar solicitud:'+ error.message,

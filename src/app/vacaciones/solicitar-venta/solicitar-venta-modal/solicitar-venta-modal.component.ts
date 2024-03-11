@@ -21,6 +21,7 @@ export class SolicitarVentaModalComponent implements OnInit{
     { id: 4, name: '15' },
     { id: 5, name: '30' }
   ];
+  modalFormSubmitted = false;
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -33,6 +34,11 @@ export class SolicitarVentaModalComponent implements OnInit{
     this.buildItemForm(this.data);
   }
 
+  get lf() {
+    // //console.log(this.myForm.controls)
+    return this.myForm.controls;
+  }
+
   private buildItemForm(item) {
     if(item.hasta != null) {
       item.hasta = this.diasASalir.find(a => a.name == item.hasta);
@@ -43,6 +49,10 @@ export class SolicitarVentaModalComponent implements OnInit{
   }
 
   submitForm() {
+    this.modalFormSubmitted = true;
+    if (this.myForm.invalid) {
+      return;
+    }
     this.activeModal.close(this.myForm.value);
   }
 

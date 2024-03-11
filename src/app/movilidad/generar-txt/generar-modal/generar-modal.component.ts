@@ -63,7 +63,7 @@ export class GenerarModalComponent implements OnInit{
 
   ngOnInit() {
     this.buildItemForm(this.data);
-    console.log(this.myForm.controls)
+    //console.log(this.myForm.controls)
     // this.solicitarService.listarDistrito().subscribe(
     //   resp => {
     //     this.origen = resp;
@@ -71,7 +71,7 @@ export class GenerarModalComponent implements OnInit{
     //     this.buildItemForm(this.data);
     //   }, 
     //   error => {
-    //     console.log("error:", error.message)
+    //     //console.log("error:", error.message)
     //   }
     // )
   }

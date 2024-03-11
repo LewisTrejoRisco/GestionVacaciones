@@ -96,12 +96,12 @@ export class SolicitarPermisoModalComponent implements OnInit{
   }
 
   get lf() {
-    // console.log(this.myForm.controls)
+    // //console.log(this.myForm.controls)
     return this.myForm.controls;
   }
 
   private buildItemForm(item) {
-    console.log(item)
+    //console.log(item)
     if(item.horas != null) {
       item.horas = this.horas.find(a => a.name == item.horas);
     }

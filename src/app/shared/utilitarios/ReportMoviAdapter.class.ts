@@ -1,14 +1,16 @@
 import { ReporteMovi } from "./reporteMovi.model";
 
 export interface iReporte {
-    tsolicitudId?: number, 
-    ttiposolicitudId?: number,
+    tusuasoli?: string,
+    tnumeviaje?: number,
+    tfechinicsoli?: string,
+    tfechfinasoli?: string,
+    tmonto?: number,
     tfechresp?: string,
     tusuaaprob?: string,
     tfechactu?: string,
     tusuaactu?: string,
     tdesctiposolicitud?: string,
-    tstatus?: number,
     statusDesc?: string
 }
 
@@ -17,14 +19,16 @@ export class ReportMoviAdapter {
     constructor(reportList: ReporteMovi[]) {
         reportList.forEach((report, index) => {
             const reportItem: iReporte = {
-                tsolicitudId: report.tsolicitudId,
-                ttiposolicitudId: report.ttiposolicitudId,
+                tusuasoli: report.tusuasoli,
+                tnumeviaje: report.tnumeviaje,
+                tfechinicsoli: report.tfechinicsoli,
+                tfechfinasoli: report.tfechfinasoli,
+                tmonto: report.tmonto,
                 tfechresp: report.tfechresp,
                 tusuaaprob: report.tusuaaprob,
                 tfechactu: report.tfechactu,
                 tusuaactu: report.tusuaactu,
                 tdesctiposolicitud: report.tdesctiposolicitud,
-                tstatus: report.tstatus,
                 statusDesc: report.statusDesc,
             }
             this.data.push(reportItem)

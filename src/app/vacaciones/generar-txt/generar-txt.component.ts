@@ -38,10 +38,10 @@ export class GenerarTxtComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.listarHistorialSolicitudes();
-    console.log("solicitar componente")
-    console.log(this.sesion.p_codipers)
+    //console.log("solicitar componente")
+    //console.log(this.sesion.p_codipers)
   }
 
   saveTextAsFile (data: any, filename: any){
@@ -83,11 +83,11 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.generarTxtPersonas(this.sesion.p_codipers, 2, 2).subscribe(
       resp => {
         this.personasPagar = resp;
-        console.log(this.personasPagar);
+        //console.log(this.personasPagar);
         this.docuBBVA(this.personasPagar);
       }, 
       error => {
-        console.log("error al consultar:", error.message)
+        //console.log("error al consultar:", error.message)
       }
     )
   }
@@ -167,10 +167,10 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.listarSolicitudes(this.sesion.p_codipers, 2).subscribe(
       resp => {
         this.listaMovilidad = resp;
-        console.log(this.listaMovilidad);
+        //console.log(this.listaMovilidad);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
       }
     )
   }
@@ -179,10 +179,10 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.listarVacacionesAprobados(2, 2).subscribe(
       resp => {
         this.listaHistorialSolicitudes = resp;
-        console.log(this.listaHistorialSolicitudes);
+        //console.log(this.listaHistorialSolicitudes);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
       }
     )
   }

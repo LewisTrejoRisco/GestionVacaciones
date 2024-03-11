@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { User } from './user.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
+const now = new Date();
 
 @Component({
   selector: 'app-aprobar',
@@ -42,7 +43,7 @@ export class AprobarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.listarSolicitudesAprobadas() ;
     this.listarSolicitudesPendientes();
   }
@@ -50,12 +51,21 @@ export class AprobarComponent implements OnInit {
   listarSolicitudesPendientes() {
     this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 1).subscribe(
       resp => {
-        // this.listaHistorialSolicitudes = resp;
-        console.log(resp);
         this.solicitudesPendientes = resp;
+        this.solicitudesPendientes.forEach(user => {
+          this.authService.obtenerFoto(user.tusuasoli, JSON.parse(this.authService.userToken).token).subscribe(
+            (imagen: Blob) =>{
+              this.createImageFromBlob(imagen, user);
+            }, error=> {
+              console.log(error)
+            }
+          )
+      })
+      //console.log(this.solicitudesPendientes);
+      this.trabajador = null;
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -65,14 +75,24 @@ export class AprobarComponent implements OnInit {
     )
   }
 
+  createImageFromBlob(image: Blob, user: any): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      user.tfoto = reader.result as string;
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+  }
+
   listarSolicitudesAprobadas() {
     this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 1).subscribe(
       resp => {
-        console.log(resp);
+        //console.log(resp);
         this.solicitudesAprobadas = resp;
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes aprobadas:'+ error.message,
@@ -86,7 +106,7 @@ export class AprobarComponent implements OnInit {
     this.detalleSolicitudUsuario = user;
     this.aprobarService.listarDetalleUsuario(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.objVacaUsua = resp;
         this.trabajador = {
           tsolicitudId: this.detalleSolicitudUsuario.tsolicitudId,
@@ -112,7 +132,7 @@ export class AprobarComponent implements OnInit {
         this.solicitudPendiente.isActive = true;
       },
       error => {
-        console.log("error detalle de solicitud:", error.message)
+        //console.log("error detalle de solicitud:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar detalle solicitud:'+ error.message,
@@ -133,16 +153,16 @@ export class AprobarComponent implements OnInit {
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo
       }
-      console.log(objRechazar);
+      //console.log(objRechazar);
       this.aprobarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.trabajador = null;
           this.listarSolicitudesPendientes();
           this.listarSolicitudesAprobadas();
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al rechazar solicitud:'+ error.message,
@@ -160,10 +180,10 @@ export class AprobarComponent implements OnInit {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
     }
-    console.log(objAprobar);
+    //console.log(objAprobar);
     this.aprobarService.aprobarSolicitud(objAprobar).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.trabajador = null;
         this.listarSolicitudesPendientes();
         this.listarSolicitudesAprobadas();
@@ -176,7 +196,7 @@ export class AprobarComponent implements OnInit {
         })
       }, 
       error => {
-        console.log("Error: " + error.message)
+        //console.log("Error: " + error.message)
         Swal.fire(
           'Error',
           'error al aprobar solicitud:'+ error.message,
@@ -189,12 +209,12 @@ export class AprobarComponent implements OnInit {
   public createXLSX() : void {
     this.aprobarService.reporteAprobados(1, this.sesion.p_codipers, 1).subscribe(
       resp => {
-        console.log(resp)
+        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapter(this.listReporte);
-        console.log(report)
-        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Reporte_vacaciones.xlsx');
+        //console.log(report)
+        this.aprobarService.generateReportWithAdapter(headers,report.data, 'Vacaciones_Aprobadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
         Swal.fire(
           'Exito',
           'Se generó con éxito',

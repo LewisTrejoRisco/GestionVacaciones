@@ -14,6 +14,7 @@ import { CODIGO_BANCO_CUENTA_BENEFICIARIO, CODIGO_DEVOLUCION, CUENTA_CARGO, CUEN
 import Swal from 'sweetalert2';
 import { GenerarModalComponent } from './generar-modal/generar-modal.component';
 import { ReportMoviAdapter } from 'app/shared/utilitarios/ReportMoviAdapter.class';
+const now = new Date();
 
 @Component({
   selector: 'app-generar-txt',
@@ -46,7 +47,7 @@ export class GenerarTxtComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.sesion = JSON.parse(this.authService.userToken);
+    this.sesion = JSON.parse(this.authService.userSesion);
     this.listarHistorialSolicitudes();
     this.listarHistorialSolicitudesGeneradoPago();
   }
@@ -56,10 +57,10 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.listarSolicitudes(this.sesion.p_codipers, 5).subscribe(
       resp => {
         this.listaMovilidad = resp;
-        console.log(this.listaMovilidad);
+        //console.log(this.listaMovilidad);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar listado de solicitudes:'+ error.message,
@@ -73,10 +74,10 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.listarMovilidadesAprobados(2, 5).subscribe(
       resp => {
         this.listaHistorialSolicitudes = resp;
-        console.log(this.listaHistorialSolicitudes);
+        //console.log(this.listaHistorialSolicitudes);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -90,10 +91,10 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.listarMovilidadesAprobados(4, 5).subscribe(
       resp => {
         this.listaHistorialSolicitudesPagadas = resp;
-        console.log(this.listaHistorialSolicitudesPagadas);
+        // console.log(this.listaHistorialSolicitudesPagadas);
       }, 
       error => {
-        console.log("error:", error.message)
+        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pagadas:'+ error.message,
@@ -110,12 +111,12 @@ export class GenerarTxtComponent implements OnInit {
    */
 
   rowDetailsToggleExpand(row) {
-    console.log(row)
+    //console.log(row)
     this.tableRowDetails.rowDetail.toggleExpandRow(row);
   }
 
   rowDetailsPayToggleExpand(row) {
-    console.log(row)
+    //console.log(row)
     this.tableRowDetailsPagado.rowDetail.toggleExpandRow(row);
   }
 
@@ -157,11 +158,11 @@ export class GenerarTxtComponent implements OnInit {
     this.solicitarService.generarTxtPersonas(this.sesion.p_codipers,2, 5).subscribe(
       resp => {
         this.personasPagar = resp;
-        console.log(this.personasPagar);
+        //console.log(this.personasPagar);
         this.dataExportarBancos(this.personasPagar);
       }, 
       error => {
-        console.log("error al consultar:", error.message)
+        //console.log("error al consultar:", error.message)
         Swal.fire(
           'Error',
           'error al exportar TXT:'+ error.message,
@@ -203,7 +204,7 @@ export class GenerarTxtComponent implements OnInit {
           this.PadLeft(NOMBRE_ORDENANTE, 35) + 
           this.PadLeft(" ", 35) + 
           this.PadLeft(" ", 168);
-    console.log(listBanco.length)
+    //console.log(listBanco.length)
     listBanco.forEach(e => {
       var tipo = null;
       switch (e.tipoDocu) {
@@ -220,7 +221,7 @@ export class GenerarTxtComponent implements OnInit {
           tipo = "P";
           break;
         case '11' :
-          console.log('No existe el tipo de documento')
+          //console.log('No existe el tipo de documento')
           break;
       }
       primerRegistro = primerRegistro + "\r\n"+
@@ -289,13 +290,13 @@ export class GenerarTxtComponent implements OnInit {
           tipo = "3";
           break;
         case '06' :
-          console.log('No existe el tipo de documento RUC')
+          //console.log('No existe el tipo de documento RUC')
           break;
         case '07' :
           tipo = "4";
           break;
         case '11' :
-          console.log('No existe el tipo de documento PN')
+          //console.log('No existe el tipo de documento PN')
           break;
       }
       primerRegistro = primerRegistro + "\r\n"+
@@ -326,16 +327,16 @@ export class GenerarTxtComponent implements OnInit {
       tipoCambio: null
     }
     modalRef.result.then((result) => {
-      console.log(result)
+      //console.log(result)
       const pFechInic = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
       const pTiempo = result.tiempo.id;
       const pTipoCambio = result.tipoCambio;
       this.solicitarService.exportarTxtCont(pFechInic, pTiempo, pTipoCambio).subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.listTxtCont = resp;
           var primerRegistro = '';
-          this.listTxtCont.forEach(e => {
+          this.listTxtCont.sort((a, b) => a.id - b.id).forEach(e => {
             primerRegistro = primerRegistro +
             e.tcentcost + "," +
             e.tcuencont + "," +
@@ -349,7 +350,7 @@ export class GenerarTxtComponent implements OnInit {
           })
           // this.listarSolicitudesGroupBy();
           // this.listarHistorialSolicitudes();
-          var fileName = "Contabilidad.txt"
+          var fileName = 'Contabilidad' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.txt';
           this.saveTextAsFile(primerRegistro, fileName);
           Swal.fire({
             title: 'Exito',
@@ -360,7 +361,7 @@ export class GenerarTxtComponent implements OnInit {
           })
         }, 
         error => {
-          console.log("Error: " + error.message)
+          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al generar TXT para contabilidad:'+ error.message,
@@ -375,10 +376,10 @@ export class GenerarTxtComponent implements OnInit {
 
   createXLSX() {
     // this.listaHistorialSolicitudesPagadas
-    const headers = ['Colaborador', 'Fecha Aprobación', 'Aprobador', 'Fecha pago', 'Usuario Pago', 'Tipo', 'Status']
+    const headers = ['Colaborador', '# Viajes', 'Fecha Inicio', 'Fecha Fin', 'Monto', 'Fecha Aprobación', 'Aprobador', 'Fecha pago', 'Usuario Pago', 'Tipo', 'Status']
     const report = new ReportMoviAdapter(this.listaHistorialSolicitudesPagadas)
-    console.log(report)
-    this.solicitarService.generateReporMovitWithAdapter(headers, report.data, 'Reporte.xlsx');
+    //console.log(report)
+    this.solicitarService.generateReporMovitWithAdapter(headers, report.data, 'Movilidades_Pagadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
     Swal.fire(
       'Exito',
       'Se generó con éxito',
