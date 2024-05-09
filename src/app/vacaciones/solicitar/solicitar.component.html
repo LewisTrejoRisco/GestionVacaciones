@@ -71,6 +71,11 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
+                    <ngx-datatable-column name="Solicitud" prop="tsolicitudId" [width]="50">
+                      <ng-template let-solicitudid="value" ngx-datatable-cell-template>
+                          {{ solicitudid == 0 ? "" : solicitudid }}
+                      </ng-template>
+                    </ngx-datatable-column>
                     <ngx-datatable-column name="Período" prop="tperiodo" [width]="80"></ngx-datatable-column>
                     <ngx-datatable-column name="Dias" prop="periodo" [width]="160"></ngx-datatable-column>
                     <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>

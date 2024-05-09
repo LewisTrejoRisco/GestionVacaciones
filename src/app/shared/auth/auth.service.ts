@@ -133,8 +133,8 @@ export class AuthService {
   }
 
   public obtenerFoto(codiUsua: string, token: string ) {
-    console.log(OBTENERFOTO + codiUsua)
-    console.log(token)
+    // console.log(OBTENERFOTO + codiUsua)
+    // console.log(token)
     const headers = new HttpHeaders({
         'Authorization': token
     });

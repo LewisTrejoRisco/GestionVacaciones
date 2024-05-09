@@ -56,7 +56,7 @@
                     <ngx-datatable-row-detail [rowHeight]="40">
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1" *ngIf="!row.tmotivorech">
-                          <div><strong>*Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
+                          <div><strong>  *Número viaje : </strong> {{ row.tnumeviaje }} <strong>  *Transporte :</strong> {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}  <strong>  *Monto :</strong> {{ row.tmonto }}</div>
                           <div><strong>  *Motivo :</strong> {{ row.tmotivo }}</div>
                         </div>
                         <div class="ml-5 my-1" *ngIf="row.tmotivorech">
@@ -74,6 +74,7 @@
                         </a>
                       </ng-template>
                     </ngx-datatable-column>
+                    <ngx-datatable-column name="Solicitud" prop="tsolicitudId" [width]="50"></ngx-datatable-column>
                     <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli" [width]="100"></ngx-datatable-column>
                     <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli" [width]="100"></ngx-datatable-column>
                     <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>

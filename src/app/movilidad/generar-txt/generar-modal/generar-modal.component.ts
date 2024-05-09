@@ -47,7 +47,7 @@ export class GenerarModalComponent implements OnInit{
   d2: any;
   d3: any;
   tiempo = [
-    { id: 'S', name: 'Semana' },
+    // { id: 'S', name: 'Semana' }, // se elimino porque funcionalmente solo se busca por mes
     { id: 'M', name: 'Mes' }
   ];
   modalFormSubmitted = false;

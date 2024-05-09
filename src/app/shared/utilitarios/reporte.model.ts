@@ -9,7 +9,10 @@ export interface Reporte {
     tfechfinasoli?: string,
     tstatus?: string,
     statusDesc?: string,
+    tusuaaprob?: string,
+    tdescusuaaprob?: string,
+    tfechaprob?: string,
     tusuaactu?: string,
     tdescusuaactu?: string,
-    tfechactu?: string 
+    tfechactu?: string
 }

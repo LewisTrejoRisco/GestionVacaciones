@@ -20,6 +20,7 @@
                 <p class="list-group-item-text chat-user-list-text m-0">
                   <i class="ft-calendar primary font-small-2 mr-1"></i>
                   <span>{{user.periodo}}</span>
+                  <span>(Sol.: {{user.tsolicitudId}})</span>
                   <span class="float-right primary">
                     <i class="font-medium-3 icon-check mr-1" (click)="aprobarSolicitud(user)"></i>
                     <i class="font-medium-3 icon-close mr-1" (click)="modalShowCancelar(user)"></i>

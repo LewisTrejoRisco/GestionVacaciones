@@ -44,6 +44,7 @@ export class SolicitarComponent implements OnInit {
   sesion: any;
   fechaIngreso: string = null;
   public listReporte: Array<Reporte> = [];
+  public objeDetaVaca: any;
 
   constructor(private modalService: NgbModal, 
     private solicitarService: SolicitarService,
@@ -127,35 +128,16 @@ export class SolicitarComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  modalShowSolicitar(tipo: any, row: any) {
-    this.changeDetector.detectChanges();
-    const modalRef = this.modalService.open(SolicitarModalComponent);
+  openModal(tipo: any, row: any, fechaInic: any, hasta: any, descripcion: any, codipers: any, periodo: any, reemplazo: any) {
+    var  modalRef = this.modalService.open(SolicitarModalComponent, { size: 'lg' });  
     modalRef.componentInstance.id = tipo; // should be the id
-    if(row == null) {
-      modalRef.componentInstance.data = { fechaInic: null, 
-                                          hasta: null, 
-                                          descripcion: null, 
-                                          codipers: this.sesion.p_codipers,
-                                          periodo: null,
-                                          reemplazo: null
-                                        }; // should be the data
-    } else {
-      let fechInicEdit = null;
-      if(row.tfechinicsoli.split('/').length == 3){
-        fechInicEdit = {
-          "year": parseInt(row.tfechinicsoli.split('/')[2]),
-          "month": parseInt(row.tfechinicsoli.split('/')[1]),
-          "day": parseInt(row.tfechinicsoli.split('/')[0])
-        };
-      }
-      modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
-                                          hasta: row.tcantidad, 
-                                          descripcion: row.tdescripcion, 
-                                          codipers: this.sesion.p_codipers, 
-                                          periodo: row.tperiodo,
-                                          reemplazo: row.treemplazo
-                                        }; // should be the data
-    }
+    modalRef.componentInstance.data = { fechaInic: fechaInic, 
+                                        hasta: hasta, 
+                                        descripcion: descripcion, 
+                                        codipers: codipers,
+                                        periodo: periodo,
+                                        reemplazo: reemplazo
+                                      }; // should be the data
     modalRef.result.then((result) => {
       let fechaInicio:string = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
       let cantidadDias: number = result.hasta.id;
@@ -213,7 +195,23 @@ export class SolicitarComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
-    this.changeDetector.detectChanges();
+    // this.changeDetector.detectChanges();
+  }
+
+  modalShowSolicitar(tipo: any, row: any) {
+    if(row == null) {
+      this.openModal(tipo, row, null, null, null, this.sesion.p_codipers, null, null)
+    } else {
+      let fechInicEdit = null;
+      if(row.tfechinicsoli.split('/').length == 3){
+        fechInicEdit = {
+          "year": parseInt(row.tfechinicsoli.split('/')[2]),
+          "month": parseInt(row.tfechinicsoli.split('/')[1]),
+          "day": parseInt(row.tfechinicsoli.split('/')[0])
+        };
+      }
+      this.openModal(tipo, row, fechInicEdit, row.tcantidad, row.tdescripcion, this.sesion.p_codipers, row.tperiodo, row.treemplazo)
+    }
   }
 
   public grabarSolicitud(row: any, fechaInicio:string, cantidadDias: number, periodo: number, result: any) {
@@ -244,15 +242,15 @@ export class SolicitarComponent implements OnInit {
           timer: 1500, 
           showConfirmButton: false,
         })
-      }, 
-      error => {
-        //console.log("Error: " + error.message)
-        Swal.fire(
+        }, 
+        error => {
+          //console.log("Error: " + error.message)
+          Swal.fire(
           'Error',
           'error al grabar la solicitud:'+ error.message,
           'error'
-        );
-      }
+          );
+        }
     );
   }
 

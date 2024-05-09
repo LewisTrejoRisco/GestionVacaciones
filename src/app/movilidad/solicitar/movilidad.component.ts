@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { forEach } from 'core-js/core/array';
+import { ReportAdapterMovilidad } from 'app/shared/utilitarios/ReportAdapterMovilidad.class';
 
 @Component({
   selector: 'app-movilidad',
@@ -99,35 +100,12 @@ export class MovilidadComponent implements OnInit {
   modalShowSolicitar(tipo: any, row: any) {
     var modalRef = null
     if(row == null) {
-      this.openModal(tipo, row, null, null, null, null, null, null, null, null, null, null,[]);
+      this.openModal(tipo, null, null, null, null, null, null, null, null,[]);
     } else {
       this.solicitarService.listarDetalleMovilidadLicencia(row.tsolicitudId).subscribe(
         resp => {
           this.listDetalle = resp;
           if(this.listDetalle.length != 0) {
-          //   let listDinamic:any = [];
-          //   this.listDetalle.forEach(a => {
-          //     let fechaInic: any = null;
-          //     let fechaFina: any = null;
-          //     let fecha: any = null;
-          //     if(a.tfechinicio.split('/').length == 3){
-          //       fecha = this.formatDate(a.tfechinicio);
-          //       fechaInic = fecha;
-          //     }
-          //     if(a.tfechfin.split(':').length == 2){
-          //       fechaFina = this.formatHourMinu(a.tfechfin)
-          //     }
-          //     this.listDetalle.forEach(a => {
-          //       const movilidad = {
-          //         tfechinicio: this.formatDate(a.tfechinicio),
-          //         tfechfina: this.formatHourMinu(a.tfechfin),
-          //         tmonto : a.tmonto.toFixed(2)
-          //       };
-          //       listDinamic.push(movilidad)
-          //     })
-          //     this.openModal(tipo, row, fecha, null, null, null, a.tnumeviaje, a.ttransporte, a.torigen, a.tdestino, a.tmotivo, a.ttiempo, listDinamic);
-          //   })
-          // } else {
             let listDinamic:any = [];
             let tfecha = this.formatDate(this.listDetalle[0].tfechinicio);
             let tnumeviaje = this.listDetalle[0].tnumeviaje;
@@ -144,7 +122,7 @@ export class MovilidadComponent implements OnInit {
               };
               listDinamic.push(movilidad)
             })
-            this.openModal(tipo, row, tfecha, null, null, null, tnumeviaje, ttransporte, torigen, tdestino, tmotivo, ttiempo, listDinamic);
+            this.openModal(tipo, row, tfecha, tnumeviaje, ttransporte, torigen, tdestino, tmotivo, ttiempo, listDinamic);
           }
         }, 
         error => {
@@ -159,13 +137,10 @@ export class MovilidadComponent implements OnInit {
     }
   }
 
-  openModal(tipo: any, row: any, fecha: any, fechaInic: any, fechaFina: any, monto: number, numeViajes: any, transporte: any, origen: any, destino: any, motivo: any, idTiempo: any, listDinamic:any) {
+  openModal(tipo: any, row: any, fecha: any, numeViajes: any, transporte: any, origen: any, destino: any, motivo: any, idTiempo: any, listDinamic:any) {
     var  modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
     modalRef.componentInstance.id = tipo; // should be the id
     modalRef.componentInstance.data = { fecha: fecha,
-                                        fechaInic: fechaInic, 
-                                        fechaFina: fechaFina, 
-                                        monto: monto,
                                         numeViajes: numeViajes, 
                                         transporte: transporte , 
                                         origen: origen, 
@@ -188,103 +163,134 @@ export class MovilidadComponent implements OnInit {
         listMovilidad: []
       }
       if (result.idTiempo == 'D') {
-        const movilidad = {
-          tfechinicio: result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ 0 + ':'+ 0,
-          thora: result.fechaFina.hour,
-          tminuto: result.fechaFina.minute,
-          tmonto : Number(result.monto).toFixed(2),
-          tnumeviaje : result.numeViajes,
-          ttransporte : result.transporte.id,
-          torigen : result.origen.id_distrito,
-          tdestino : result.destino.id_distrito,
-          ttiempo: result.idTiempo,
-          tmotivo : result.motivo
-        };
-        objSolicitud.tfechinicio = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
-        objSolicitud.tfechfin = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
-        objSolicitud.listMovilidad.push(movilidad);   
-        // console.log(objSolicitud)
+        if (result.fechaInic != null && result.fechaFina != null && result.monto != null) {
+          if(result.monto > 0) {
+            const movilidad = {
+              tfechinicio: result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ 0 + ':'+ 0,
+              thora: result.fechaFina == null ? null : result.fechaFina.hour,
+              tminuto: result.fechaFina == null ? null : result.fechaFina.minute,
+              tmonto : result.monto == null ? null : Number(result.monto).toFixed(2),
+              tnumeviaje : result.numeViajes,
+              ttransporte : result.transporte.id,
+              torigen : result.origen.id_distrito,
+              tdestino : result.destino.id_distrito,
+              ttiempo: result.idTiempo,
+              tmotivo : result.motivo
+            };
+            objSolicitud.tfechinicio = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+            objSolicitud.tfechfin = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+            objSolicitud.listMovilidad.push(movilidad);   
+            // console.log(objSolicitud)
+          }
+        }
       } else {
+        let primeraFecha = null;
+        let ultimaFecha = null;
         for(var i = 1; i <= 7; i++) {
+          let fechaCabeza;
           let fecha;
           let hora;
           let minuto;
           let monto;
           switch (i) {
             case 1:
-              fecha = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina.hour;
-              minuto = result.fechaFina.minute;
-              monto = Number(result.monto);
+              fechaCabeza = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+              fecha = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina == null ? null : result.fechaFina.hour;
+              minuto = result.fechaFina == null ? null : result.fechaFina.minute;
+              monto = result.monto == null ? null : Number(result.monto);
               break;
             case 2:
-              fecha = result.fechaInic1.day + '/' + result.fechaInic1.month + '/' + result.fechaInic1.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina1.hour;
-              minuto = result.fechaFina1.minute;
-              monto =  Number(result.monto1);
+              fechaCabeza = result.fechaInic1 == null ? null : result.fechaInic1.day + '/' + result.fechaInic1.month + '/' + result.fechaInic1.year;
+              fecha = result.fechaInic1 == null ? null : result.fechaInic1.day + '/' + result.fechaInic1.month + '/' + result.fechaInic1.year + ' '+ 0 + ':'+ 0;
+              hora =  result.fechaFina1 == null ? null : result.fechaFina1.hour;
+              minuto =  result.fechaFina1 == null ? null : result.fechaFina1.minute;
+              monto =   result.monto1 == null ? null : Number(result.monto1);
               break;
             case 3:
-              fecha = result.fechaInic2.day + '/' + result.fechaInic2.month + '/' + result.fechaInic2.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina2.hour;
-              minuto = result.fechaFina2.minute;
-              monto =  Number(result.monto2);
+              fechaCabeza = result.fechaInic2 == null ? null : result.fechaInic2.day + '/' + result.fechaInic2.month + '/' + result.fechaInic2.year;
+              fecha = result.fechaInic2 == null ? null : result.fechaInic2.day + '/' + result.fechaInic2.month + '/' + result.fechaInic2.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina2 == null ? null : result.fechaFina2.hour;
+              minuto = result.fechaFina2 == null ? null : result.fechaFina2.minute;
+              monto =  result.monto2 == null ? null : Number(result.monto2);
               break;
             case 4:
-              fecha = result.fechaInic3.day + '/' + result.fechaInic3.month + '/' + result.fechaInic3.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina3.hour;
-              minuto = result.fechaFina3.minute;
-              monto =  Number(result.monto3);
+              fechaCabeza = result.fechaInic3 == null ? null : result.fechaInic3.day + '/' + result.fechaInic3.month + '/' + result.fechaInic3.year;
+              fecha = result.fechaInic3 == null ? null : result.fechaInic3.day + '/' + result.fechaInic3.month + '/' + result.fechaInic3.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina3 == null ? null : result.fechaFina3.hour;
+              minuto = result.fechaFina3 == null ? null : result.fechaFina3.minute;
+              monto =  result.monto3 == null ? null : Number(result.monto3);
               break;
             case 5:
-              fecha = result.fechaInic4.day + '/' + result.fechaInic4.month + '/' + result.fechaInic4.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina4.hour;
-              minuto = result.fechaFina4.minute;
-              monto =  Number(result.monto4);
+              fechaCabeza = result.fechaInic4 == null ? null : result.fechaInic4.day + '/' + result.fechaInic4.month + '/' + result.fechaInic4.year;
+              fecha = result.fechaInic4 == null ? null : result.fechaInic4.day + '/' + result.fechaInic4.month + '/' + result.fechaInic4.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina4 == null ? null : result.fechaFina4.hour;
+              minuto = result.fechaFina4 == null ? null : result.fechaFina4.minute;
+              monto =  result.monto4 == null ? null : Number(result.monto4);
               break;
             case 6:
-              fecha = result.fechaInic5.day + '/' + result.fechaInic5.month + '/' + result.fechaInic5.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina5.hour;
-              minuto = result.fechaFina5.minute;
-              monto =  Number(result.monto5);
+              fechaCabeza = result.fechaInic5 == null ? null : result.fechaInic5.day + '/' + result.fechaInic5.month + '/' + result.fechaInic5.year;
+              fecha = result.fechaInic5 == null ? null : result.fechaInic5.day + '/' + result.fechaInic5.month + '/' + result.fechaInic5.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina5 == null ? null : result.fechaFina5.hour;
+              minuto = result.fechaFina5 == null ? null : result.fechaFina5.minute;
+              monto =  result.monto5 == null ? null : Number(result.monto5);
               break;
             case 7:
-              fecha = result.fechaInic6.day + '/' + result.fechaInic6.month + '/' + result.fechaInic6.year + ' '+ 0 + ':'+ 0;
-              hora = result.fechaFina6.hour;
-              minuto = result.fechaFina6.minute;
-              monto =  Number(result.monto6);
+              fechaCabeza = result.fechaInic6 == null ? null : result.fechaInic6.day + '/' + result.fechaInic6.month + '/' + result.fechaInic6.year;
+              fecha = result.fechaInic6 == null ? null : result.fechaInic6.day + '/' + result.fechaInic6.month + '/' + result.fechaInic6.year + ' '+ 0 + ':'+ 0;
+              hora = result.fechaFina6 == null ? null : result.fechaFina6.hour;
+              minuto = result.fechaFina6 == null ? null : result.fechaFina6.minute;
+              monto =  result.monto6 == null ? null : Number(result.monto6);
               break;
             default:
               console.log("Error al mapear la semana"); // Manejar un caso por defecto si es necesario
           }
-          const movilidad = {
-            tfechinicio: fecha,
-            thora: hora,
-            tminuto: minuto,
-            tmonto : monto.toFixed(2),
-            tnumeviaje : result.numeViajes,
-            ttransporte : result.transporte.id,
-            torigen : result.origen.id_distrito,
-            tdestino : result.destino.id_distrito,
-            ttiempo: result.idTiempo,
-            tmotivo : result.motivo
-          };
-          objSolicitud.listMovilidad.push(movilidad);
+          if (fecha != null && hora != null && minuto != null && monto != null) {
+            if(monto > 0) {
+              if(primeraFecha == null) {
+                primeraFecha = fechaCabeza;
+              }
+              ultimaFecha = fechaCabeza;
+              const movilidad = {
+                tfechinicio: fecha,
+                thora: hora,
+                tminuto: minuto,
+                tmonto : monto.toFixed(2),
+                tnumeviaje : result.numeViajes,
+                ttransporte : result.transporte.id,
+                torigen : result.origen.id_distrito,
+                tdestino : result.destino.id_distrito,
+                ttiempo: result.idTiempo,
+                tmotivo : result.motivo
+              };
+              objSolicitud.listMovilidad.push(movilidad);
+            }
+          }
         }
-        objSolicitud.tfechinicio = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
-        objSolicitud.tfechfin = result.fechaInic6.day + '/' + result.fechaInic6.month + '/' + result.fechaInic6.year;   
+
+        objSolicitud.tfechinicio = primeraFecha;
+        objSolicitud.tfechfin = ultimaFecha;   
         // console.log(objSolicitud)
       }
       this.solicitarService.grabarMovilidad(objSolicitud).subscribe(
         resp => {
-          this.listarSolicitudesGroupBy();
-          this.listarHistorialSolicitudes();
-          Swal.fire({
-            title: 'Exito',
-            text: 'Solicitud generada',
-            icon: 'success',
-            timer: 1500, 
-            showConfirmButton: false,
-          })
+          if (resp == 1) {
+            this.listarSolicitudesGroupBy();
+            this.listarHistorialSolicitudes();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error',
+              'error al grabar la solicitud',
+              'error'
+            );
+          }
         }, 
         error => {
           Swal.fire(
@@ -357,8 +363,8 @@ export class MovilidadComponent implements OnInit {
       resp => {
         //console.log(resp)
         this.listReporte = resp;
-        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
-        const report = new ReportAdapter(this.listReporte);
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada', 'Código Actualiza' , 'Actualizador', 'Fecha Actualizar'];
+        const report = new ReportAdapterMovilidad(this.listReporte);
         //console.log(report)
         this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_movilidad_rrhh.xlsx');
         Swal.fire(

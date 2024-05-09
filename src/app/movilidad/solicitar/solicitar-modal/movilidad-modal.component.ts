@@ -60,8 +60,8 @@ export class MovilidadModalComponent implements OnInit{
   selectedOption: boolean;
   meridian = true; 
   spinners = false;
-  dynamicControls = ['fechaInic', 'fechaFina', 'monto', 'fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
-  dynamicControlsD = ['fechaInic', 'fechaFina', 'monto'];
+  dynamicControls = [];
+  // dynamicControlsD = [];
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -85,17 +85,6 @@ export class MovilidadModalComponent implements OnInit{
     // )
   }
 
-  private checkedRadio() {
-    const opcion1 = document.getElementById("idDia") as HTMLInputElement;
-    const opcion2 = document.getElementById("idSemana") as HTMLInputElement;
-    window.addEventListener("DOMContentLoaded", () => {
-      // Aquí puedes definir cuál opción quieres que esté marcada inicialmente
-      // console.log("Entro a checked")
-      opcion1.checked = true; // Opción 1 está chequeada por defecto
-      // opcion2.checked = true; // Si quieres que la Opción 2 esté chequeada por defecto
-  });
-  }
-
   get lf() {
     return this.myForm.controls;
   }
@@ -112,17 +101,17 @@ export class MovilidadModalComponent implements OnInit{
       item.destino = this.destino.find(a => a.id_distrito == item.destino);
     }
     if(item.idTiempo != null) {
-      if(item.idTiempo == 'D') {
+      // if(item.idTiempo == 'D') {
         this.createForm(item);
-        this.addDynamicControlsD();
+        this.addDynamicControls(item.idTiempo);
         this.setValueDinamicControl(item);
         this.selectedOption = true;
-      } else {
-        this.createForm(item);
-        this.addDynamicControls();
-        this.setValueDinamicControl(item);
-        this.selectedOption = true;
-      }
+      // } else {
+      //   this.createForm(item);
+      //   this.addDynamicControls();
+      //   this.setValueDinamicControl(item);
+      //   this.selectedOption = true;
+      // }
     } else {
       this.createForm(item);
     }
@@ -133,27 +122,6 @@ export class MovilidadModalComponent implements OnInit{
   createForm(item: any) {
     this.myForm = this.formBuilder.group({
       fecha: [item.fecha || null, Validators.required],
-      // fechaInic: [item.fechaInic || null, Validators.required],
-      // fechaFina: [item.fechaFina || null, Validators.required],
-      // monto: [item.monto || null, Validators.required],
-      // fechaInic1: [item.fechaInic || null, Validators.required],
-      // fechaFina1: [item.fechaFina || null, Validators.required],
-      // monto1: [item.monto || null, Validators.required],
-      // fechaInic2: [item.fechaInic || null, Validators.required],
-      // fechaFina2: [item.fechaFina || null, Validators.required],
-      // monto2: [item.monto || null, Validators.required],
-      // fechaInic3: [item.fechaInic || null, Validators.required],
-      // fechaFina3: [item.fechaFina || null, Validators.required],
-      // monto3: [item.monto || null, Validators.required],
-      // fechaInic4: [item.fechaInic || null, Validators.required],
-      // fechaFina4: [item.fechaFina || null, Validators.required],
-      // monto4: [item.monto || null, Validators.required],
-      // fechaInic5: [item.fechaInic || null, Validators.required],
-      // fechaFina5: [item.fechaFina || null, Validators.required],
-      // monto5: [item.monto || null, Validators.required],
-      // fechaInic6: [item.fechaInic || null, Validators.required],
-      // fechaFina6: [item.fechaFina || null, Validators.required],
-      // monto6: [item.monto || null, Validators.required],
       numeViajes: [item.numeViajes || null, Validators.required],
       transporte: [item.transporte || null, Validators.required],
       origen: [item.origen || null, Validators.required],
@@ -164,54 +132,57 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   setValueDinamicControl(item: any): void {
-    // debugger;
+    // console.log(this.dynamicControls.length)
+    // this.dynamicControls.forEach((controlName, index) => {
+    //   console.log(`Control ${index}: ${controlName}`);
+    // });
     for(var i = 0; i < item.listDinamic.length; i++) {
-      let controlName;
+      // let controlName;
       switch (i) {
         case 0:
-          controlName = 'fechaInic';
+          // controlName = 'fechaInic';
           this.patchValue('fechaInic', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina', item.listDinamic[i].tfechfina)
           this.patchValue('monto', item.listDinamic[i].tmonto)
           break;
         case 1:
-          controlName = 'fechaInic1';
+          // controlName = 'fechaInic1';
           this.patchValue('fechaInic1', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina1', item.listDinamic[i].tfechfina)
           this.patchValue('monto1', item.listDinamic[i].tmonto)
           break;
         case 2:
-          controlName = 'fechaInic2';
+          // controlName = 'fechaInic2';
           this.patchValue('fechaInic2', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina2', item.listDinamic[i].tfechfina)
           this.patchValue('monto2', item.listDinamic[i].tmonto)
           break;
         case 3:
-          controlName = 'fechaInic3';
+          // controlName = 'fechaInic3';
           this.patchValue('fechaInic3', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina3', item.listDinamic[i].tfechfina)
           this.patchValue('monto3', item.listDinamic[i].tmonto)
           break;
         case 4:
-          controlName = 'fechaInic4';
+          // controlName = 'fechaInic4';
           this.patchValue('fechaInic4', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina4', item.listDinamic[i].tfechfina)
           this.patchValue('monto4', item.listDinamic[i].tmonto)
           break;
         case 5:
-          controlName = 'fechaInic5';
+          // controlName = 'fechaInic5';
           this.patchValue('fechaInic5', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina5', item.listDinamic[i].tfechfina)
           this.patchValue('monto5', item.listDinamic[i].tmonto)
           break;
         case 6:
-          controlName = 'fechaInic6';
+          // controlName = 'fechaInic6';
           this.patchValue('fechaInic6', item.listDinamic[i].tfechinicio)
           this.patchValue('fechaFina6', item.listDinamic[i].tfechfina)
           this.patchValue('monto6', item.listDinamic[i].tmonto)
           break;
         default:
-          controlName = ''; // Manejar un caso por defecto si es necesario
+          // controlName = ''; // Manejar un caso por defecto si es necesario
       }
     }
   }
@@ -230,7 +201,7 @@ export class MovilidadModalComponent implements OnInit{
       this.selectedOption = true;
       if(this.myForm.value.idTiempo == 'S') {
         this.clearDynamicControls();
-        this.addDynamicControls();
+        this.addDynamicControls(this.myForm.value.idTiempo);
         this.myForm.patchValue({
           numeViajes: 1
         });
@@ -272,13 +243,17 @@ export class MovilidadModalComponent implements OnInit{
         }
       } else {
         this.clearDynamicControls();
-        this.addDynamicControlsD();
+        this.addDynamicControls(this.myForm.value.idTiempo);
         this.myForm.patchValue({
           fechaInic: this.myForm.value.fecha || null,
           numeViajes: 1
         });
       }
     }
+    // console.log(this.dynamicControls.length)
+    // this.dynamicControls.forEach(controlName => {
+    //   console.log(controlName)
+    // });
   }
   
   getFirstDayOfWeek(date: Date): Date {
@@ -309,19 +284,23 @@ export class MovilidadModalComponent implements OnInit{
     return desiredDate;
   }
 
-  addDynamicControls(): void {
-    this.dynamicControls = ['fechaInic', 'fechaFina', 'monto', 'fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
+  addDynamicControls(tiempo: string): void {
+    if(tiempo == 'D') {
+      this.dynamicControls = ['fechaInic', 'fechaFina', 'monto'];
+    } else {
+      this.dynamicControls = ['fechaInic', 'fechaFina', 'monto', 'fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
+    }
     this.dynamicControls.forEach(controlName => {
-      this.myForm.addControl(controlName, new FormControl(null, Validators.required)); // Agregar un nuevo formControl al FormGroup
+      this.myForm.addControl(controlName, new FormControl(null)); // Agregar un nuevo formControl al FormGroup
     });
   }
 
-  addDynamicControlsD(): void {
-    this.dynamicControlsD = ['fechaInic', 'fechaFina', 'monto'];
-    this.dynamicControlsD.forEach(controlName => {
-      this.myForm.addControl(controlName, new FormControl(null, Validators.required)); // Agregar un nuevo formControl al FormGroup
-    });
-  }
+  // addDynamicControlsD(): void {
+  //   this.dynamicControlsD = ['fechaInic', 'fechaFina', 'monto'];
+  //   this.dynamicControlsD.forEach(controlName => {
+  //     this.myForm.addControl(controlName, new FormControl(null, Validators.required)); // Agregar un nuevo formControl al FormGroup
+  //   });
+  // }
   
   clearDynamicControls(): void {
     this.dynamicControls = ['fechaInic', 'fechaFina', 'monto', 'fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
@@ -333,15 +312,15 @@ export class MovilidadModalComponent implements OnInit{
     this.dynamicControls = [];
   }
   
-  clearDynamicControlsD(): void {
-    this.dynamicControlsD = ['fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
-    // Itera sobre los nombres de los controles dinámicos y elimina cada control del formulario
-    this.dynamicControlsD.forEach(controlName => {
-      this.myForm.removeControl(controlName);
-    });
-    // Vacía el array dynamicControls
-    this.dynamicControlsD = [];
-  }
+  // clearDynamicControlsD(): void {
+  //   this.dynamicControlsD = ['fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
+  //   // Itera sobre los nombres de los controles dinámicos y elimina cada control del formulario
+  //   this.dynamicControlsD.forEach(controlName => {
+  //     this.myForm.removeControl(controlName);
+  //   });
+  //   // Vacía el array dynamicControls
+  //   this.dynamicControlsD = [];
+  // }
 
   formatDate(date: Date): any {
     // Obtiene el día, mes y año de la fecha
@@ -370,7 +349,6 @@ export class MovilidadModalComponent implements OnInit{
     if (this.myForm.invalid) {
       return;
     }
-    // console.log(this.myForm.value)
     this.activeModal.close(this.myForm.value);
   }
 

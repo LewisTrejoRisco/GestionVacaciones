@@ -13,10 +13,13 @@ export interface iReporte {
     statusDesc?: string,
     tusuaaprob?: string,
     tdescusuaaprob?: string,
-    tfechaprob?: string
+    tfechaprob?: string,
+    tusuaactu?: string,
+    tdescusuaactu?: string,
+    tfechactu?: string 
 }
 
-export class ReportAdapter {
+export class ReportAdapterMovilidad {
     data: iReporte[] = [];
     constructor(reportList: Reporte[]) {
         reportList.forEach((report, index) => {
@@ -30,7 +33,10 @@ export class ReportAdapter {
                 statusDesc: report.statusDesc,
                 tusuaaprob: report.tusuaaprob,
                 tdescusuaaprob: report.tdescusuaaprob,
-                tfechaprob: report.tfechaprob
+                tfechaprob: report.tfechaprob,
+                tusuaactu: report.tusuaactu,
+                tdescusuaactu: report.tdescusuaactu,
+                tfechactu: report.tfechactu,
             }
             this.data.push(reportItem)
         })

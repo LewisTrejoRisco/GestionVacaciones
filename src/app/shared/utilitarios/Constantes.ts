@@ -22,6 +22,7 @@ export const LISTAR_TXT_CONTABILIDAD = "/generar/reporteTxtContabilidad?";
 // Solicitar vacaciones
 export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";
 export const REGLAS_VACACIONES = "/vacaciones/reglasVacaciones?";
+export const COLISION_VACACIONES = "/vacaciones/colisionVacaciones?";
 
 // Aprobar vacaciones
 export const LISTAR_DETALLE_USUARIO = "/vacaciones/listarXSolicitud?tsolicitudId=";

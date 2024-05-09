@@ -50,6 +50,7 @@
                 <div class="card-body">
                   <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"
                     [rows]="listaHistorialSolicitudesVenta" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
+                    <ngx-datatable-column name="Solicitud" prop="tsolicitudId" [width]="50"></ngx-datatable-column>
                     <ngx-datatable-column name="Período" prop="tperiodo" [width]="80"></ngx-datatable-column>
                     <ngx-datatable-column name="Dias" prop="tcantidad" [width]="80"></ngx-datatable-column>
                     <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>

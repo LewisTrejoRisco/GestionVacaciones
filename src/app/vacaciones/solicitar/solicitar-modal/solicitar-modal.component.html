@@ -8,10 +8,12 @@
   <div class="modal-body">
     <div class="container">
       <div class="form-group position-relative has-icon-left">
-        <div *ngIf="numberOfWeek" class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Debe
-          agregar sabado y domingo a las vacaciones</div>
-        <div *ngIf="fechaMayor" class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Debe
-          colocar fecha mayor o igual a {{reglas.p_fecha_inicio_minimo}}</div>
+        <div *ngIf="colision" class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> !Debe
+          elegir otro rango de días, Existe una fecha ya programa!</div>
+        <div *ngIf="numberOfWeek" class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> !Debe
+          agregar sabado y domingo a las vacaciones!</div>
+        <div *ngIf="fechaMayor" class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> !Debe
+          colocar fecha mayor o igual a {{reglas.p_fecha_inicio_minimo}}!</div>
         <div *ngIf="modalVacaFormSubmitted && (lf.fechaInic.invalid || lf.fechaInic.errors?.required)"
           class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
         <div class="input-group">

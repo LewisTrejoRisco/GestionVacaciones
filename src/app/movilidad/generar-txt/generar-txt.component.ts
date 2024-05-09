@@ -376,7 +376,7 @@ export class GenerarTxtComponent implements OnInit {
 
   createXLSX() {
     // this.listaHistorialSolicitudesPagadas
-    const headers = ['Colaborador', '# Viajes', 'Fecha Inicio', 'Fecha Fin', 'Monto', 'Fecha Aprobación', 'Aprobador', 'Fecha pago', 'Usuario Pago', 'Tipo', 'Status']
+    const headers = ['Solicitante', 'Nombre Solicitante', 'Puesto', 'Área', '# Viajes', 'Fecha Inicio', 'Fecha Fin', 'Monto', 'Fecha Aprobación', 'Aprobador', 'Nombre Aprobador', 'Fecha pago', 'Usuario Pago', 'Tipo', 'Status']
     const report = new ReportMoviAdapter(this.listaHistorialSolicitudesPagadas)
     //console.log(report)
     this.solicitarService.generateReporMovitWithAdapter(headers, report.data, 'Movilidades_Pagadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
