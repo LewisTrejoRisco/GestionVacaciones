@@ -140,7 +140,7 @@ export class SolicitarModalComponent implements OnInit{
                             this.myForm.value.fechaInic.day+"/"+(this.myForm.value.fechaInic.month)+"/"+this.myForm.value.fechaInic.year, 
                             this.myForm.value.hasta.id).subscribe(
       resp => {
-        this.colissionNumber = resp;
+                this.colissionNumber = resp;
         if (this.colissionNumber > 0) {
           this.colision = true;
           return;

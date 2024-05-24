@@ -235,6 +235,16 @@ export class SolicitarService {
         );
     }
 
+    public generarUltimoTxtPersonas(codipers: string, status: number, idtiposolicitud: number) {
+        //console.log(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
+            return this.http.get(URL_END_POINT_BASE + GENERAR_PAGO + "codiActu=" + codipers + "&status=" + status + "&ttiposolicitudId=" + idtiposolicitud + "&treintentar=1")
+            .pipe(catchError(e => {
+                console.error(' Error al reintentar listar personas para pago. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
     public listarVacacionesAprobados(status: number, idtiposolicitud: number) {
         //console.log(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SOLICITUD_VACACIONES_APROBADA + "status=" + status + "&ttiposolicitudId=" + idtiposolicitud)

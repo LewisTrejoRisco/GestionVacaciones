@@ -153,9 +153,26 @@ export class GenerarTxtComponent implements OnInit {
     return (value.toString().length < length) ? this.PadLeftCeros("0"+value, length) : value;
   }
 
-
   exportarTXT() {
     this.solicitarService.generarTxtPersonas(this.sesion.p_codipers,2, 5).subscribe(
+      resp => {
+        this.personasPagar = resp;
+        //console.log(this.personasPagar);
+        this.dataExportarBancos(this.personasPagar);
+      }, 
+      error => {
+        //console.log("error al consultar:", error.message)
+        Swal.fire(
+          'Error',
+          'error al exportar TXT:'+ error.message,
+          'error'
+        );
+      }
+    )
+  }
+
+  exportarReintentoTXT() {
+    this.solicitarService.generarUltimoTxtPersonas(this.sesion.p_codipers,2, 5).subscribe(
       resp => {
         this.personasPagar = resp;
         //console.log(this.personasPagar);
