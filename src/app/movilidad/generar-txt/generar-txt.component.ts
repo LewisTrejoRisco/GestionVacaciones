@@ -146,11 +146,23 @@ export class GenerarTxtComponent implements OnInit {
   }
 
   PadLeft(value: string, length: number) {
-    return (value.toString().length < length) ? this.PadLeft(value+ " ", length) : value;
+    // Si la longitud de la cadena es mayor o igual a la longitud deseada, truncamos la cadena
+    if (value.length >= length) {
+        return value.substring(0, length);
+    }
+    // Calculamos cuántos caracteres de relleno se necesitan
+    const padding = " ".repeat(length - value.length);
+    return value + padding;
   }
 
   PadLeftCeros(value: string, length: number) {
-    return (value.toString().length < length) ? this.PadLeftCeros("0"+value, length) : value;
+    // Si la longitud de la cadena es mayor o igual a la longitud deseada, truncamos la cadena
+    if (value.length >= length) {
+        return value.substring(0, length);
+    }
+    // Calculamos cuántos caracteres de relleno se necesitan
+    const padding = "0".repeat(length - value.length);
+    return padding + value;
   }
 
   exportarTXT() {
@@ -271,12 +283,12 @@ export class GenerarTxtComponent implements OnInit {
           this.PadLeft(" ", 139);
     });
     var a = 3 + (2*listBanco.length)
-    primerRegistro = primerRegistro + "\r\n" +
+        primerRegistro = primerRegistro + "\r\n" +
           this.PadLeft(REGISTRO_TOTALES, 4) +
           TIPO_DOCUMENTO_RUC + 
           this.PadLeft(DOCUMENTO_RUC_ORDENANTE, 12) +
           this.PadLeftCeros(a.toString(), 10) + 
-          this.PadLeftCeros(listBanco.length, 8) + 
+          this.PadLeftCeros(listBanco.length.toString(), 8) + 
           this.PadLeftCeros(totalEntero, 12) +
           this.PadLeftCeros(totalDecimal, 2) +
           this.PadLeft(" ", 106);
@@ -288,7 +300,7 @@ export class GenerarTxtComponent implements OnInit {
 
   docuBCP(listBanco: any, fecha: string, sumatoriaCuenta: number, totalEntero: any, totalDecimal: any) {
     var primerRegistro = TIPO_REGISTRO +
-          this.PadLeftCeros(listBanco.length, 6) + 
+          this.PadLeftCeros(listBanco.length.toString(), 6) + 
           fecha + 
           PLANILLA_HABERES + 
           CUENTA_CARGO +
