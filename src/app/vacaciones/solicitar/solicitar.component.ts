@@ -139,7 +139,7 @@ export class SolicitarComponent implements OnInit {
                                         reemplazo: reemplazo
                                       }; // should be the data
     modalRef.result.then((result) => {
-      let fechaInicio:string = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
+            let fechaInicio:string = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
       let cantidadDias: number = result.hasta.id;
       let periodo: number = Number(result.periodo);
       

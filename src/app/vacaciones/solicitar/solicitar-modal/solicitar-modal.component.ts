@@ -141,53 +141,53 @@ export class SolicitarModalComponent implements OnInit{
                             this.myForm.value.hasta.id).subscribe(
       resp => {
                 this.colissionNumber = resp;
-        if (this.colissionNumber > 0) {
-          this.colision = true;
-          return;
-        }
-        const anioBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[2]);
-        const anioFront: number = this.myForm.value.fechaInic.year;
-        const montBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[1]);
-        const montFront: number = this.myForm.value.fechaInic.month;
-        const dayBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[0]);
-        const dayFront: number = this.myForm.value.fechaInic.day;
-        if( anioBack > anioFront) {
-          this.fechaMayor = true;
-          return;
-        }
-        if( montBack > montFront && anioBack == anioFront) {
-          this.fechaMayor = true; 
-          return;
-        }
-        if( dayBack > dayFront && montBack == montFront && anioBack == anioFront) {
-          this.fechaMayor = true;
-          return;
-        }
-        if(this.reglas.p_incluir_fin_semana == 1){
-          const startDate  = new Date(this.myForm.value.fechaInic.year, this.myForm.value.fechaInic.month - 1, this.myForm.value.fechaInic.day)
-          const numberOfDays = this.myForm.value.hasta.id;
-          // Iterar sobre las fechas
-          var numberOfWeekend: number = 0;
-          for (let i = 0; i < numberOfDays; i++) {
-            // Crear una nueva fecha sumando 'i' días a la fecha inicial
-            const currentDate = new Date(startDate.getTime());
-            currentDate.setDate(startDate.getDate() + i);
+                if (this.colissionNumber > 0) {
+                  this.colision = true;
+                  return;
+                }
+                const anioBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[2]);
+                const anioFront: number = this.myForm.value.fechaInic.year;
+                const montBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[1]);
+                const montFront: number = this.myForm.value.fechaInic.month;
+                const dayBack: number =  Number(this.reglas.p_fecha_inicio_minimo.split('/')[0]);
+                const dayFront: number = this.myForm.value.fechaInic.day;
+                if( anioBack > anioFront) {
+                  this.fechaMayor = true;
+                  return;
+                }
+                if( montBack > montFront && anioBack == anioFront) {
+                  this.fechaMayor = true; 
+                  return;
+                }
+                if( dayBack > dayFront && montBack == montFront && anioBack == anioFront) {
+                  this.fechaMayor = true;
+                  return;
+                }
+                if(this.reglas.p_incluir_fin_semana == 1){
+                  const startDate  = new Date(this.myForm.value.fechaInic.year, this.myForm.value.fechaInic.month - 1, this.myForm.value.fechaInic.day)
+                  const numberOfDays = this.myForm.value.hasta.id;
+                  // Iterar sobre las fechas
+                  var numberOfWeekend: number = 0;
+                  for (let i = 0; i < numberOfDays; i++) {
+                    // Crear una nueva fecha sumando 'i' días a la fecha inicial
+                    const currentDate = new Date(startDate.getTime());
+                    currentDate.setDate(startDate.getDate() + i);
 
-            // Mostrar la fecha actual en la consola o realizar cualquier otra operación que necesites
-            // //console.log('Fecha', i + 1, ':', currentDate.getDay());
-            // 6 = sabado
-            // 0 = domingo
-            if (currentDate.getDay() == 6 || currentDate.getDay() == 0){
-              numberOfWeekend = numberOfWeekend + 1;
-            }
-          }
-          // //console.log(numberOfWeekend)
-          if (numberOfWeekend < 2) {
-            this.numberOfWeek = true;
-            return;
-          }
-        }
-        this.activeModal.close(this.myForm.value);
+                    // Mostrar la fecha actual en la consola o realizar cualquier otra operación que necesites
+                    // //console.log('Fecha', i + 1, ':', currentDate.getDay());
+                    // 6 = sabado
+                    // 0 = domingo
+                    if (currentDate.getDay() == 6 || currentDate.getDay() == 0){
+                      numberOfWeekend = numberOfWeekend + 1;
+                    }
+                  }
+                  // //console.log(numberOfWeekend)
+                  if (numberOfWeekend < 2) {
+                    this.numberOfWeek = true;
+                    return;
+                  }
+                }
+                this.activeModal.close(this.myForm.value);
       }, error => {
         console.log(error)
       }

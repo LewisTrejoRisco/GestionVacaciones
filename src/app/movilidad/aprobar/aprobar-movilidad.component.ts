@@ -42,6 +42,7 @@ export class AprobarMovilidadComponent implements OnInit {
   solicitudPendiente: User = null;
   public listReporte: Array<Reporte> = [];
   distritos: any = null;
+  messageResponse: any = null;
 
   constructor(private aprobarService: SolicitarService, private modalService: NgbModal,
     private authService: AuthService) {
@@ -214,16 +215,25 @@ export class AprobarMovilidadComponent implements OnInit {
     this.aprobarService.aprobarSolicitud(objAprobar).subscribe(
       resp => {
         //console.log(resp)
-        this.trabajador = null;
-        this.listarSolicitudesMovilidad();
-        this.listarSolicitudesAprobadas();
-        Swal.fire({
-          title: 'Exito',
-          text: 'Solicitud aprobada',
-          icon: 'success',
-          timer: 1500, 
-          showConfirmButton: false,
-        })
+        this.messageResponse = resp;
+        if (this.messageResponse.codeMessage = "200") {
+          this.trabajador = null;
+          this.listarSolicitudesMovilidad();
+          this.listarSolicitudesAprobadas();
+          Swal.fire({
+            title: 'Exito',
+            text: 'Solicitud aprobada',
+            icon: 'success',
+            timer: 1500, 
+            showConfirmButton: false,
+          })
+        } else {
+          Swal.fire(
+            'Error',
+            'error al aprobar solicitud',
+            'error'
+          );
+        }
       }, 
       error => {
         //console.log("Error: " + error.message)

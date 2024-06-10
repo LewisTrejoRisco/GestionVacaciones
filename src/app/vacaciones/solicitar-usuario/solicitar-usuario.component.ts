@@ -142,11 +142,11 @@ export class SolicitarUsuarioComponent implements OnInit {
       let periodo: number = Number(result.periodo);
       
       let listTipoDia = [];
-      if(this.sesion.p_diasvenc > 0 && cantidadDias > 0) {
+      if(this.usuarioSolicitar.p_diasvenc > 0 && cantidadDias > 0) {
         let diasProg: number = cantidadDias;
         let periProg: number = periodo;
-        if (this.sesion.p_diasvenc <= cantidadDias) {
-          diasProg = this.sesion.p_diasvenc;
+        if (this.usuarioSolicitar.p_diasvenc <= cantidadDias) {
+          diasProg = this.usuarioSolicitar.p_diasvenc;
         }
         let objTipoDia = {
           tfechaInicio : fechaInicio,
@@ -158,11 +158,11 @@ export class SolicitarUsuarioComponent implements OnInit {
         cantidadDias = cantidadDias - diasProg;
         periodo = periodo + 1;
       }
-      if(this.sesion.p_diaspend > 0 && cantidadDias > 0) {
+      if(this.usuarioSolicitar.p_diaspend > 0 && cantidadDias > 0) {
         let diasProg: number = cantidadDias;
         let periProg: number = periodo;
-        if (this.sesion.p_diaspend <= cantidadDias) {
-          diasProg = this.sesion.p_diaspend;
+        if (this.usuarioSolicitar.p_diaspend <= cantidadDias) {
+          diasProg = this.usuarioSolicitar.p_diaspend;
         }
         let objTipoDia = {
           tfechaInicio : fechaInicio,
@@ -174,11 +174,11 @@ export class SolicitarUsuarioComponent implements OnInit {
         cantidadDias = cantidadDias - diasProg;
         periodo = periodo + 1;
       }
-      if(this.sesion.p_diastrun > 0 && cantidadDias > 0) {
+      if(this.usuarioSolicitar.p_diastrun > 0 && cantidadDias > 0) {
         let diasProg: number = cantidadDias;
         let periProg: number = periodo;
-        if (this.sesion.p_diastrun <= cantidadDias) {
-          diasProg = this.sesion.p_diastrun;
+        if (this.usuarioSolicitar.p_diastrun <= cantidadDias) {
+          diasProg = this.usuarioSolicitar.p_diastrun;
         }
         let objTipoDia = {
           tfechaInicio : fechaInicio,
