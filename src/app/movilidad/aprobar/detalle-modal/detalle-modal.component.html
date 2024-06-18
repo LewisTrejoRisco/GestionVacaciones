@@ -1,0 +1,57 @@
+
+    <!-- <div class="modal-content"> -->
+<div class="modal-header">
+  <h4 class="modal-title"> Detalle Movilidad</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    x
+  </button>
+</div>
+            <!-- <button id="btnStartTour" class="btn btn-primary" (click)="startTour()">Start Tour</button> -->
+<!-- <form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm"> -->
+  <div class="modal-body">
+    <div class="container">
+      <!-- <div class="card-content">
+        <div class="card-body">
+        </div>
+      </div> -->
+      
+      <!-- <div class="card"> -->
+        <!-- <div class="card-content"> -->
+          <!-- <div class="card-body"> -->
+            
+            <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force" 
+            [rows]="listDetalle" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="false">
+              <ngx-datatable-column name="Origen" prop="torigen" [width]="100">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ getDescription(row.torigen) }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Destino Completo" prop="tdestino" [width]="200">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ getDescription(row.tdestino) }}
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column name="Fecha" prop="tfechinicio" [width]="120"></ngx-datatable-column>
+              <ngx-datatable-column name="Hora" prop="tfechfin" [width]="120"></ngx-datatable-column>
+              <ngx-datatable-column name="Monto" prop="tmonto" [width]="100"></ngx-datatable-column>
+              <!-- <ngx-datatable-column name="Transporte" prop="ttransporte" [width]="100"></ngx-datatable-column> -->
+              <ngx-datatable-column name="Transporte" prop="ttransporte" [width]="100">
+                <ng-template let-status="value" ngx-datatable-cell-template>
+                  <div class="badge badge-pill">
+                    {{ status == 'U' ? "Urbano" : (status == 'T' ? "Transpore" : "No reconocido") }}
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          <!-- </div> -->
+        <!-- </div> -->
+      <!-- </div> -->
+    </div>
+  </div>
+  <div class="modal-footer taskboard-modal-footer">
+    <button class="btn btn-secondary btn-save" (click)="submitForm()">
+      Cerrar
+    </button>
+  </div>
+<!-- </form> -->
+<!-- </div> -->

@@ -11,10 +11,12 @@ import { MovilidadModalComponent } from './solicitar/solicitar-modal/movilidad-m
 import { AprobarMovilidadComponent } from './aprobar/aprobar-movilidad.component';
 import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
 import { GenerarModalComponent } from './generar-txt/generar-modal/generar-modal.component';
+import { DetalleModalComponent } from './aprobar/detalle-modal/detalle-modal.component';
 
 
 @NgModule({
   declarations: [MovilidadComponent,
+                 DetalleModalComponent,
                  MovilidadModalComponent,
                  AprobarMovilidadComponent,
                  GenerarTxtComponent,

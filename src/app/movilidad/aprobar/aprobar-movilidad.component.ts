@@ -14,6 +14,7 @@ import { DataUserVacation } from 'app/vacaciones/data/datauservacation.data';
 import { User } from 'app/vacaciones/aprobar/user.model';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
+import { DetalleModalComponent } from './detalle-modal/detalle-modal.component';
 declare var require: any;
 const dataDistrito: any = require('../../../assets/data/distritos-data.json');
 const now = new Date();
@@ -115,7 +116,7 @@ export class AprobarMovilidadComponent implements OnInit {
     this.aprobarService.listarDetalleMovilidadLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
         this.objMoviUsua = resp;
-        let tmotivo = this.objMoviUsua[0].tmotivo
+                let tmotivo = this.objMoviUsua[0].tmotivo
         let tdestino = this.objMoviUsua[0].tdestino
         let tmonto = 0
         let tnumeviaje = 0
@@ -269,6 +270,18 @@ export class AprobarMovilidadComponent implements OnInit {
         );
       }
     )
+  }
+
+  modalShowDetalle() {
+    const modalRef = this.modalService.open(DetalleModalComponent, { size: 'lg' });
+    modalRef.componentInstance.titulo = 'movilidad'; // should be the id
+    modalRef.componentInstance.data = { listDetalle:  this.objMoviUsua}; // should be the data
+
+    modalRef.result.then((result) => {
+      // console.log(result)
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
 }
