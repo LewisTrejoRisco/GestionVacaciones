@@ -1,9 +1,7 @@
 <div class="modal-header">
-    <h4 class="modal-title"> {{ id != 0 ? 'Actualizar Licencia' : 'Solicitar Licencia'}} 
-      <h6>
-        (Sujeto a descuento)
-      </h6>
-    </h4>
+  
+  <div class="font-small-2"><strong>{{ id != 0 ? 'Actualizar Licencia' : 'Solicitar Licencia'}} </strong></div>
+  <div class="font-small-2"><strong>  (Sujeto a descuento)</strong></div>
     
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     x

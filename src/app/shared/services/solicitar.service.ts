@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, COLISION_VACACIONES, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, LISTAR_TXT_CONTABILIDAD, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { APROBAR_SOLICITUD, BORRAR_SALIDABUS, COLISION_VACACIONES, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SALIDABUS, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_SALIDABUS, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, LISTAR_TXT_CONTABILIDAD, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, TOLERANCIA_SALIDABUS, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { PDFDocument, rgb } from 'pdf-lib';
@@ -290,6 +290,46 @@ export class SolicitarService {
             return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             .pipe(catchError(e => {
                 console.error(' Error al intentar obtener datos APROBADOS RRHH. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public listarSalidaBus(): Observable<any>  {
+        //console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
+            return this.http.get(URL_END_POINT_BASE + LISTAR_SALIDABUS)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener salida de bus Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public grabarSalidaBus(objSalidabus: any) {
+        //console.log(URL_END_POINT_BASE + GRABAR_SOLICITUD + objSolicitud)
+        return this.http.post(URL_END_POINT_BASE + GRABAR_SALIDABUS, objSalidabus)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar grabar salida de bus Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public borrarSalidaBus(tsalidabusId: number) {
+        //console.log(URL_END_POINT_BASE + GRABAR_SOLICITUD + objSolicitud)
+        return this.http.delete(URL_END_POINT_BASE + BORRAR_SALIDABUS + "?tsalidabusId=" + tsalidabusId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar borrar salida de bus Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public toleranciaSalidaBus(tsolicitudId: number): Observable<any>  {
+        //console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
+            return this.http.get(URL_END_POINT_BASE + TOLERANCIA_SALIDABUS + "?tsolicitudId=" + tsolicitudId)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener tolerancia de bus Msg: ' + e.error);
                 return throwError(e);
             })
         );

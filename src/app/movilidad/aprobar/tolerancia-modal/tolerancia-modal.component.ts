@@ -12,14 +12,14 @@ declare var require: any;
 const dataDistrito: any = require('../../../../assets/data/distritos-data.json');
 
 @Component({
-  selector: 'app-detalle-modal',
-  templateUrl: './detalle-modal.component.html',
-  styleUrls: ['./detalle-modal.component.scss'],
+  selector: 'app-tolerancia-modal',
+  templateUrl: './tolerancia-modal.component.html',
+  styleUrls: ['./tolerancia-modal.component.scss'],
   providers: [
     SolicitarService
   ]
 })
-export class DetalleModalComponent implements OnInit{
+export class ToleranciaModalComponent implements OnInit{
 
   type = 'Marketing';
   @Input() id: number;
@@ -40,7 +40,6 @@ export class DetalleModalComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.distritos = dataDistrito;
     this.buildItemForm(this.data);
   }
 
@@ -56,10 +55,6 @@ export class DetalleModalComponent implements OnInit{
     this.myForm = this.formBuilder.group({
       listDetalle: [item.listDetalle || null, Validators.required]
     });
-  }
-
-  getDescription(idCiudad: any): string {
-    return this.distritos.find(a => a.id_distrito == idCiudad).descripcion_distrito
   }
 
   submitForm() {

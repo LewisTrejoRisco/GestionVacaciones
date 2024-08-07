@@ -69,6 +69,11 @@
                     </div>
                   </div>
                 </div>
+                <div class="list-group-item " *ngIf="objTolerancia.length > 0">
+                  <strong class="text-danger fonticon-container">Hubo un bus cerca de su hora de salida. Ver el detalle.   
+                    <i class="font-medium-3 fa fa-search mr-1 detalleObs" (click)="modalShowTolerancia()"></i>
+                  </strong>
+                </div>
               </div>
               <div class="card-content">
                 <div class="card-body">
@@ -94,7 +99,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 fonticon-container">
                       <div class="form-group row align-items-center">
                         <div class="col-lg-3 col-xs-12">
                           <label for="descr" class="col-form-label"># de viaje: </label>
@@ -103,7 +108,7 @@
                           <label id="descr" class="form-control">{{trabajador.tnumeviaje}}</label>
                         </div>
 
-                        <i class="font-medium-3 ft-eye mr-1 detalleObs" (click)="modalShowDetalle()"></i>
+                        <i class="font-medium-3 icon-eye mr-1 detalleObs" (click)="modalShowDetalle()"></i>
                       </div>
                     </div>
                     <div class="col-md-6">

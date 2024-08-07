@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <div class="font-small-2"><strong>Detalle de buses cerca de la hora de salida</strong></div>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    x
+  </button>
+</div>
+  <div class="modal-body">
+    <div class="container">
+      <ngx-datatable #tableRowDetails class="font-small-2 bootstrap core-bootstrap" [columnMode]="ColumnMode.force" 
+      [rows]="listDetalle" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="false">
+        
+        <ngx-datatable-column name="Fecha Solicitud" prop="tfechregistro"></ngx-datatable-column>
+        <ngx-datatable-column name="Fecha Salida Bus" prop="tfechsalidabus"></ngx-datatable-column>
+        
+      </ngx-datatable>
+    </div>
+  </div>
+  <div class="modal-footer taskboard-modal-footer">
+    <button class="btn btn-secondary btn-save" (click)="submitForm()">
+      Cerrar
+    </button>
+  </div>

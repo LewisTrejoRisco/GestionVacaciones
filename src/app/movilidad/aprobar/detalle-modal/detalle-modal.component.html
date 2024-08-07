@@ -1,24 +1,11 @@
-
-    <!-- <div class="modal-content"> -->
 <div class="modal-header">
-  <h4 class="modal-title"> Detalle Movilidad</h4>
+  <div class="font-small-2"><strong>Detalle Movilidad</strong></div>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     x
   </button>
 </div>
-            <!-- <button id="btnStartTour" class="btn btn-primary" (click)="startTour()">Start Tour</button> -->
-<!-- <form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm"> -->
   <div class="modal-body">
     <div class="container">
-      <!-- <div class="card-content">
-        <div class="card-body">
-        </div>
-      </div> -->
-      
-      <!-- <div class="card"> -->
-        <!-- <div class="card-content"> -->
-          <!-- <div class="card-body"> -->
-            
             <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force" 
             [rows]="listDetalle" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="false">
               <ngx-datatable-column name="Origen" prop="torigen" [width]="100">
@@ -34,7 +21,6 @@
               <ngx-datatable-column name="Fecha" prop="tfechinicio" [width]="120"></ngx-datatable-column>
               <ngx-datatable-column name="Hora" prop="tfechfin" [width]="120"></ngx-datatable-column>
               <ngx-datatable-column name="Monto" prop="tmonto" [width]="100"></ngx-datatable-column>
-              <!-- <ngx-datatable-column name="Transporte" prop="ttransporte" [width]="100"></ngx-datatable-column> -->
               <ngx-datatable-column name="Transporte" prop="ttransporte" [width]="100">
                 <ng-template let-status="value" ngx-datatable-cell-template>
                   <div class="badge badge-pill">
@@ -43,9 +29,6 @@
                 </ng-template>
               </ngx-datatable-column>
             </ngx-datatable>
-          <!-- </div> -->
-        <!-- </div> -->
-      <!-- </div> -->
     </div>
   </div>
   <div class="modal-footer taskboard-modal-footer">
@@ -53,5 +36,3 @@
       Cerrar
     </button>
   </div>
-<!-- </form> -->
-<!-- </div> -->

@@ -51,6 +51,12 @@ export const LISTAR_SOLICITUD_MOVILIDAD_APROBADA = "/solicitud/listarHistorialMo
 // Aprobar movilidad
 export const LISTAR_DETALLE_USUARIO_MOVILIDAD = "/movilidad/listarXSolicitud?tsolicitudId=";
 
+// Salida bus
+export const GRABAR_SALIDABUS = "/salidaBus/insert";
+export const LISTAR_SALIDABUS = "/salidaBus/findAll";
+export const BORRAR_SALIDABUS = "/salidaBus/delete";
+export const TOLERANCIA_SALIDABUS = "/salidaBus/toleranciaByTsolicitudId";
+
 //Banco BBVA
 export const PRIMER_ORDENANTE = "2110";
 export const SEGUNDO_ORDENANTE = "2120";

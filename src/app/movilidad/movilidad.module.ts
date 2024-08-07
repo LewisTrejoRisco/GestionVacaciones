@@ -12,6 +12,8 @@ import { AprobarMovilidadComponent } from './aprobar/aprobar-movilidad.component
 import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
 import { GenerarModalComponent } from './generar-txt/generar-modal/generar-modal.component';
 import { DetalleModalComponent } from './aprobar/detalle-modal/detalle-modal.component';
+import { SalidaBusComponent } from './salida-buses/salida-bus.component';
+import { ToleranciaModalComponent } from './aprobar/tolerancia-modal/tolerancia-modal.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { DetalleModalComponent } from './aprobar/detalle-modal/detalle-modal.com
                  MovilidadModalComponent,
                  AprobarMovilidadComponent,
                  GenerarTxtComponent,
-                 GenerarModalComponent],
+                 GenerarModalComponent,
+                 SalidaBusComponent,
+                 ToleranciaModalComponent],
   imports: [
     CommonModule,
     MovilidadRoutingModule,

@@ -29,6 +29,7 @@ export const ROUTES: RouteInfo[] = [
       { path: '/movilidad/solicitar', title: 'Solicitar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '1' },
       { path: '/movilidad/aprobar', title: 'Aprobar', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '2' },
       { path: '/movilidad/generar', title: 'Generar TXT', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
+      { path: '/movilidad/salidaBus', title: 'Salida Bus', icon: 'ft-arrow-right submenu-icon', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [], perfil: '3' },
     ]
   }
   // ,{

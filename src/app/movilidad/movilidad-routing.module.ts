@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MovilidadComponent } from './solicitar/movilidad.component';
 import { AprobarMovilidadComponent } from './aprobar/aprobar-movilidad.component';
 import { GenerarTxtComponent } from './generar-txt/generar-txt.component';
+import { SalidaBusComponent } from './salida-buses/salida-bus.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,13 @@ const routes: Routes = [
         component: GenerarTxtComponent,
         data: {
           title: 'Generar TXT'
+        }
+      },
+      {
+        path: 'salidaBus',
+        component: SalidaBusComponent,
+        data: {
+          title: 'Salida Bus'
         }
       }
     ]

@@ -1,0 +1,85 @@
+<div class="row match-height">
+    <div class="col-xl-4 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <h4 class="card-title float-left font-small-2">REGISTRO SALIDA DE BUSES</h4>
+              <h4 class="card-title float-right font-small-2"></h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body font-small-2">
+                    <p class="grey"></p>
+                    <form #registraForm="ngForm" (ngSubmit)="registrar(registraForm)">
+                        <div class="row">
+                            <div class="col-xl-12 col-md-12 col-xs-12">
+                                <div *ngIf="flagformreserva && !modalDataRese?.reserva.fechInic" 
+                                class="help-block mt-1 text-danger"> 
+                                  <i class="ft-alert-circle align-middle"></i> Fecha es requerido
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" 
+                                        readonly 
+                                        class="form-control"
+                                        id="fechaInic" 
+                                        name="fechaInic" 
+                                        placeholder="Fecha Inicio" 
+                                        [(ngModel)]="modalDataRese?.reserva.fechInic"
+                                        (keydown.enter)="$event.preventDefault()" 
+                                        ngbDatepicker 
+                                        #d2="ngbDatepicker" 
+                                        required>
+                                    <div class="input-group-append">
+                                    <div class="input-group-text" (click)="d2.toggle()">
+                                        <i class="fa fa-calendar" style="cursor: pointer;"></i>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 col-md-12 col-xs-12">
+                                <div class="">
+                                    <div *ngIf="flagformreserva && !modalDataRese?.reserva.fechInic" 
+                                    class="help-block mt-1 text-danger"> 
+                                      <i class="ft-alert-circle align-middle"></i> Tiempo es requerido
+                                    </div>
+                                    <ngb-timepicker id="timeInic"
+                                                    name="timeInic"
+                                                    [(ngModel)]="modalDataRese?.reserva.timeInic"
+                                                    [meridian]="meridian" [spinners]="spinners"
+                                                    required>
+                                    </ngb-timepicker>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer taskboard-modal-footer">
+                          <button type="button" class="btn btn-secondary btn-save" (click)="registrar(registraForm)">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-8 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <h4 class="card-title float-left font-small-2">HISTORIAL SALIDA DE BUSES</h4>
+              <h4 class="card-title float-right font-small-2"></h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body font-small-2">
+                    <ngx-datatable #tableRowDetails class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force" 
+                    [rows]="listSalidaBus" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true" >
+                        
+                        <ngx-datatable-column name="Fecha Inicio" prop="tfechinicio" [width]="120"></ngx-datatable-column>
+                        <ngx-datatable-column name="Hora Inicio" prop="ttiempo" [width]="120"></ngx-datatable-column>
+                        
+                        <ngx-datatable-column prop="tsolicitudId" name="Borrar" [width]="80">
+                            <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
+                                <i class="ft-x text-primary cursor-pointer" 
+                                   (click)="borrar(row)"></i>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

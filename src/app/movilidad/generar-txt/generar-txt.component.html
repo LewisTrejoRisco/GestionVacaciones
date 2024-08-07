@@ -19,7 +19,7 @@
               
               <!-- <button type="button" class="btn btn-secondary mr-2" (click)="modalShowSolicitar(0, null)">Solicitar</button> -->
               <button type="button" class="btn btn-secondary mr-2 button-margin" (click)="exportarTXT()">Generar TXT</button>
-              <button type="button" class="btn btn-secondary mr-2" (click)="exportarReintentoTXT()">Reintentar</button>
+              <button type="button" class="btn btn-secondary mr-2" (click)="exportarReintentoTXT()">Último TXT</button>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
             <div class="card">
               <div class="card-header">
                 <!-- <h4 class="card-title float-left font-small-2">HISTORIAL DE MOVILIDAD</h4> -->
-                <h4 class="card-title float-left font-small-2">HISTORIAL POR GENERAR PAGO</h4>
+                <h4 class="card-title float-left font-small-2">LISTA PARA GENERACIÓN DE PAGO</h4>
               </div>
               <div class="card-content">
                 <div class="card-body">
@@ -106,14 +106,12 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <!-- <h4 class="card-title float-left font-small-2">HISTORIAL DE MOVILIDAD</h4> -->
-                <h4 class="card-title float-left font-small-2">MOVILIDADES CON PAGOS GENERADOS</h4>
+                <h4 class="card-title float-left font-small-2">ULTIMO HISTORIAL DE PAGO GENERADO</h4>
                 <button type="button" class="btn btn-success bg-light-success mr-3 mb-1  float-right" (click)="createXLSX()">Descargar <i class="fa fa-print"></i></button>
               </div>
               <div class="card-content">
                 <div class="card-body">
       
-                  <!-- ngx-datatable Basic -->
                   <ngx-datatable #tableRowDetailsPagado class="bootstrap core-bootstrap font-small-2 tabla-de-datos" [columnMode]="ColumnMode.force"
                     [rows]="listaHistorialSolicitudesPagadas" [rowHeight]="30" [limit]="10" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true">
                     <ngx-datatable-row-detail [rowHeight]="50">
@@ -136,8 +134,6 @@
                       </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Colaborador" prop="tusuasoli" [width]="80"></ngx-datatable-column>
-                    <!-- <ngx-datatable-column name="Fecha Inicio" prop="tfechinicsoli"></ngx-datatable-column>
-                    <ngx-datatable-column name="Fecha Fin" prop="tfechfinasoli"></ngx-datatable-column> -->
                     <ngx-datatable-column name="Fecha Aprobado" prop="tfechresp" [width]="100"></ngx-datatable-column>
                     <ngx-datatable-column name="Fecha Pagada" prop="tfechactu" [width]="100"></ngx-datatable-column>
                     <ngx-datatable-column name="Tipo" prop="tdesctiposolicitud" [width]="100"></ngx-datatable-column>
@@ -149,16 +145,6 @@
                         </div>
                       </ng-template>
                     </ngx-datatable-column>
-                    <!-- <ngx-datatable-column prop="tsolicitudId" name="Actions">
-                      <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
-                          <i class="ft-edit text-primary cursor-pointer mr-2" 
-                            [ngClass]="{'pace-inactive':row.tstatus == '4', 'pace-inactive':row.tstatus == '2', 'pace-inactive':row.tstatus == '3' }" 
-                            ></i>
-                          <i class="ft-x text-primary cursor-pointer" 
-                            [ngClass]="{'pace-inactive':row.tstatus == '4', 'pace-inactive':row.tstatus == '2', 'pace-inactive':row.tstatus == '3' }" 
-                            ></i>
-                      </ng-template>
-                    </ngx-datatable-column> -->
                   </ngx-datatable>
                 </div>
               </div>

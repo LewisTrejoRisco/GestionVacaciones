@@ -88,7 +88,7 @@
                       </ng-template>
                     </ngx-datatable-column>
                     <ngx-datatable-column name="Aprobación" prop="tfechresp" [width]="100"></ngx-datatable-column>
-                    <ngx-datatable-column  name="Actions"prop="tsolicitudId" [width]="100">
+                    <ngx-datatable-column  name="Acción"prop="tsolicitudId" [width]="100">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
                         <i class="ft-edit text-primary cursor-pointer mr-2 btnEditar" 
                           [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' }" 
