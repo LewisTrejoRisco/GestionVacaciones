@@ -2,6 +2,8 @@ import { Component, Output, EventEmitter, Input, OnInit, Injectable } from '@ang
 import { UntypedFormGroup, UntypedFormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
+import { forkJoin } from 'rxjs';
+import Swal from 'sweetalert2';
 
 declare var require: any;
 const dataDistrito: any = require('../../../../assets/data/distritos-data.json');
@@ -61,7 +63,8 @@ export class MovilidadModalComponent implements OnInit{
   meridian = true; 
   spinners = false;
   dynamicControls = [];
-  // dynamicControlsD = [];
+  listmotivo: any = [];
+  flagObservacion: boolean = false;
 
   constructor(
    public activeModal: NgbActiveModal,
@@ -72,17 +75,40 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   ngOnInit() {
-    // this.solicitarService.listarDistrito().subscribe(
-    //   resp => {
-      this.selectedOption = false; 
-      this.origen = dataDistrito;
-      this.destino = dataDistrito;
-      this.buildItemForm(this.data);
-    //   }, 
-    //   error => {
-    //     console.log("error:", error.message)
-    //   }
-    // )
+    this.motivos();
+    this.selectedOption = false; 
+  }
+
+  private motivos(): void {
+    forkJoin({
+      listmotivo: this.solicitarService.listarMotivosMovilidades()
+    }).subscribe({
+      next: ({ listmotivo }) => {
+        this.listmotivo = listmotivo;
+        this.origen = dataDistrito;
+        this.destino = dataDistrito;
+        this.buildItemForm(this.data);
+      },
+      error: error => {
+        Swal.fire(
+          'Error',
+          'Error al cargar los datos: ' + error.message,
+          'error'
+        );
+      }
+    });
+  }
+
+  private onSelect(objeto: any): void {
+    this.myForm.controls['observacion'].setValue(null);
+    if(objeto.tflagobse == 1) {
+      this.flagObservacion = true;
+      this.myForm.controls['observacion'].setValidators([Validators.required]);
+    } else {
+      this.flagObservacion = false;
+      this.myForm.controls['observacion'].clearValidators();
+    }
+    this.myForm.controls['observacion'].updateValueAndValidity();
   }
 
   get lf() {
@@ -90,7 +116,6 @@ export class MovilidadModalComponent implements OnInit{
   }
 
   private buildItemForm(item: any) {
-    // debugger;
     if(item.transporte != null) {
       item.transporte = this.transporte.find(a => a.id == item.transporte);
     }
@@ -101,22 +126,23 @@ export class MovilidadModalComponent implements OnInit{
       item.destino = this.destino.find(a => a.id_distrito == item.destino);
     }
     if(item.idTiempo != null) {
-      // if(item.idTiempo == 'D') {
         this.createForm(item);
         this.addDynamicControls(item.idTiempo);
         this.setValueDinamicControl(item);
         this.selectedOption = true;
-      // } else {
-      //   this.createForm(item);
-      //   this.addDynamicControls();
-      //   this.setValueDinamicControl(item);
-      //   this.selectedOption = true;
-      // }
+        if(item.motivo != null) {
+          item.motivo = this.listmotivo.find(a => a.tdescmoti == item.motivo);
+          if(item.motivo.tflagobse == 1) {
+            this.flagObservacion = true;
+            this.myForm.controls['observacion'].setValidators([Validators.required]);
+          } else {
+            this.flagObservacion = false;
+            this.myForm.controls['observacion'].clearValidators();
+          }
+        }
     } else {
       this.createForm(item);
     }
-    
-    // this.startTour();
   }
 
   createForm(item: any) {
@@ -127,7 +153,8 @@ export class MovilidadModalComponent implements OnInit{
       origen: [item.origen || null, Validators.required],
       destino: [item.destino || null, Validators.required],
       motivo: [item.motivo || null, Validators.required],
-      idTiempo: [item.idTiempo || null, Validators.required]
+      idTiempo: [item.idTiempo || null, Validators.required],
+      observacion: [item.observacion || null]
     });
   }
 

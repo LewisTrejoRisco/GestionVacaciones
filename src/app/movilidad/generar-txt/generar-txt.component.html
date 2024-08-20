@@ -57,7 +57,7 @@
                       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
                         <div class="ml-5 my-1">
                           <div><strong>* Número viaje : </strong> {{ row.tnumeviaje }} <strong>  * Transporte :</strong>  {{ row.ttransporte == 'U' ? 'Urbano' : (row.ttransporte == 'T' ? 'Taxi' : row.ttransporte) }}</div>
-                          <div><strong>  * Motivo :</strong> {{ row.tmotivo }}</div>
+                          <div><strong>  * Motivo :</strong> {{ row.tmotivo }}, <strong *ngIf="row.tobservacion != null">,  *Observación : {{ row.tobservacion }}</strong></div> 
                           
                         </div>
                       </ng-template>

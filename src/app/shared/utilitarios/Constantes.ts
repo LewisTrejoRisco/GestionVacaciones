@@ -47,6 +47,7 @@ export const GRABAR_MOVILIDAD = "/solicitud/grabarMovilidad";
 export const SOLICITUD_HISTORIALMOVILIDADXUSUARIO = "/solicitud/listarHistorialMovilidadXUsuario?codiUsua=";
 export const LISTAR_DISTRITO = "/movilidad/listarDistritos";
 export const LISTAR_SOLICITUD_MOVILIDAD_APROBADA = "/solicitud/listarHistorialMovilidadXStatusXTipo?";
+export const LISTAR_MOTIVOS_MOVILIDAD = "/motivoMovilidad/findAll";
 
 // Aprobar movilidad
 export const LISTAR_DETALLE_USUARIO_MOVILIDAD = "/movilidad/listarXSolicitud?tsolicitudId=";

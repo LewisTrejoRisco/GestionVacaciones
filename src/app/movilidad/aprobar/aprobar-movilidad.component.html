@@ -171,13 +171,23 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
+                      <div class="form-group row align-items-center">
+                        <div class="col-lg-3 col-xs-12">
+                          <label for="descr" class="col-form-label">Motivo: </label>
+                        </div>
+                        <div class="col-lg-9 col-xs-12">
+                          <label id="descr" class="form-control">{{trabajador.tmotivo}}</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="trabajador.tobservacion != null">
                       <div class="form-group row align-items-center">
                         <div class="col-md-2 col-xs-12">
-                          <label for="periVaca2" class="col-form-label">Motivo: </label>
+                          <label for="observacion" class="col-form-label">Observación: </label>
                         </div>
                         <div class="col-md-10 col-xs-12">
-                          <textarea id="periVaca2" rows="4" class="form-control">{{trabajador.tmotivo}}</textarea>
+                          <textarea id="observacion" rows="4" class="form-control">{{trabajador.tobservacion}}</textarea>
                         </div>
                       </div>
                     </div>

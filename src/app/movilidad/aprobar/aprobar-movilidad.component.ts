@@ -125,6 +125,7 @@ export class AprobarMovilidadComponent implements OnInit {
         this.objTolerancia = objTolerancia;
         let tmotivo = this.objMoviUsua[0].tmotivo
         let tdestino = this.objMoviUsua[0].tdestino
+        let tobservacion = this.objMoviUsua[0].tobservacion;
         let tmonto = 0
         let tnumeviaje = 0
         let torigen = this.objMoviUsua[0].torigen
@@ -147,6 +148,7 @@ export class AprobarMovilidadComponent implements OnInit {
           tfechingrsoli: this.detalleSolicitudUsuario.tfechingrsoli,
           tfechregi: this.detalleSolicitudUsuario.tfechregi,
           tmotivo: tmotivo,
+          tobservacion: tobservacion,
           tdestino:  this.distritos.find(a => a.id_distrito == tdestino).descripcion_distrito,
           tmonto: tmonto,
           tnumeviaje: tnumeviaje,

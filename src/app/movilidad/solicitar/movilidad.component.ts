@@ -100,7 +100,7 @@ export class MovilidadComponent implements OnInit {
   modalShowSolicitar(tipo: any, row: any) {
     var modalRef = null
     if(row == null) {
-      this.openModal(tipo, null, null, null, null, null, null, null, null,[]);
+      this.openModal(tipo, null, null, null, null, null, null, null, null, null, []);
     } else {
       this.solicitarService.listarDetalleMovilidadLicencia(row.tsolicitudId).subscribe(
         resp => {
@@ -114,6 +114,7 @@ export class MovilidadComponent implements OnInit {
             let tdestino = this.listDetalle[0].tdestino;
             let tmotivo = this.listDetalle[0].tmotivo;
             let ttiempo = this.listDetalle[0].ttiempo;
+            let observacion = this.listDetalle[0].tobservacion;
             this.listDetalle.forEach(a => {
               const movilidad = {
                 tfechinicio: this.formatDate(a.tfechinicio),
@@ -122,7 +123,7 @@ export class MovilidadComponent implements OnInit {
               };
               listDinamic.push(movilidad)
             })
-            this.openModal(tipo, row, tfecha, tnumeviaje, ttransporte, torigen, tdestino, tmotivo, ttiempo, listDinamic);
+            this.openModal(tipo, row, tfecha, tnumeviaje, ttransporte, torigen, tdestino, tmotivo, ttiempo, observacion, listDinamic);
           }
         }, 
         error => {
@@ -137,7 +138,7 @@ export class MovilidadComponent implements OnInit {
     }
   }
 
-  openModal(tipo: any, row: any, fecha: any, numeViajes: any, transporte: any, origen: any, destino: any, motivo: any, idTiempo: any, listDinamic:any) {
+  openModal(tipo: any, row: any, fecha: any, numeViajes: any, transporte: any, origen: any, destino: any, motivo: any, idTiempo: any, observacion:any, listDinamic:any) {
     var  modalRef = this.modalService.open(MovilidadModalComponent, { size: 'lg' });
     modalRef.componentInstance.id = tipo; // should be the id
     modalRef.componentInstance.data = { fecha: fecha,
@@ -147,6 +148,7 @@ export class MovilidadComponent implements OnInit {
                                         destino: destino , 
                                         motivo: motivo , 
                                         idTiempo: idTiempo,
+                                        observacion: observacion,
                                         listDinamic: listDinamic  
                                       }
     modalRef.result.then((result) => {
@@ -175,7 +177,8 @@ export class MovilidadComponent implements OnInit {
               torigen : result.origen.id_distrito,
               tdestino : result.destino.id_distrito,
               ttiempo: result.idTiempo,
-              tmotivo : result.motivo
+              tmotivoId : result.motivo.tmotivoId,
+              tobservacion : result.observacion
             };
             objSolicitud.tfechinicio = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
             objSolicitud.tfechfin = result.fechaInic == null ? null : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
@@ -261,7 +264,8 @@ export class MovilidadComponent implements OnInit {
                 torigen : result.origen.id_distrito,
                 tdestino : result.destino.id_distrito,
                 ttiempo: result.idTiempo,
-                tmotivo : result.motivo
+                tmotivoId : result.motivo.tmotivoId,
+                tobservacion : result.observacion
               };
               objSolicitud.listMovilidad.push(movilidad);
             }
