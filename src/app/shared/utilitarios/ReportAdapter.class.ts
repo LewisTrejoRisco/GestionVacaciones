@@ -9,6 +9,7 @@ export interface iReporte {
     tdescusuasoli?: string,
     tfechinicsoli?: string,
     tfechfinasoli?: string,
+    tmonto?:number,
     tstatus?: string,
     statusDesc?: string,
     tusuaaprob?: string,
@@ -27,10 +28,11 @@ export class ReportAdapter {
                 tfechregi: report.tfechregi,
                 tfechinicsoli: report.tfechinicsoli,
                 tfechfinasoli: report.tfechfinasoli,
+                tmonto: report.tmonto,
                 statusDesc: report.statusDesc,
-                tusuaaprob: report.tusuaaprob,
-                tdescusuaaprob: report.tdescusuaaprob,
-                tfechaprob: report.tfechaprob
+                tusuaaprob: report.tusuaactu,
+                tdescusuaaprob: report.tdescusuaactu,
+                tfechaprob: report.tfechactu
             }
             this.data.push(reportItem)
         })

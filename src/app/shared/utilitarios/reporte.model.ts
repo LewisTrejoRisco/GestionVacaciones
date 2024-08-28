@@ -7,6 +7,7 @@ export interface Reporte {
     tdescusuasoli?: string,
     tfechinicsoli?: string,
     tfechfinasoli?: string,
+    tmonto?: number,
     tstatus?: string,
     statusDesc?: string,
     tusuaaprob?: string,

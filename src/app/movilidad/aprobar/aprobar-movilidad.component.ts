@@ -260,7 +260,7 @@ export class AprobarMovilidadComponent implements OnInit {
       resp => {
         //console.log(resp)
         this.listReporte = resp;
-        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Monto', 'Status', 'Código Actualizador' , 'Actualizador', 'Fecha Actualizada'];
         const report = new ReportAdapter(this.listReporte);
         //console.log(report)
         this.aprobarService.generateReportWithAdapter(headers,report.data, 'Movilidades_Aprobadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
