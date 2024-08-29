@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbDatepickerI18n, NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrModule } from "ngx-toastr";
 import { AgmCoreModule } from "@agm/core";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
@@ -30,6 +30,12 @@ import { FullLayoutComponent } from "./layouts/full/full-layout.component";
 import { AuthService } from "./shared/auth/auth.service";
 import { AuthGuard } from "./shared/auth/auth-guard.service";
 import { WINDOW_PROVIDERS } from './shared/services/window.service';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { LOCALE_ID } from '@angular/core';
+import { CustomDatepickerI18n } from "./vacaciones/solicitar/solicitar-modal/solicitar-modal.component";
+
+registerLocaleData(localeEs);
 
 var firebaseConfig = {
   apiKey: "AIzaSyC9XfnIpwNoSv7cyAsoccFQ5EYPd7lZXrk", //YOUR_API_KEY
@@ -86,7 +92,9 @@ export function createTranslateLoader(http: HttpClient) {
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     },
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
-    WINDOW_PROVIDERS
+    WINDOW_PROVIDERS,
+    { provide: LOCALE_ID, useValue: 'es-ES'},
+    { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n }
   ],
   bootstrap: [AppComponent]
 })

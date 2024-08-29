@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
+import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
 
 @Component({
   selector: 'app-solicitar-venta',
@@ -164,7 +165,8 @@ export class SolicitarVentaComponent implements OnInit {
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
-        motivorechazo: result.motivo
+        motivorechazo: result.motivo,
+        flagAnulado: true
       }
       //console.log(objRechazar);
       this.solicitarVentaService.rechazarSolicitud(objRechazar).subscribe(
@@ -192,7 +194,7 @@ export class SolicitarVentaComponent implements OnInit {
         //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
-        const report = new ReportAdapter(this.listReporte);
+        const report = new ReportAdapterComun(this.listReporte);
         //console.log(report)
         this.solicitarVentaService.generateReportWithAdapter(headers,report.data, 'Reporte_venta_vacaciones_rrhh.xlsx');
         Swal.fire(

@@ -1,7 +1,7 @@
 
     <!-- <div class="modal-content"> -->
 <div class="modal-header">
-  <div class="font-small-2"><strong>{{ id != 0 ? 'Actualizar Vacaciones' : 'Solicitar Vacaciones'}} </strong></div>
+  <div class="font-small-2"><strong>{{ id != 0 ? 'Actualizar Venta Vacaciones' : 'Solicitar Venta Vacaciones'}} </strong></div>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     x
   </button>
@@ -15,7 +15,7 @@
         </div> -->
         <div *ngIf="modalFormSubmitted && (lf.hasta.invalid || lf.hasta.errors?.required)"
               class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-        <ng-select  [items]="diasASalir" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a salir" id="hasta">
+        <ng-select  [items]="diasASalir" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a vender" id="hasta">
         </ng-select>
         <!-- <input type="text" [formControl]="myForm.controls['hasta']" formControlName="hasta" class="form-control"
           id="hasta" placeholder="Hasta" (keydown.enter)="$event.preventDefault()" required #hasta> -->

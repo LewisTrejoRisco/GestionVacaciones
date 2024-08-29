@@ -368,7 +368,8 @@ export class SolicitarUsuarioComponent implements OnInit {
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
-        motivorechazo: result.motivo
+        motivorechazo: result.motivo,
+        flagAnulado: true
       }
       //console.log(objRechazar);
       this.solicitarService.rechazarSolicitud(objRechazar).subscribe(

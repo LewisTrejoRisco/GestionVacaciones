@@ -191,7 +191,8 @@ export class AprobarMovilidadComponent implements OnInit {
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
-        motivorechazo: result.motivo
+        motivorechazo: result.motivo,
+        flagAnulado: false
       }
       //console.log(objRechazar);
       this.aprobarService.rechazarSolicitud(objRechazar).subscribe(

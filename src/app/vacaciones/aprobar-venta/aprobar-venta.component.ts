@@ -10,6 +10,7 @@ import { DataUserVacation } from '../data/datauservacation.data';
 import { User } from '../aprobar/user.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
+import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
 const now = new Date();
 
 @Component({
@@ -152,7 +153,8 @@ export class AprobarVentaComponent implements OnInit {
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
-        motivorechazo: result.motivo
+        motivorechazo: result.motivo,
+        flagAnulado: false
       }
       //console.log(objRechazar);
       this.aprobarVentaService.rechazarSolicitud(objRechazar).subscribe(
@@ -213,7 +215,7 @@ export class AprobarVentaComponent implements OnInit {
         //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
-        const report = new ReportAdapter(this.listReporte);
+        const report = new ReportAdapterComun(this.listReporte);
         //console.log(report)
         this.aprobarVentaService.generateReportWithAdapter(headers,report.data, 'Venta_vacaciones_Aprobadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
         Swal.fire(
