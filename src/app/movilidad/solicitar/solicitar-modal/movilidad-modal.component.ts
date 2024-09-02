@@ -318,7 +318,7 @@ export class MovilidadModalComponent implements OnInit{
       this.dynamicControls = ['fechaInic', 'fechaFina', 'monto', 'fechaInic1','fechaFina1','monto1','fechaInic2','fechaFina2','monto2','fechaInic3','fechaFina3','monto3','fechaInic4','fechaFina4','monto4','fechaInic5','fechaFina5','monto5','fechaInic6','fechaFina6','monto6'];
     }
     this.dynamicControls.forEach(controlName => {
-      this.myForm.addControl(controlName, new FormControl(null)); // Agregar un nuevo formControl al FormGroup
+      this.myForm.addControl(controlName, new FormControl(null, Validators.required)); // Agregar un nuevo formControl al FormGroup
     });
   }
 
