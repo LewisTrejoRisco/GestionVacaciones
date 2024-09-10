@@ -1,9 +1,9 @@
 // export const URL_END_POINT_BASE = 'http://localhost:8080';
-export const URL_END_POINT_BASE = 'http://sicb.nettalco.com.pe/GestionHumanaWS'
+export const URL_END_POINT_BASE = 'https://sicb.nettalco.com.pe/GestionHumanaWS'
 //Auth
-export const OBTENERTOKEN = "http://sicb.nettalco.com.pe/recursosHumanosWS/servicio/obtenerToken";
-export const AUTENTICAR = "http://sicb.nettalco.com.pe/recursosHumanosWS/servicio/autenticarUsuario";
-export const OBTENERFOTO = "http://sicb.nettalco.com.pe/recursosHumanosWS/servicio/obtenerFotoPersona/"
+export const OBTENERTOKEN = "https://sicb.nettalco.com.pe/recursosHumanosWS/servicio/obtenerToken";
+export const AUTENTICAR = "https://sicb.nettalco.com.pe/recursosHumanosWS/servicio/autenticarUsuario";
+export const OBTENERFOTO = "https://sicb.nettalco.com.pe/recursosHumanosWS/servicio/obtenerFotoPersona/"
 export const OBTENERDATOS = "/autenticar/obtenerDatos?pCodipers="
 export const OBTENERDATOSBASICOS = "/autenticar/obtenerDatosBasicos?pCodipers="
 
