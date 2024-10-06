@@ -14,7 +14,8 @@ export interface iReporte {
     statusDesc?: string,
     tusuaaprob?: string,
     tdescusuaaprob?: string,
-    tfechaprob?: string
+    tfechaprob?: string,
+    tflagadelvaca?: string
 }
 
 export class ReportAdapterComun {
@@ -32,6 +33,28 @@ export class ReportAdapterComun {
                 tusuaaprob: report.tusuaactu,
                 tdescusuaaprob: report.tdescusuaactu,
                 tfechaprob: report.tfechactu
+            }
+            this.data.push(reportItem)
+        })
+    }
+}
+
+export class ReportAdapterComun2 {
+    data: iReporte[] = [];
+    constructor(reportList: Reporte[]) {
+        reportList.forEach((report, index) => {
+            const reportItem: iReporte = {
+                tusuasoli: report.tusuasoli,
+                tdescusuasoli: report.tdescusuasoli,
+                tdesctiposolicitud: report.tdesctiposolicitud,
+                tfechregi: report.tfechregi,
+                tfechinicsoli: report.tfechinicsoli,
+                tfechfinasoli: report.tfechfinasoli,
+                statusDesc: report.statusDesc,
+                tusuaaprob: report.tusuaactu,
+                tdescusuaaprob: report.tdescusuaactu,
+                tfechaprob: report.tfechactu,
+                tflagadelvaca: report.tflagadelvaca,
             }
             this.data.push(reportItem)
         })

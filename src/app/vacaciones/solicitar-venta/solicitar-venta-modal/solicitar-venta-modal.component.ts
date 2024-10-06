@@ -15,11 +15,6 @@ export class SolicitarVentaModalComponent implements OnInit{
   myForm: UntypedFormGroup;
   d2: any;
   diasASalir = [
-    { id: 1, name: '7' },
-    { id: 2, name: '8' },
-    { id: 3, name: '9', disabled: true },
-    { id: 4, name: '15' },
-    { id: 5, name: '30' }
   ];
   modalFormSubmitted = false;
 
@@ -39,7 +34,19 @@ export class SolicitarVentaModalComponent implements OnInit{
     return this.myForm.controls;
   }
 
+  private listDiasASalir() {
+    this.diasASalir;
+    for(let i = 1; i<16; i++) {
+      let dia = {
+        id: i, 
+        name: '' + i
+      }
+      this.diasASalir.push(dia);
+    }
+  }
+
   private buildItemForm(item) {
+    this.listDiasASalir();
     if(item.hasta != null) {
       item.hasta = this.diasASalir.find(a => a.name == item.hasta);
     }

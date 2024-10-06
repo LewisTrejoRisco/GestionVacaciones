@@ -15,5 +15,6 @@ export interface Reporte {
     tfechaprob?: string,
     tusuaactu?: string,
     tdescusuaactu?: string,
-    tfechactu?: string
+    tfechactu?: string,
+    tflagadelvaca?: string
 }

@@ -12,7 +12,7 @@ import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.componen
 import Swal from 'sweetalert2';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
-import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
+import { ReportAdapterComun, ReportAdapterComun2 } from 'app/shared/utilitarios/ReportAdapterComun.class';
 
 @Component({
   selector: 'app-solicitar',
@@ -129,7 +129,7 @@ export class SolicitarComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  openModal(tipo: any, row: any, fechaInic: any, hasta: any, descripcion: any, codipers: any, periodo: any, reemplazo: any) {
+  openModal(tipo: any, row: any, fechaInic: any, hasta: any, descripcion: any, codipers: any, periodo: any, reemplazo: any, tflagadelvaca: any) {
     var  modalRef = this.modalService.open(SolicitarModalComponent, { size: 'lg' });  
     modalRef.componentInstance.id = tipo; // should be the id
     modalRef.componentInstance.data = { fechaInic: fechaInic, 
@@ -137,7 +137,8 @@ export class SolicitarComponent implements OnInit {
                                         descripcion: descripcion, 
                                         codipers: codipers,
                                         periodo: periodo,
-                                        reemplazo: reemplazo
+                                        reemplazo: reemplazo,
+                                        tflagadelvaca: tflagadelvaca
                                       }; // should be the data
     modalRef.result.then((result) => {
             let fechaInicio:string = result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year;
@@ -201,7 +202,7 @@ export class SolicitarComponent implements OnInit {
 
   modalShowSolicitar(tipo: any, row: any) {
     if(row == null) {
-      this.openModal(tipo, row, null, null, null, this.sesion.p_codipers, null, null)
+      this.openModal(tipo, row, null, null, null, this.sesion.p_codipers, null, null, null)
     } else {
       let fechInicEdit = null;
       if(row.tfechinicsoli.split('/').length == 3){
@@ -211,7 +212,7 @@ export class SolicitarComponent implements OnInit {
           "day": parseInt(row.tfechinicsoli.split('/')[0])
         };
       }
-      this.openModal(tipo, row, fechInicEdit, row.tcantidad, row.tdescripcion, this.sesion.p_codipers, row.tperiodo, row.treemplazo)
+      this.openModal(tipo, row, fechInicEdit, row.tcantidad, row.tdescripcion, this.sesion.p_codipers, row.tperiodo, row.treemplazo, row.tflagadelvaca)
     }
   }
 
@@ -228,8 +229,9 @@ export class SolicitarComponent implements OnInit {
       cantidaddias : cantidadDias,
       descripcion : result.descripcion,
       periodo: periodo,
+      tflagadelvaca: result.tflagadelvaca.id,
       treemplazo: result.reemplazo
-    }
+    } 
     //console.log(objSolicitud);
     this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
       resp => {
@@ -301,10 +303,9 @@ export class SolicitarComponent implements OnInit {
   public createXLSX() : void {
     this.solicitarService.reporteAprobadosRRHH(1, 1).subscribe(
       resp => {
-        //console.log(resp)
         this.listReporte = resp;
-        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
-        const report = new ReportAdapterComun(this.listReporte);
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada', 'Adelanto de Pago'];
+        const report = new ReportAdapterComun2(this.listReporte);
         //console.log(report)
         this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_vacaciones_rrhh.xlsx');
         Swal.fire(

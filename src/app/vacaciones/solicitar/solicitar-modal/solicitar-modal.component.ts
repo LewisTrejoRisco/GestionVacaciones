@@ -79,6 +79,10 @@ export class SolicitarModalComponent implements OnInit{
   modelFecha: NgbDateStruct;
   dias = [
   ];
+  listAdelVaca = [
+    {id: "0", name: "No"},
+    {id: "1", name: "Si"}
+  ];
   fechaMayor: boolean = false;
   modalVacaFormSubmitted = false;
   numberOfWeek: boolean = false;
@@ -140,11 +144,15 @@ export class SolicitarModalComponent implements OnInit{
         item.fechaInic = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
     //   }
     }
+    if(item.tflagadelvaca != null) {
+      item.tflagadelvaca = this.listAdelVaca.find(a => a.id == item.tflagadelvaca);
+    }
     this.myForm = this.formBuilder.group({
       fechaInic: [item.fechaInic || null, Validators.required],
       hasta: [item.hasta || null, Validators.required],
       descripcion: [item.descripcion || null],
       periodo: [item.periodo || null, Validators.required],
+      tflagadelvaca: [item.tflagadelvaca || null, Validators.required],
       reemplazo: [item.reemplazo || null]
     });
     // this.startTour();
