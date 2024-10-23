@@ -241,4 +241,9 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   toggleSidebar() {
     this.layoutService.toggleSidebarSmallScreen(this.hideSidebar);
   }
+
+  cerrarSesion() {
+    this.authService.cerrarSesion();
+    this.router.navigate(['/pages/login']);
+  }
 }

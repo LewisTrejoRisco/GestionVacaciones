@@ -199,7 +199,7 @@ export class AprobarLicenciaComponent implements OnInit {
       resp => {
         //console.log(resp)
         this.messageResponse = resp;
-        if (this.messageResponse.codeMessage = "200") {
+        if (this.messageResponse.codeMessage == "200") {
           this.trabajador = null;
           this.listarSolicitudesLicencias();
           this.listarSolicitudesAprobadas();
@@ -212,8 +212,8 @@ export class AprobarLicenciaComponent implements OnInit {
           })
         } else {
           Swal.fire(
-            'Error',
-            'error al aprobar solicitud',
+            'Error al aprobar solicitud',
+            this.messageResponse.message,
             'error'
           );
         }
