@@ -115,8 +115,9 @@
                     <ngx-datatable-column prop="tsolicitudId" name="Acción" [width]="100">
                       <ng-template let-row="row" let-name="value" ngx-datatable-cell-template>
                         <!-- <i class="ft-eye text-primary cursor-pointer mr-2"></i> -->
-                        <i class="ft-edit text-primary cursor-pointer mr-2" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' || row.tstatus == '5' }" (click)="modalShowSolicitar(1, row)"></i>
-                        <i class="ft-x text-primary cursor-pointer" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' || row.tstatus == '5' }" (click)="modalEliminarSolicitar(row)"></i>
+                        <i class="ft-edit text-primary cursor-pointer mr-2" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' || row.tstatus == '5' }" (click)="modalShowSolicitar(1, row)" placement="top" ngbTooltip="Actualizar"></i>
+                        <i class="ft-x text-primary cursor-pointer mr-2" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' || row.tstatus == '5' }" (click)="modalEliminarSolicitar(row)" placement="top" ngbTooltip="Eliminar"></i>
+                        <i class="icon-user-following text-primary cursor-pointer" [ngClass]="{'pace-inactive':row.tstatus == '4' || row.tstatus == '2' || row.tstatus == '3' || row.tstatus == '5' }" (click)="actualizarAprobador(row)"  placement="top" ngbTooltip="Ser Aprobador"></i>
                       </ng-template>
                     </ngx-datatable-column>
       

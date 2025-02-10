@@ -56,7 +56,7 @@ export class ConfigService {
           size: "sidebar-md",
           backgroundColor: "purple-bliss",
           backgroundImage: true,
-          backgroundImageURL: "assets/img/sidebar-bg/01.jpg"
+          backgroundImageURL: "assets/img/sidebar-bg/bannernettalco.jpg"
         }
       }
     };

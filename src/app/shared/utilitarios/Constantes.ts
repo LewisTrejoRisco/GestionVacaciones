@@ -18,11 +18,14 @@ export const GENERAR_PAGO = "/generar/pagoPersonasTiposolicitud?"
 export const REPORTE_APROBADOSXAPROB = "/solicitud/buscarXTtiposolicitudIdAndTusuaaprobAndNotInTstatus?ttiposolicitudId=";
 export const REPORTE_APROBADOS = "/solicitud/buscarXTipoSolicitudAndNotinStatus?ttiposolicitudId=";
 export const LISTAR_TXT_CONTABILIDAD = "/generar/reporteTxtContabilidad?";
+export const REPORTE_APROBADOS_VACACIONES = "/reporte/reportevacaciones";
+export const REPORTE_APROBADOS_VENTA_VACACIONES = "/reporte/reporteventavacaciones";
 
 // Solicitar vacaciones
 export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";
 export const REGLAS_VACACIONES = "/vacaciones/reglasVacaciones?";
 export const COLISION_VACACIONES = "/vacaciones/colisionVacaciones?";
+export const ACTUALIZAR_APROBADOR = "/solicitud/actualizarAprobador";
 
 // Aprobar vacaciones
 export const LISTAR_DETALLE_USUARIO = "/vacaciones/listarXSolicitud?tsolicitudId=";

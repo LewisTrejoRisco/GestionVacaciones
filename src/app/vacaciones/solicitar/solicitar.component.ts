@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapterComun, ReportAdapterComun2 } from 'app/shared/utilitarios/ReportAdapterComun.class';
+import { ReportAdapterVacaciones } from 'app/shared/utilitarios/ReportAdapterVacaciones.class';
 
 @Component({
   selector: 'app-solicitar',
@@ -54,7 +55,6 @@ export class SolicitarComponent implements OnInit {
 
   ngOnInit(): void {
     this.sesion = JSON.parse(this.authService.userSesion);
-    //console.log(this.sesion)
     this.fechaIngreso = this.sesion.p_fechingr.split("T")[0]
     this.listarHistorialSolicitudes();
     this.poblarListaResumen();
@@ -235,16 +235,25 @@ export class SolicitarComponent implements OnInit {
     //console.log(objSolicitud);
     this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
       resp => {
-        //console.log(resp)
-        this.poblarListaResumen();
-        this.listarHistorialSolicitudes();
-        Swal.fire({
-          title: 'Exito',
-          text: 'Solicitud generada',
-          icon: 'success',
-          timer: 1500, 
-          showConfirmButton: false,
-        })
+          //console.log(resp)
+          let message: any = resp;
+          if (message.codeMessage == "200") {
+            this.poblarListaResumen();
+            this.listarHistorialSolicitudes();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error: ',
+              message.message,
+              'error'
+            );
+          }
         }, 
         error => {
           //console.log("Error: " + error.message)
@@ -301,13 +310,13 @@ export class SolicitarComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.solicitarService.reporteAprobadosRRHH(1, 1).subscribe(
+    this.solicitarService.reporteVacacionesRRHH().subscribe(
       resp => {
         this.listReporte = resp;
-        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada', 'Adelanto de Pago'];
-        const report = new ReportAdapterComun2(this.listReporte);
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Inicio', 'Fecha Fin', '# Dias', 'Status', 'Aprobador', 'Fecha Aprobada', 'Adelanto de Pago'];
+        const report = new ReportAdapterVacaciones(this.listReporte);
         //console.log(report)
-        this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_vacaciones_rrhh.xlsx');
+        this.solicitarService.generateReportVacationWithAdapter(headers,report.data, 'Reporte_vacaciones_rrhh.xlsx');
         Swal.fire(
           'Exito',
           'Se generó con éxito',

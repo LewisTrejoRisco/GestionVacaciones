@@ -65,15 +65,26 @@ export class LoginPageComponent {
               this.authService.signupUser(this.user.trabajador.codigoMatricula)
                 .subscribe(res => {
                   this.sesion = res;
-                  this.authService.obtenerFoto(this.sesion.p_codipers, this.token.token).subscribe(
-                    (imagen: Blob) =>{
-                      this.createImageFromBlob(imagen);
-                    }, error=> {
-                      console.log(error)
-                    }
-                  )
+                  if (this.sesion.p_menserro == null) {
+                    this.authService.obtenerFoto(this.sesion.p_codipers, this.token.token).subscribe(
+                      (imagen: Blob) =>{
+                        this.createImageFromBlob(imagen);
+                      }, error=> {
+                        console.log(error)
+                      }
+                    )
+                  } else {
+                    this.isLoginFailed = true;
+                    this.spinner.hide();
+                    Swal.fire(
+                      'Error',
+                      this.sesion.p_menserro,
+                      'error'
+                    );
+                  }
                 }, error => {
-                  console.log(error.message)
+                  this.isLoginFailed = true;
+                  this.spinner.hide();
                   Swal.fire(
                     'Error',
                     'error al obtener datos del colaborador',
@@ -99,6 +110,8 @@ export class LoginPageComponent {
         )
       }, 
       error => {
+          this.isLoginFailed = true;
+          this.spinner.hide();
         //console.log("Error: " + error.message)
         Swal.fire(
           'Error',

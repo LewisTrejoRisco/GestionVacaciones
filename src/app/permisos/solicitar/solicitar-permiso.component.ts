@@ -125,9 +125,9 @@ export class SolicitarPermisoComponent implements OnInit {
     }
     modalRef.result.then((result) => {
       let objSolicitud = null;
-      if(row == null) {
+      // if(row == null) {
         objSolicitud = {
-          tsolicitudId : 0,
+          tsolicitudId : row == null ? 0 : row.tsolicitudId,
           idtiposolicitud : "3",
           usuarioregistro : this.sesion.p_codipers,
           usuariosolicitado : this.sesion.p_codipers,
@@ -140,34 +140,43 @@ export class SolicitarPermisoComponent implements OnInit {
           descripcion : result.descripcion,
           tficheroadjunto: result.documento
         }
-      } else {
-        objSolicitud = {
-          tsolicitudId : row.tsolicitudId,
-          idtiposolicitud : "3",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          // areaactualtrabajador : this.sesion.p_unidfunc,
-          usuarioactual : this.sesion.p_matrresp,
-          fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ result.timeInic.hour + ':'+ result.timeInic.minute,
-          status : "1",
-          horas : result.horas.id,
-          minutos : result.minutos.id,
-          descripcion : result.descripcion,
-          tficheroadjunto: result.documento
-        }
-      }
+      // } else {
+      //   objSolicitud = {
+      //     tsolicitudId : row.tsolicitudId,
+      //     idtiposolicitud : "3",
+      //     usuarioregistro : this.sesion.p_codipers,
+      //     usuariosolicitado : this.sesion.p_codipers,
+      //     // areaactualtrabajador : this.sesion.p_unidfunc,
+      //     usuarioactual : this.sesion.p_matrresp,
+      //     fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year + ' '+ result.timeInic.hour + ':'+ result.timeInic.minute,
+      //     status : "1",
+      //     horas : result.horas.id,
+      //     minutos : result.minutos.id,
+      //     descripcion : result.descripcion,
+      //     tficheroadjunto: result.documento
+      //   }
+      // }
       this.solicitarService.grabarPermiso(objSolicitud).subscribe(
         resp => {
           //console.log(resp)
-          this.listarSolicitudesGroupBy();
-          this.listarHistorialSolicitudes();
-          Swal.fire({
-            title: 'Exito',
-            text: 'Solicitud generada',
-            icon: 'success',
-            timer: 1500, 
-            showConfirmButton: false,
-          })
+          let message: any = resp;
+          if (message.codeMessage == "200") {
+            this.listarSolicitudesGroupBy();
+            this.listarHistorialSolicitudes();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error: ',
+              message.message,
+              'error'
+            );
+          }
         }, 
         error => {
           //console.log("Error: " + error.message)

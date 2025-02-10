@@ -65,11 +65,9 @@ export class AprobarLicenciaComponent implements OnInit {
             }
           )
       })
-      //console.log(this.solicitudesLicencias);
         this.trabajador = null;
       }, 
       error => {
-        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -82,21 +80,23 @@ export class AprobarLicenciaComponent implements OnInit {
   createImageFromBlob(image: Blob, user: any): void {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      user.tfoto = reader.result as string;
+      user.tfoto = this.validaFoto(reader.result as string);
     }, false);
     if (image) {
       reader.readAsDataURL(image);
     }
   }
+  
+  validaFoto(foto: string) : string {
+    return foto === 'data:image/gif;base64,' ? 'assets/img/userX.PNG' : foto;
+  }
 
   listarSolicitudesAprobadas() {
     this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 4).subscribe(
       resp => {
-        //console.log(resp);
         this.solicitudesAprobadas = resp;
       }, 
       error => {
-        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes aprobadas:'+ error.message,
@@ -110,7 +110,6 @@ export class AprobarLicenciaComponent implements OnInit {
     this.detalleSolicitudUsuario = user;
     this.aprobarService.listarDetalleUsuarioLicencia(this.detalleSolicitudUsuario.tsolicitudId).subscribe(
       resp => {
-        //console.log(resp)
         this.objLiceUsua = resp;
         this.trabajador = {
           tsolicitudId: this.detalleSolicitudUsuario.tsolicitudId,
@@ -136,7 +135,6 @@ export class AprobarLicenciaComponent implements OnInit {
         this.solicitudPendiente.isActive = true;
       },
       error => {
-        //console.log("error detalle de solicitud:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar detalle solicitud:'+ error.message,
@@ -167,16 +165,13 @@ export class AprobarLicenciaComponent implements OnInit {
         motivorechazo: result.motivo,
         flagAnulado: false
       }
-      //console.log(objRechazar);
       this.aprobarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          //console.log(resp)
           this.trabajador = null;
           this.listarSolicitudesLicencias();
           this.listarSolicitudesAprobadas();
         }, 
         error => {
-          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al rechazar solicitud:'+ error.message,
@@ -194,10 +189,8 @@ export class AprobarLicenciaComponent implements OnInit {
       idsolicitud: user.tsolicitudId,
       usuarioactualizacion: this.sesion.p_codipers
     }
-    //console.log(objAprobar);
     this.aprobarService.aprobarSolicitud(objAprobar).subscribe(
       resp => {
-        //console.log(resp)
         this.messageResponse = resp;
         if (this.messageResponse.codeMessage == "200") {
           this.trabajador = null;
@@ -219,7 +212,6 @@ export class AprobarLicenciaComponent implements OnInit {
         }
       }, 
       error => {
-        //console.log("Error: " + error.message)
         Swal.fire(
           'Error',
           'error al aprobar solicitud:'+ error.message,
@@ -232,11 +224,9 @@ export class AprobarLicenciaComponent implements OnInit {
   public createXLSX() : void {
     this.aprobarService.reporteAprobados(4, this.sesion.p_codipers, 1).subscribe(
       resp => {
-        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapterComun(this.listReporte);
-        //console.log(report)
         this.aprobarService.generateReportWithAdapter(headers,report.data, 'Licencias_Aprobadas_' + (now.getFullYear()) + "/" + (now.getMonth() + 1) + "/" + now.getDate() + ':'+ now.getHours() +':' + now.getMinutes() + '.xlsx');
         Swal.fire(
           'Exito',

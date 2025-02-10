@@ -10,6 +10,7 @@ import { AuthService } from 'app/shared/auth/auth.service';
 import { SolicitarService } from 'app/shared/services/solicitar.service';
 import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.component';
 import Swal from 'sweetalert2';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-solicitar-usuario',
@@ -202,8 +203,6 @@ export class SolicitarUsuarioComponent implements OnInit {
       tsolicitudId : row == null ? 0 : row.tsolicitudId,
       idtiposolicitud : "1",
       usuarioregistro : this.sesion.p_codipers,
-      // usuariosolicitado : this.sesion.p_codipers,
-      // usuarioactual : this.sesion.p_matrresp,
       usuariosolicitado : this.usuarioSolicitar.p_codipers,
       usuarioactual : this.usuarioSolicitar.p_matrresp,
       fechainiciosolicitud : fechaInicio,
@@ -216,16 +215,24 @@ export class SolicitarUsuarioComponent implements OnInit {
     //console.log(objSolicitud);
     this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
       resp => {
-        //console.log(resp)
-        this.poblarListaResumen(this.usuarioSolicitar);
-        this.listarHistorialSolicitudesUsua();
-        Swal.fire({
-          title: 'Exito',
-          text: 'Solicitud generada',
-          icon: 'success',
-          timer: 1500, 
-          showConfirmButton: false,
-        })
+          let message: any = resp;
+          if (message.codeMessage == "200") {
+            this.poblarListaResumen(this.usuarioSolicitar);
+            this.listarHistorialSolicitudesUsua();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error: ',
+              message.message,
+              'error'
+            );
+          }
         }, 
         error => {
           //console.log("Error: " + error.message)
@@ -239,14 +246,7 @@ export class SolicitarUsuarioComponent implements OnInit {
   }
 
   modalShowSolicitar(tipo: any, row: any) {
-    // const modalRef = this.modalService.open(SolicitarModalComponent);
-    // modalRef.componentInstance.id = tipo; // should be the id
     if(row == null) {
-      // modalRef.componentInstance.data = { fechaInic: null, 
-      //                                     hasta: null, 
-      //                                     descripcion: null, 
-      //                                     codipers: this.usuarioSolicitar.p_codipers,
-      //                                     periodo: null }; // should be the data
       this.openModal(tipo, row, null, null, null, this.usuarioSolicitar.p_codipers, null, null)
     } else {
       let fechInicEdit = null;
@@ -258,67 +258,56 @@ export class SolicitarUsuarioComponent implements OnInit {
         };
       }
       this.openModal(tipo, row, fechInicEdit, row.tcantidad, row.tdescripcion, this.usuarioSolicitar.p_codipers, row.tperiodo, row.treemplazo)
-      // modalRef.componentInstance.data = { fechaInic: fechInicEdit, 
-      //                                     hasta: row.tcantidad, 
-      //                                     descripcion: row.tdescripcion, 
-      //                                     codipers: this.usuarioSolicitar.p_codipers,
-      //                                     periodo: null }; // should be the data
     }
-    // modalRef.result.then((result) => {
-    //   let objSolicitud = null;
-    //   if(row == null) {
-    //     objSolicitud = {
-    //       tsolicitudId : 0,
-    //       idtiposolicitud : "1",
-    //       usuarioregistro : this.sesion.p_codipers,
-    //       usuariosolicitado : this.usuarioSolicitar.p_codipers,
-    //       usuarioactual : this.usuarioSolicitar.p_matrresp,
-    //       fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-    //       status : "1",
-    //       cantidaddias : result.hasta.name,
-    //       descripcion : result.descripcion,
-    //       periodo: result.periodo
-    //     }
-    //   } else {
-    //     objSolicitud = {
-    //       tsolicitudId : row.tsolicitudId,
-    //       idtiposolicitud : "1",
-    //       usuarioregistro : this.sesion.p_codipers,
-    //       usuariosolicitado : this.usuarioSolicitar.p_codipers,
-    //       usuarioactual : this.usuarioSolicitar.p_matrresp,
-    //       fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-    //       status : "1",
-    //       cantidaddias : result.hasta.name,
-    //       descripcion : result.descripcion,
-    //       periodo: result.periodo
-    //     }
-    //   }
-    //   //console.log(objSolicitud);
-    //   this.solicitarService.grabarSolicitud(objSolicitud).subscribe(
-    //     resp => {
-    //       //console.log(resp)
-    //       this.poblarListaResumen(this.usuarioSolicitar);
-    //       this.listarHistorialSolicitudesUsua();
-    //       Swal.fire({
-    //         title: 'Exito',
-    //         text: 'Solicitud generada',
-    //         icon: 'success',
-    //         timer: 1500, 
-    //         showConfirmButton: false,
-    //       })
-    //     }, 
-    //     error => {
-    //       //console.log("Error: " + error.message)
-    //       Swal.fire(
-    //         'Error',
-    //         'error al grabar la solicitud:'+ error.message,
-    //         'error'
-    //       );
-    //     }
-    //   );
-    // }).catch((error) => {
-    //   console.log(error);
-    // });
+  }
+
+  actualizarAprobador(row: any) {
+
+    Swal.fire({
+      title: '¿Estás seguro de actualizar aprobador a '+this.sesion.p_nombcompleto+'?',
+      text: 'No podrás revertir esto después.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cambiar aprobador',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let objSolicitud = null;
+        objSolicitud = {
+          tsolicitudId : row.tsolicitudId,
+          usuarioactual : this.sesion.p_codipers
+        }
+        forkJoin({
+          numero: this.solicitarService.actualizarAprobador(objSolicitud)
+        }).subscribe({
+          next: ({ numero }) => {
+            let respuesta = numero;
+            if(respuesta == 1){
+              Swal.fire({
+                title: 'Exito',
+                text: 'Usuario ' + this.sesion.p_nombcompleto + ' ahora es aprobador',
+                icon: 'success',
+                timer: 1500, 
+                showConfirmButton: false,
+              })
+            } else {
+              Swal.fire(
+                'Error',
+                'Error al actualizar: ',
+                'error'
+              );
+            }
+          },
+          error: error => {
+            Swal.fire(
+              'Error',
+              'Error al cargar los datos: ' + error.message,
+              'error'
+            );
+          }
+        });
+      }
+    });
   }
 
   public sumarFecha(anio: number, mes: number, dia: number, diasProg): string {

@@ -82,16 +82,78 @@ export class SolicitarPermisoModalComponent implements OnInit{
   }
   
   imageUpload(event:any) {
-    var file = event.target.files.length;
-    for(let i=0;i<file;i++)
-    {
-       var reader = new FileReader();
-       reader.onload = (event:any) => 
-       {
-           this.profileImage = event.target.result;
-           this.changeDetector.detectChanges();
-       }
-       reader.readAsDataURL(event.target.files[i]);
+    const files = event.target.files;
+    this.procesarImagen(files, (base64: string) => {
+      // Asignamos la cadena Base64 generada a imageDNIPost
+      this.profileImage = base64;
+
+      // Actualizamos la vista
+      this.changeDetector.detectChanges();
+    });
+
+    // var file = event.target.files.length;
+    // for(let i=0;i<file;i++)
+    // {
+    //    var reader = new FileReader();
+    //    reader.onload = (event:any) => 
+    //    {
+          //  this.profileImage = event.target.result;
+          //  this.changeDetector.detectChanges();
+    //    }
+    //    reader.readAsDataURL(event.target.files[i]);
+    // }
+  }
+  
+  // Función genérica para procesar la imagen
+  procesarImagen(files: FileList, callback: (base64: string) => void) {
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        const imagen = new Image();
+        imagen.src = e.target.result;
+
+        imagen.onload = () => {
+          // Redimensionamos la imagen
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Definir el tamaño máximo
+          const MAX_WIDTH = 700;
+          const MAX_HEIGHT = 700;
+
+          let width = imagen.width;
+          let height = imagen.height;
+
+          // Calculamos el nuevo tamaño de la imagen
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round(height * MAX_WIDTH / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round(width * MAX_HEIGHT / height);
+              height = MAX_HEIGHT;
+            }
+          }
+
+          // Ajustamos el tamaño del canvas
+          canvas.width = width;
+          canvas.height = height;
+
+          // Dibujamos la imagen redimensionada en el canvas
+          ctx.drawImage(imagen, 0, 0, width, height);
+
+          // Convertir la imagen redimensionada a Base64 (con compresión de calidad 0.7)
+          const base64 = canvas.toDataURL('image/jpeg', 0.7); // Ajusta el valor de calidad según lo necesites
+
+          // Llamamos al callback con el resultado
+          callback(base64);
+        };
+      };
+
+      reader.readAsDataURL(files[i]);
     }
   }
 

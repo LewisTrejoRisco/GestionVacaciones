@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { APROBAR_SOLICITUD, BORRAR_SALIDABUS, COLISION_VACACIONES, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SALIDABUS, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_MOTIVOS_MOVILIDAD, LISTAR_SALIDABUS, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, LISTAR_TXT_CONTABILIDAD, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, TOLERANCIA_SALIDABUS, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
+import { ACTUALIZAR_APROBADOR, APROBAR_SOLICITUD, BORRAR_SALIDABUS, COLISION_VACACIONES, GENERAR_PAGO, GRABAR_LICENCIA, GRABAR_MOVILIDAD, GRABAR_PERMISO, GRABAR_SALIDABUS, GRABAR_SOLICITUD, LISTAR_DETALLE_USUARIO, LISTAR_DETALLE_USUARIO_LICENCIA, LISTAR_DETALLE_USUARIO_MOVILIDAD, LISTAR_DETALLE_USUARIO_PERMISO, LISTAR_DISTRITO, LISTAR_MOTIVOS_MOVILIDAD, LISTAR_SALIDABUS, LISTAR_SOLICITUD_APROBADA, LISTAR_SOLICITUD_MOVILIDAD_APROBADA, LISTAR_SOLICITUD_PENDIENTE, LISTAR_SOLICITUD_VACACIONES_APROBADA, LISTAR_TXT_CONTABILIDAD, OBTENERDATOSBASICOS, RECHAZAR_SOLICITUD, REGLAS_VACACIONES, REPORTE_APROBADOS, REPORTE_APROBADOSXAPROB, REPORTE_APROBADOS_VACACIONES, REPORTE_APROBADOS_VENTA_VACACIONES, SOLICITUDXUSUARIO, SOLICITUD_HISTORIALLICENCIAXUSUARIO, SOLICITUD_HISTORIALMOVILIDADXUSUARIO, SOLICITUD_HISTORIALPERMISOXUSUARIO, SOLICITUD_HISTORIALXUSUARIO, TOLERANCIA_SALIDABUS, URL_END_POINT_BASE } from "app/shared/utilitarios/Constantes";
 import { catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { PDFDocument, rgb } from 'pdf-lib';
@@ -8,6 +8,7 @@ import * as XLSX from 'xlsx'
 import { async } from "@angular/core/testing";
 import { Reporte } from "../utilitarios/reporte.model";
 import { ReporteMovi } from "../utilitarios/reporteMovi.model";
+import { ReporteVacaciones } from "../utilitarios/reporteVacaciones.model";
 
 @Injectable()
 export class SolicitarService {
@@ -80,6 +81,16 @@ export class SolicitarService {
         return this.http.post(URL_END_POINT_BASE + GRABAR_SOLICITUD, objSolicitud)
             .pipe(catchError(e => {
                 console.error(' Error al intentar grabar solicitud. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public actualizarAprobador(objSolicitud: any) {
+        //console.log(URL_END_POINT_BASE + GRABAR_SOLICITUD + objSolicitud)
+        return this.http.post(URL_END_POINT_BASE + ACTUALIZAR_APROBADOR, objSolicitud)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar actualizar aprobador. Msg: ' + e.error);
                 return throwError(e);
             })
         );
@@ -305,6 +316,24 @@ export class SolicitarService {
         );
     }
 
+    public reporteVacacionesRRHH(): Observable<any>  {
+            return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS_VACACIONES)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener datos APROBADOS RRHH. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
+    public reporteVentaVacacionesRRHH(): Observable<any>  {
+            return this.http.get(URL_END_POINT_BASE + REPORTE_APROBADOS_VENTA_VACACIONES)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar obtener datos APROBADOS RRHH. Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+
     public listarSalidaBus(): Observable<any>  {
         //console.log(URL_END_POINT_BASE + REPORTE_APROBADOS + ttiposolicitudId + "&status=" + status)
             return this.http.get(URL_END_POINT_BASE + LISTAR_SALIDABUS)
@@ -421,6 +450,16 @@ export class SolicitarService {
     }
 
     generateReportWithAdapter(headers: string[], data: Reporte[], filename: string) {
+      let workbook = XLSX.utils.book_new();
+      let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
+    
+      XLSX.utils.sheet_add_json(worksheet, data, { origin: 'A2', skipHeader: true })
+    
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja 1")
+      XLSX.writeFileXLSX(workbook, filename);
+    }
+
+    generateReportVacationWithAdapter(headers: string[], data: ReporteVacaciones[], filename: string) {
       let workbook = XLSX.utils.book_new();
       let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
     

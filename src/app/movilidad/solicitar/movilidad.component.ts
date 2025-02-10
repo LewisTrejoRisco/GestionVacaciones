@@ -246,7 +246,7 @@ export class MovilidadComponent implements OnInit {
               monto =  result.monto6 == null ? null : Number(result.monto6);
               break;
             default:
-              console.log("Error al mapear la semana"); // Manejar un caso por defecto si es necesario
+              // console.log("Error al mapear la semana"); // Manejar un caso por defecto si es necesario
           }
           if (fecha != null && hora != null && minuto != null && monto != null) {
             if(monto > 0) {

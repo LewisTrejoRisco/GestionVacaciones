@@ -47,10 +47,8 @@ export class SolicitarLicenciaComponent implements OnInit {
     this.solicitarService.listarSolicitudes(this.sesion.p_codipers, 4).subscribe(
       resp => {
         this.listaLicencia = resp;
-        //console.log(this.listaLicencia);
       }, 
       error => {
-        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes:'+ error.message,
@@ -64,10 +62,8 @@ export class SolicitarLicenciaComponent implements OnInit {
     this.solicitarService.listarHistorialLicenciasSolicitudes(this.sesion.p_codipers, 4).subscribe(
       resp => {
         this.listaHistorialLicencias = resp;
-        //console.log(this.listaHistorialLicencias);
       }, 
       error => {
-        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -112,9 +108,8 @@ export class SolicitarLicenciaComponent implements OnInit {
 
     modalRef.result.then((result) => {
       let objSolicitud = null;
-      if(row == null) {
         objSolicitud = {
-          tsolicitudId : 0,
+          tsolicitudId : row == null ? 0 : row.tsolicitudId,
           idtiposolicitud : "4",
           usuarioregistro : this.sesion.p_codipers,
           usuariosolicitado : this.sesion.p_codipers,
@@ -125,35 +120,28 @@ export class SolicitarLicenciaComponent implements OnInit {
           descripcion : result.descripcion,
           tficheroadjunto: result.documento
         }
-      } else {
-        objSolicitud = {
-          tsolicitudId : row.tsolicitudId,
-          idtiposolicitud : "4",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          usuarioactual : this.sesion.p_matrresp,
-          fechainiciosolicitud : result.fechaInic.day + '/' + result.fechaInic.month + '/' + result.fechaInic.year,
-          status : "1",
-          hasta : result.hasta.id,
-          descripcion : result.descripcion,
-          tficheroadjunto: result.documento
-        }
-      }
       this.solicitarService.grabarLicencia(objSolicitud).subscribe(
         resp => {
-          //console.log(resp)
-          this.listarSolicitudesGroupBy();
-          this.listarHistorialSolicitudes();
-          Swal.fire({
-            title: 'Exito',
-            text: 'Solicitud generada',
-            icon: 'success',
-            timer: 1500, 
-            showConfirmButton: false,
-          })
+          let message: any = resp;
+          if (message.codeMessage == "200") {
+            this.listarSolicitudesGroupBy();
+            this.listarHistorialSolicitudes();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error: ',
+              message.message,
+              'error'
+            );
+          }
         }, 
         error => {
-          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al grabar la solicitud:'+ error.message,
@@ -173,22 +161,18 @@ export class SolicitarLicenciaComponent implements OnInit {
     modalRef.componentInstance.data = { motivo: 'el motivo es' }; // should be the data
 
     modalRef.result.then((result) => {
-      //console.log(result)
       let objRechazar = {
         idsolicitud: user.tsolicitudId,
         usuarioactualizacion: this.sesion.p_codipers,
         motivorechazo: result.motivo,
         flagAnulado: true
       }
-      //console.log(objRechazar);
       this.solicitarService.rechazarSolicitud(objRechazar).subscribe(
         resp => {
-          //console.log(resp)
           this.listarHistorialSolicitudes();
           this.listarSolicitudesGroupBy();
         }, 
         error => {
-          //console.log("Error: " + error.message)
           Swal.fire(
             'Error',
             'error al eliminar solicitud:'+ error.message,
@@ -204,11 +188,9 @@ export class SolicitarLicenciaComponent implements OnInit {
   public createXLSX() : void {
     this.solicitarService.reporteAprobadosRRHH(4, 1).subscribe(
       resp => {
-        //console.log(resp)
         this.listReporte = resp;
         const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
         const report = new ReportAdapterComun(this.listReporte);
-        //console.log(report)
         this.solicitarService.generateReportWithAdapter(headers,report.data, 'Reporte_licencias_rrhh.xlsx');
         Swal.fire(
           'Exito',

@@ -84,9 +84,13 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sesion = JSON.parse(this.authService.userSesion);
     //console.log(this.sesion)
     this.nombreUsuario = this.sesion.p_nombcompleto,
-    this.fotoUsuario = this.sesion.p_foto;
+    this.fotoUsuario = this.validaFoto(this.sesion.p_foto);
     this.descripcionArea = this.sesion.p_descpues;
     this.codigoUsuario = this.sesion.p_codipers
+  }
+
+  validaFoto(foto: string) : string {
+    return foto === 'data:image/gif;base64,' ? 'assets/img/userX.PNG' : foto;
   }
 
   ngAfterViewInit() {

@@ -13,6 +13,7 @@ import { CancelarModalComponent } from '../cancelarModal/cancelar-modal.componen
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
+import { ReportAdapterVacaciones } from 'app/shared/utilitarios/ReportAdapterVacaciones.class';
 
 @Component({
   selector: 'app-solicitar-venta',
@@ -92,54 +93,46 @@ export class SolicitarVentaComponent implements OnInit {
     this.tableRowDetails.rowDetail.toggleExpandRow(row);
   }
 
-  modalShowSolicitar(tipo: any, row: any) {
+  openModal(tipo: any, row: any, hasta: any, codipers: any) {
     const modalRef = this.modalService.open(SolicitarVentaModalComponent);
     modalRef.componentInstance.id = tipo; // should be the id
-    
-    if(row == null) {
-      modalRef.componentInstance.data = {hasta: ''}; // should be the data
-    } else {
-      modalRef.componentInstance.data = {hasta: row.tcantidad}; // should be the data
-    }
-
+    modalRef.componentInstance.data = {hasta: hasta,
+                                       codipers: codipers
+                                      }; // should be the data
     modalRef.result.then((result) => {
       let objSolicitud = null;
-      if(row == null) {
-        objSolicitud = {
-          tsolicitudId : 0,
-          idtiposolicitud : "2",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          areaactualtrabajador : this.sesion.p_unidfunc,
-          usuarioactual : this.sesion.p_matrresp,
-          status : "1",
-          cantidaddias : result.hasta.name
-        }
-      } else {
-        objSolicitud = {
-          tsolicitudId : row.tsolicitudId,
-          idtiposolicitud : "2",
-          usuarioregistro : this.sesion.p_codipers,
-          usuariosolicitado : this.sesion.p_codipers,
-          areaactualtrabajador : this.sesion.p_unidfunc,
-          usuarioactual : this.sesion.p_matrresp,
-          status : "1",
-          cantidaddias : result.hasta.name
-        }
+      objSolicitud = {
+        tsolicitudId : row == null ? 0 : row.tsolicitudId,
+        idtiposolicitud : "2",
+        usuarioregistro : this.sesion.p_codipers,
+        usuariosolicitado : this.sesion.p_codipers,
+        areaactualtrabajador : this.sesion.p_unidfunc,
+        usuarioactual : this.sesion.p_matrresp,
+        status : "1",
+        cantidaddias : result.hasta.name,
+        periodo: result.periodo,
       }
-      //console.log(objSolicitud);
       this.solicitarVentaService.grabarSolicitud(objSolicitud).subscribe(
         resp => {
           //console.log(resp)
-          this.listarSolicitudesGroupBy();
-          this.listarHistorialSolicitudes();
-          Swal.fire({
-            title: 'Exito',
-            text: 'Solicitud generada',
-            icon: 'success',
-            timer: 1500, 
-            showConfirmButton: false,
-          })
+          let message: any = resp;
+          if (message.codeMessage == "200") {
+            this.listarSolicitudesGroupBy();
+            this.listarHistorialSolicitudes();
+            Swal.fire({
+              title: 'Exito',
+              text: 'Solicitud generada',
+              icon: 'success',
+              timer: 1500, 
+              showConfirmButton: false,
+            })
+          } else {
+            Swal.fire(
+              'Error: ',
+              message.message,
+              'error'
+            );
+          }
         }, 
         error => {
           //console.log("Error: " + error.message)
@@ -154,6 +147,14 @@ export class SolicitarVentaComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
+  }
+
+  modalShowSolicitar(tipo: any, row: any) {    
+    if(row == null) {
+      this.openModal(tipo, row, null, this.sesion.p_codipers);
+    } else {
+      this.openModal(tipo, row, row.tcantidad, this.sesion.p_codipers);
+    }
   }
 
   public modalEliminarSolicitar(user: any){
@@ -189,14 +190,14 @@ export class SolicitarVentaComponent implements OnInit {
   }
 
   public createXLSX() : void {
-    this.solicitarVentaService.reporteAprobadosRRHH(2, 1).subscribe(
+    this.solicitarVentaService.reporteVentaVacacionesRRHH().subscribe(
       resp => {
         //console.log(resp)
         this.listReporte = resp;
-        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Registro', 'Fecha Inicio', 'Fecha Fin', 'Status', 'Código Aprobador' , 'Aprobador', 'Fecha Aprobada'];
-        const report = new ReportAdapterComun(this.listReporte);
+        const headers = ['Código', 'Nombre Completo', 'Tipo Solicitud', 'Fecha Inicio', 'Fecha Fin', '# Dias', 'Status', 'Aprobador', 'Fecha Aprobada', 'Adelanto de Pago'];
+        const report = new ReportAdapterVacaciones(this.listReporte);
         //console.log(report)
-        this.solicitarVentaService.generateReportWithAdapter(headers,report.data, 'Reporte_venta_vacaciones_rrhh.xlsx');
+        this.solicitarVentaService.generateReportVacationWithAdapter(headers,report.data, 'Reporte_venta_vacaciones_rrhh.xlsx');
         Swal.fire(
           'Exito',
           'Se generó con éxito',

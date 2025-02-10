@@ -17,3 +17,6 @@
 .ngx-datatable .datatable-body .datatable-body-cell {
     flex: 1;
 } */
+.logonettalco {
+    text-transform: capitalize!important;
+}

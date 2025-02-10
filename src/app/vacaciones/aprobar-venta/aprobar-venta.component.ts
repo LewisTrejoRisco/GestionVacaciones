@@ -76,11 +76,15 @@ export class AprobarVentaComponent implements OnInit {
   createImageFromBlob(image: Blob, user: any): void {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      user.tfoto = reader.result as string;
+      user.tfoto = this.validaFoto(reader.result as string);
     }, false);
     if (image) {
       reader.readAsDataURL(image);
     }
+  }
+  
+  validaFoto(foto: string) : string {
+    return foto === 'data:image/gif;base64,' ? 'assets/img/userX.PNG' : foto;
   }
 
   listarSolicitudesAprobadas() {

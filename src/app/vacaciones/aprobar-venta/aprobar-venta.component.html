@@ -16,9 +16,12 @@
               <div class="media-body">
                 <h6 class="list-group-item-heading mb-1">{{usuario.tdescusuasoli}} </h6>
                 <p class="list-group-item-text chat-user-list-text m-0">
+                  <span class="badge badge-pill mr-3" 
+                        [ngClass]="usuario.tubicfisi == '02' ? 'bg-light-primary' : 'bg-light-info'">
+                        {{usuario.tubicfisi == '02' ? "Cercado" : "Vulcano"}}
+                      </span>
                   <i class="ft-calendar primary font-small-2 mr-1"></i>
                   <span>(Sol.: {{usuario.tsolicitudId}})</span>
-                  <!-- <span>{{trabajador.tcantidaddias}} días</span> -->
                   <span class="float-right primary">
                     <i class="font-medium-3 icon-check mr-1" (click)="aprobarSolicitudVenta(usuario)"></i>
                     <i class="font-medium-3 icon-close mr-1" (click)="modalShowCancelarVenta(usuario)"></i>

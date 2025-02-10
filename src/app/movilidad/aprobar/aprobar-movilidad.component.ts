@@ -63,7 +63,6 @@ export class AprobarMovilidadComponent implements OnInit {
     this.aprobarService.listarSolicitudesPendientes(this.sesion.p_codipers, 1, 5).subscribe(
       resp => {
         this.solicitudesPendientes = resp;
-        // console.log(this.solicitudesPendientes)
         this.solicitudesPendientes.forEach(user => {
           this.authService.obtenerFoto(user.tusuasoli, JSON.parse(this.authService.userToken).token).subscribe(
             (imagen: Blob) =>{
@@ -73,11 +72,9 @@ export class AprobarMovilidadComponent implements OnInit {
             }
           )
       })
-      //console.log(this.solicitudesPendientes);
         this.trabajador = null;
       }, 
       error => {
-        //console.log("error:", error.message)
         Swal.fire(
           'Error',
           'error al mostrar solicitudes pendientes:'+ error.message,
@@ -90,17 +87,20 @@ export class AprobarMovilidadComponent implements OnInit {
   createImageFromBlob(image: Blob, user: any): void {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      user.tfoto = reader.result as string;
+      user.tfoto = this.validaFoto(reader.result as string);
     }, false);
     if (image) {
       reader.readAsDataURL(image);
     }
   }
+  
+  validaFoto(foto: string) : string {
+    return foto === 'data:image/gif;base64,' ? 'assets/img/userX.PNG' : foto;
+  }
 
   listarSolicitudesAprobadas() {
     this.aprobarService.listarSolicitudesAprobadas(this.sesion.p_codipers, 5).subscribe(
       resp => {
-        //console.log(resp);
         this.solicitudesAprobadas = resp;
       }, 
       error => {

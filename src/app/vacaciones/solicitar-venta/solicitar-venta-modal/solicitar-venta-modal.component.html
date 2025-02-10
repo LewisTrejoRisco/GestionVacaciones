@@ -6,7 +6,7 @@
     x
   </button>
 </div>
-<form [formGroup]="myForm" (ngSubmit)="submitForm()">
+<form [formGroup]="myForm" (ngSubmit)="submitForm()" *ngIf="myForm">
   <div class="modal-body">
     <div class="container">
       <div class="form-group position-relative has-icon-left">
@@ -15,7 +15,8 @@
         </div> -->
         <div *ngIf="modalFormSubmitted && (lf.hasta.invalid || lf.hasta.errors?.required)"
               class="help-block mt-1 text-danger"> <i class="ft-alert-circle align-middle"></i> Campo requerido</div>
-        <ng-select  [items]="diasASalir" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" placeholder="Elegir días a vender" id="hasta">
+        <ng-select  [items]="diasASalir" [formControl]="myForm.controls['hasta']" bindLabel="name" formControlName="hasta" 
+                    placeholder="Elegir días a vender" id="hasta" required>
         </ng-select>
         <!-- <input type="text" [formControl]="myForm.controls['hasta']" formControlName="hasta" class="form-control"
           id="hasta" placeholder="Hasta" (keydown.enter)="$event.preventDefault()" required #hasta> -->
