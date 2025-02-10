@@ -20,6 +20,7 @@ export const REPORTE_APROBADOS = "/solicitud/buscarXTipoSolicitudAndNotinStatus?
 export const LISTAR_TXT_CONTABILIDAD = "/generar/reporteTxtContabilidad?";
 export const REPORTE_APROBADOS_VACACIONES = "/reporte/reportevacaciones";
 export const REPORTE_APROBADOS_VENTA_VACACIONES = "/reporte/reporteventavacaciones";
+export const REPORTE_SOLICITUD_VENCIDA = "/reporte/reportesolicitudvencido";
 
 // Solicitar vacaciones
 export const GRABAR_SOLICITUD = "/solicitud/grabarSolicitud";

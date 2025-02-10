@@ -9,6 +9,7 @@ import { async } from "@angular/core/testing";
 import { Reporte } from "../utilitarios/reporte.model";
 import { ReporteMovi } from "../utilitarios/reporteMovi.model";
 import { ReporteVacaciones } from "../utilitarios/reporteVacaciones.model";
+import { ReporteVencida } from "../utilitarios/reporteVencida.model";
 
 @Injectable()
 export class SolicitarService {
@@ -384,6 +385,16 @@ export class SolicitarService {
         );
     }
     
+    public listar(path: string, param: string): Observable<any>  {
+        console.log(URL_END_POINT_BASE + path + param)
+            return this.http.get(URL_END_POINT_BASE + path + param)
+            .pipe(catchError(e => {
+                console.error(' Error al intentar listar, Msg: ' + e.error);
+                return throwError(e);
+            })
+        );
+    }
+    
     // Función para crear un PDF
     
     async createPDF(userData: any) {
@@ -460,6 +471,16 @@ export class SolicitarService {
     }
 
     generateReportVacationWithAdapter(headers: string[], data: ReporteVacaciones[], filename: string) {
+      let workbook = XLSX.utils.book_new();
+      let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
+    
+      XLSX.utils.sheet_add_json(worksheet, data, { origin: 'A2', skipHeader: true })
+    
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Hoja 1")
+      XLSX.writeFileXLSX(workbook, filename);
+    }
+
+    generateReportVencidaWithAdapter(headers: string[], data: ReporteVencida[], filename: string) {
       let workbook = XLSX.utils.book_new();
       let worksheet = XLSX.utils.json_to_sheet([], { header: headers });
     

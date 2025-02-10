@@ -13,6 +13,9 @@ import Swal from 'sweetalert2';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
+import { REPORTE_SOLICITUD_VENCIDA } from 'app/shared/utilitarios/Constantes';
+import { forkJoin } from 'rxjs';
+import { ReportAdapterVencida } from 'app/shared/utilitarios/ReportAdapterVencida.class';
 
 @Component({
   selector: 'app-solicitar-licencia',
@@ -206,6 +209,29 @@ export class SolicitarLicenciaComponent implements OnInit {
         );
       }
     )
+  }
+
+  public createXLSXVencido() : void {
+    let path = REPORTE_SOLICITUD_VENCIDA;
+    let param = "?ttiposolicitud=4"
+    
+    forkJoin({
+      solicitud: this.solicitarService.listar(path, param)
+    }).subscribe({
+      next: ({ solicitud }) => {
+        let solivenc: any = solicitud;
+        const headers = ['Solicitud', 'Tipo Solicitud', 'Codigo Aprobador', 'Aprobador', 'Estado Laboral', 'Fecha registro', 'Codi. Solicitante', 'Fecha Inicio', 'Fecha Fin', '# Días'];
+        const report = new ReportAdapterVencida(solivenc);
+        this.solicitarService.generateReportVencidaWithAdapter(headers,report.data, 'Licencias_pendientes.xlsx');
+      },
+      error: error => {
+        Swal.fire(
+          'Error',
+          'Error al cargar los datos: ' + error.message,
+          'error'
+        );
+      }
+    });
   }
 
 }

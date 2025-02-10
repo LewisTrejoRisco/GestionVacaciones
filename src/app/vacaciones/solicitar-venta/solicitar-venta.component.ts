@@ -14,6 +14,9 @@ import { Reporte } from 'app/shared/utilitarios/reporte.model';
 import { ReportAdapter } from 'app/shared/utilitarios/ReportAdapter.class';
 import { ReportAdapterComun } from 'app/shared/utilitarios/ReportAdapterComun.class';
 import { ReportAdapterVacaciones } from 'app/shared/utilitarios/ReportAdapterVacaciones.class';
+import { REPORTE_SOLICITUD_VENCIDA } from 'app/shared/utilitarios/Constantes';
+import { forkJoin } from 'rxjs';
+import { ReportAdapterVencida } from 'app/shared/utilitarios/ReportAdapterVencida.class';
 
 @Component({
   selector: 'app-solicitar-venta',
@@ -212,6 +215,29 @@ export class SolicitarVentaComponent implements OnInit {
         );
       }
     )
+  }
+
+  public createXLSXVencido() : void {
+    let path = REPORTE_SOLICITUD_VENCIDA;
+    let param = "?ttiposolicitud=2"
+    
+    forkJoin({
+      solicitud: this.solicitarVentaService.listar(path, param)
+    }).subscribe({
+      next: ({ solicitud }) => {
+        let solivenc: any = solicitud;
+        const headers = ['Solicitud', 'Tipo Solicitud', 'Codigo Aprobador', 'Aprobador', 'Estado Laboral', 'Fecha registro', 'Codi. Solicitante', 'Fecha Inicio', 'Fecha Fin', '# Días'];
+        const report = new ReportAdapterVencida(solivenc);
+        this.solicitarVentaService.generateReportVencidaWithAdapter(headers,report.data, 'Venta_vacaciones_pendientes.xlsx');
+      },
+      error: error => {
+        Swal.fire(
+          'Error',
+          'Error al cargar los datos: ' + error.message,
+          'error'
+        );
+      }
+    });
   }
 
 
